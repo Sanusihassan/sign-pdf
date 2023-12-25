@@ -1,1 +1,0 @@
-export type nav_content = typeof import("./content/en").nav_content;

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import NavBar from "@/components/NavBar/NavBar";
+import NavBar from "pdfequips-navbar/NavBar";
 import Tool from "../components/Tool";
 import {
   edit_page,
@@ -8,7 +8,7 @@ import {
   tools,
   downloadFile,
 } from "../src/content/content";
-
+import { useRouter } from "next/router";
 type data_type = {
   title: string;
   description: string;
@@ -37,10 +37,25 @@ export async function getStaticProps({
 }
 
 export default ({ item }: { item: data_type }) => {
+  const router = useRouter();
+  const { asPath } = router;
+  const websiteSchema = {
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    name: `PDFEquips ${item.title}`,
+    description: item.description,
+    url: `https://www.pdfequips.com${asPath}`,
+  };
   return (
     <>
       <Head>
         <title>{`PDFEquips | ${item.title}`}</title>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
         <meta name="description" content={item.description} />
         <link rel="icon" href="/logo.png" />
         {/* needed for styles */}
@@ -49,7 +64,7 @@ export default ({ item }: { item: data_type }) => {
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         />
       </Head>
-      <NavBar lang="" />
+      <NavBar path="path-to-tool" lang="" />
       <Tool
         tools={tools}
         data={item}
