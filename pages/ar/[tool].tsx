@@ -1,7 +1,6 @@
 import Head from "next/head";
 import NavBar from "pdfequips-navbar/NavBar";
 import Tool from "../../components/Tool";
-import { useRouter } from "next/router";
 import {
   edit_page,
   errors,
