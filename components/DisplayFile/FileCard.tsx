@@ -95,7 +95,7 @@ const FileCard = ({
     <div
       className="card item"
       data-tooltip-id={`item-tooltip-${index}`}
-      data-tooltip-content={tooltipSize}
+      data-tooltip-html={tooltipSize}
       data-tooltip-place="top"
       {...(isDraggable ? provided.dragHandleProps : {})}
     >
