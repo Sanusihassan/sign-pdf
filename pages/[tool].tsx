@@ -9,11 +9,13 @@ import {
   downloadFile,
 } from "../src/content/content";
 import { useRouter } from "next/router";
-type data_type = {
+
+export type data_type = {
   title: string;
   description: string;
   color: string;
   type: string;
+  to: string;
 };
 
 export async function getStaticPaths() {

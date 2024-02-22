@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { setShowDownloadBtn, type ToolState } from "../src/store";
+import { setField, type ToolState } from "../src/store";
 import { DownloadIcon, ArrowLeftIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import { Tooltip } from "react-tooltip";
@@ -9,33 +9,29 @@ import { useFileStore } from "../src/file-store";
 const DownloadFile = ({
   lang,
   downloadFile,
+  path
 }: {
   lang: string;
   downloadFile: downloadFile;
+  path: string
 }) => {
   const { files, downloadBtn } = useFileStore();
-
   const dispatch = useDispatch();
-  const statePath = useSelector(
-    (state: { tool: ToolState }) => state.tool.path
-  );
   const showDownloadBtn = useSelector(
     (state: { tool: ToolState }) => state.tool.showDownloadBtn
   );
-  const path = statePath;
-  useEffect(() => {}, [downloadFile, showDownloadBtn]);
+  useEffect(() => { }, [downloadFile, showDownloadBtn]);
   return (
     <div
-      className={`download-page flex-column align-items-center justify-content-center text-center${
-        showDownloadBtn ? " d-flex" : " d-none"
-      }`}
+      className={`download-page flex-column align-items-center justify-content-center text-center${showDownloadBtn ? " d-flex" : " d-none"
+        }`}
     >
       <h3 className="text-center mb-4">
         <bdi>
           {downloadFile.titles &&
             downloadFile.titles[path as keyof typeof downloadFile.titles] &&
             downloadFile.titles[path as keyof typeof downloadFile.titles][
-              files && files.length > 1 ? 0 : 1
+            files && files.length > 1 ? 0 : 1
             ]}
         </bdi>
       </h3>
@@ -49,14 +45,14 @@ const DownloadFile = ({
           data-tooltip-id="download-btn-tooltip"
           data-tooltip-place="left"
           onClick={() => {
-            dispatch(setShowDownloadBtn(false));
+            dispatch(setField({ showDownloadBtn: false }));
           }}
         >
           <ArrowLeftIcon className="icon" />
           <Tooltip id="download-btn-tooltip" />
         </button>
         <button
-          className={`download-btn btn btn-lg text-white position-relative overflow-hidden ${statePath}`}
+          className={`download-btn btn btn-lg text-white position-relative overflow-hidden ${path}`}
           onClick={() => {
             if (downloadBtn?.current) {
               downloadBtn.current.click();
@@ -68,7 +64,7 @@ const DownloadFile = ({
             {downloadFile.btnText &&
               downloadFile.btnText[path as keyof typeof downloadFile.btnText] &&
               downloadFile.btnText[path as keyof typeof downloadFile.btnText][
-                files && files.length > 1 ? 0 : 1
+              files && files.length > 1 ? 0 : 1
               ]}
           </bdi>
         </button>

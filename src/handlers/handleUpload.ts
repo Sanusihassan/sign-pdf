@@ -5,9 +5,7 @@ import type { errors as _ } from "../../content";
 import { AnyAction } from "@reduxjs/toolkit";
 import {
   resetErrorMessage,
-  setErrorMessage,
-  setIsSubmitted,
-  setShowDownloadBtn,
+  setField
 } from "../store";
 
 export const handleUpload = async (
@@ -24,7 +22,7 @@ export const handleUpload = async (
   setFilesOnSubmit: (value: string[]) => void
 ) => {
   e.preventDefault();
-  dispatch(setIsSubmitted(true));
+  dispatch(setField({ isSubmitted: true }));
 
   if (!files) return;
   // Extract file names from the File[] array
@@ -36,7 +34,7 @@ export const handleUpload = async (
   );
 
   if (allFilesPresent && files.length === filesOnSubmit.length) {
-    dispatch(setShowDownloadBtn(true));
+    dispatch(setField({ showDownloadBtn: true }));
     dispatch(resetErrorMessage());
     return;
   }
@@ -93,11 +91,11 @@ export const handleUpload = async (
       outputFileName: `${originalFileName}.pptx`,
     },
     "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-      {
-        outputFileMimeType:
-          "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        outputFileName: `${originalFileName}.pptx`,
-      },
+    {
+      outputFileMimeType:
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      outputFileName: `${originalFileName}.pptx`,
+    },
     "text/plain": {
       outputFileMimeType: "text/plain",
       outputFileName: `${originalFileName}.txt`,
@@ -116,7 +114,7 @@ export const handleUpload = async (
     };
     const { outputFileMimeType, outputFileName } = mimeTypeData;
 
-    dispatch(setShowDownloadBtn(true));
+    dispatch(setField({ showDownloadBtn: true }));
     downloadConvertedFile(
       response,
       outputFileMimeType,
@@ -129,15 +127,15 @@ export const handleUpload = async (
       throw new Error(`HTTP error! status: ${response.status}`);
     } else {
       dispatch(resetErrorMessage());
-      dispatch(setIsSubmitted(false));
+      dispatch(setField({ isSubmitted: false }));
     }
   } catch (error) {
     if ((error as { code: string }).code === "ERR_NETWORK") {
-      dispatch(setErrorMessage(errors.ERR_NETWORK.message));
+      dispatch(setField({ errorMessage: errors.ERR_NETWORK.message }));
       return;
     }
-    dispatch(setIsSubmitted(false));
+    dispatch(setField({ isSubmitted: false }));
   } finally {
-    dispatch(setIsSubmitted(false));
+    dispatch(setField({ isSubmitted: false }));
   }
 };

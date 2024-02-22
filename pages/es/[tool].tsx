@@ -9,12 +9,7 @@ import {
 } from "../../src/content/content-es";
 import { errors } from "../../src/content/content-es";
 import { useRouter } from "next/router";
-type data_type = {
-  title: string;
-  description: string;
-  color: string;
-  type: string;
-};
+import type { data_type } from "../[tool]";
 
 export async function getStaticPaths() {
   const paths = Object.keys(routes).map((key) => ({
