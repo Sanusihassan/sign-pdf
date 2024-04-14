@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { useFileStore } from "../src/file-store";
 import { FileInputForm } from "./Tool/FileInputForm";
 import DownloadFile from "./DownloadFile";
+import { validateFiles } from "@/src/utils";
 
 export type errorType = {
   response: {
@@ -75,7 +76,11 @@ const Tool: React.FC<ToolProps> = ({
   // const [endpoint, setEndpoint] = useState("");
   // drag and drop input handling
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
+    const isValid = validateFiles(acceptedFiles, data.type, errors, dispatch, { path: data.to });
+    if (isValid) {
+      setFiles(acceptedFiles);
+      handleHideTool();
+    }
     handleHideTool();
   }, []);
   const { getRootProps, isDragActive } = useDropzone({ onDrop });
