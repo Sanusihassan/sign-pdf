@@ -74,7 +74,7 @@ export default ({ item }: { item: data_type }) => {
         />
         {/* needed for styles */}
       </Head>
-      <NavBar path="path-to-tool" lang="" />
+      <NavBar path={item.to.replace("/", "")} lang="" />
       <Tool
         tools={tools}
         data={item}

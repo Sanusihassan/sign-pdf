@@ -63,7 +63,7 @@ export default ({ item, lang }: { item: data_type; lang: string }) => {
           ogImage={`https://www.pdfequips.com/images/hi${item.to}.png`}
         />
       </Head>
-      <NavBar path="path-to-tool" lang={lang} />
+      <NavBar path={item.to.replace("/", "")} lang={lang} />
       <Tool
         tools={tools}
         data={item}
