@@ -53,7 +53,7 @@ export default ({ item }: { item: data_type }) => {
   return (
     <>
       <Head>
-        <title>{`PDFEquips | ${item.title}`}</title>
+        <title>{item.seoTitle}</title>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
