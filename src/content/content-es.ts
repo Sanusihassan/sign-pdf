@@ -10,26 +10,29 @@ import type {
 } from "../../content";
 
 export const tool: _tool = {
-  Merge_PDF: {
-    title: "Combinar PDF",
-    description: "Combina varios archivos PDF en un solo documento",
-    color: "var(--red)",
+  Sign_PDF: {
+    title: "Firmar PDF",
+    seoTitle: "Firmar PDFs en línea - Herramienta de firma PDF gratuita",
+    description: "Añade tu firma a documentos PDF en línea",
+    color: "#341f97",
     type: ".pdf",
-    to: "/merge-pdf",
-  },
-};
-
-export const edit_page: _edit_page = {
-  edit_page_titles: {
-    merge_pdf: "Opciones para fusionar PDF",
-  },
-  loader_text: "Por favor espera...",
-  add_more_button: "Agrega más archivos",
-  action_buttons: {
-    merge_pdf: "Combinar PDF",
-  },
-  pages: "paginas",
-  page: "página",
+    to: "/sign-pdf",
+    features: [
+      {
+        title: "Completamente gratis y sin registro",
+        description: "PDFEquips ofrece un servicio de firma de PDF en línea gratuito. No es necesario crear una cuenta, y nunca pedimos tu dirección de correo electrónico ni información de tu tarjeta de crédito."
+      },
+      {
+        title: "Herramienta de firma de PDF fácil de usar",
+        description: "PDFEquips facilita añadir tu firma a cualquier documento PDF, ya sea un contrato, formulario u otro documento, todos los formatos son compatibles."
+      },
+      {
+        title: "Firma archivos PDF en línea de manera segura",
+        description: "Todos los archivos que cargas y creas en nuestros servidores están encriptados por razones de seguridad usando TLS. Serán eliminados de inmediato y de manera permanente después de su procesamiento. Para más información, consulta nuestra política de privacidad."
+      }
+    ],
+    keywords: "firmar PDF, firmar PDF en línea, añadir firma a PDF, firmar PDF gratis, herramienta de firma PDF, firma PDF en línea, firmar PDF gratis, firmar documentos PDF, añadir firma en línea, firma PDF segura, firma de archivos PDF, herramienta de firma PDF, firma PDF en línea gratuita, firmar múltiples PDFs, añadir firma a páginas PDF, firmar PDF sin registro, herramienta de firma PDF, firma PDF en línea"
+  }
 };
 
 export const tools: _tools = {
@@ -39,23 +42,33 @@ export const tools: _tools = {
   drop_files: "Arrastra los archivos aquí",
 };
 
+export const edit_page: _edit_page = {
+  edit_page_titles: {
+    sign_pdf: "Opciones de firma de PDF",
+  },
+  loader_text: "por favor espera...",
+  add_more_button: "Agregar más archivos",
+  action_buttons: {
+    sign_pdf: "Firmar PDF",
+  },
+  pages: "páginas",
+  page: "página",
+};
+
 export const downloadFile: _downloadFile = {
   titles: {
-    "merge-pdf": [
-      "¡Combinación de archivos PDF exitosa!",
-      "¡Combinación de archivo PDF exitosa!",
-    ],
+    "sign-pdf": ["¡Los archivos PDF han sido firmados!", "¡El archivo PDF ha sido firmado!"],
   },
+
   btnText: {
-    "merge-pdf": [
-      "Descargar archivos PDF combinados",
-      "Descargar archivo PDF combinado",
-    ],
+    "sign-pdf": ["Descargar archivos PDF firmados", "Descargar archivo PDF firmado"],
   },
+
   backto: {
-    "merge-pdf": "Volver a unir PDF",
+    "sign-pdf": "Volver a Firmar PDF",
   },
 };
+
 
 export const errors: _errors = {
   EMPTY_FILE: {

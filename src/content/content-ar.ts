@@ -9,14 +9,31 @@ import type {
 } from "../../content";
 
 export const tool: _tool = {
-  Merge_PDF: {
-    title: "دمج PDF",
-    description: "دمج ملفات PDF متعددة في مستند واحد",
-    color: "var(--red)",
+  Sign_PDF: {
+    title: "توقيع PDF",
+    seoTitle: "توقيع ملفات PDF عبر الإنترنت - أداة توقيع PDF مجانية",
+    description: "أضف توقيعك إلى مستندات PDF عبر الإنترنت",
+    color: "#341f97",
     type: ".pdf",
-    to: "/merge-pdf",
-  },
+    to: "/sign-pdf",
+    features: [
+      {
+        title: "مجاني تمامًا وبدون تسجيل",
+        description: "تقدم PDFEquips خدمة توقيع ملفات PDF عبر الإنترنت مجانًا. ليس من الضروري إنشاء حساب، ولا نطلب أبدًا عنوان بريدك الإلكتروني أو معلومات بطاقة الائتمان الخاصة بك."
+      },
+      {
+        title: "أداة توقيع ملفات PDF سهلة الاستخدام",
+        description: "تجعل PDFEquips من السهل إضافة توقيعك إلى أي مستند PDF، سواء كان عقدًا أو نموذجًا أو أي مستند آخر، جميع التنسيقات متوافقة."
+      },
+      {
+        title: "توقيع ملفات PDF عبر الإنترنت بشكل آمن",
+        description: "جميع الملفات التي تقوم بتحميلها وإنشائها على خوادمنا مشفرة لأسباب أمنية باستخدام TLS. سيتم حذفها على الفور وبشكل دائم بعد المعالجة. لمزيد من المعلومات، يرجى الرجوع إلى سياسة الخصوصية الخاصة بنا."
+      }
+    ],
+    keywords: "توقيع PDF, توقيع ملفات PDF عبر الإنترنت, إضافة توقيع إلى PDF, توقيع PDF مجاني, أداة توقيع PDF, توقيع PDF عبر الإنترنت, توقيع PDF مجاني, توقيع مستندات PDF, إضافة توقيع عبر الإنترنت, توقيع PDF آمن, توقيع ملفات PDF, أداة توقيع PDF, توقيع PDF عبر الإنترنت مجانا, توقيع ملفات PDF متعددة, إضافة توقيع إلى صفحات PDF, توقيع PDF بدون تسجيل, أداة توقيع PDF, توقيع PDF عبر الإنترنت"
+  }
 };
+
 
 export const tools: _tools = {
   select: "اختر",
@@ -25,29 +42,31 @@ export const tools: _tools = {
   drop_files: "قم بوضع الملفات هنا",
 };
 
-export const downloadFile: _downloadFile = {
-  titles: {
-    "merge-pdf": ["تم دمج ملفات ال PDF!", "تم دمج ملف ال PDF!"],
-  },
-  btnText: {
-    "merge-pdf": ["تحميل ملفات PDF المدموجة", "تحميل ملف PDF مدموج"],
-  },
-  backto: {
-    "merge-pdf": "العودة إلى دمج ملفات PDF",
-  },
-};
-
 export const edit_page: _edit_page = {
   edit_page_titles: {
-    merge_pdf: "خيارات دمج ملف PDF",
+    sign_pdf: "خيارات توقيع PDF",
   },
   loader_text: "يرجى الانتظار...",
   add_more_button: "إضافة المزيد من الملفات",
   action_buttons: {
-    merge_pdf: "دمج PDF",
+    sign_pdf: "توقيع PDF",
   },
-  pages: "صفحة",
-  page: "صفحة واحدة",
+  pages: "صفحات",
+  page: "صفحة",
+};
+
+export const downloadFile: _downloadFile = {
+  titles: {
+    "sign-pdf": ["تم توقيع ملفات PDF!", "تم توقيع ملف PDF!"],
+  },
+
+  btnText: {
+    "sign-pdf": ["تحميل ملفات PDF الموقعة", "تحميل ملف PDF الموقع"],
+  },
+
+  backto: {
+    "sign-pdf": "العودة إلى توقيع PDF",
+  },
 };
 
 export const errors: _errors = {

@@ -10,38 +10,56 @@ import type {
 } from "../../content";
 
 export const tool: _tool = {
-  Merge_PDF: {
-    title: "合并PDF",
-    description: "将多个PDF文件合并成一个文档",
-    color: "var(--red)",
+  Sign_PDF: {
+    title: "签署PDF",
+    seoTitle: "在线签署PDF - 免费PDF签名工具",
+    description: "在线为PDF文件添加签名",
+    color: "#341f97",
     type: ".pdf",
-    to: "/merge-pdf",
-  },
-};
-
-export const downloadFile: _downloadFile = {
-  titles: {
-    "merge-pdf": ["PDF文件已合并！", "PDF文件已合并！"],
-  },
-  btnText: {
-    "merge-pdf": ["下载合并后的PDF文件", "下载合并后的PDF文件"],
-  },
-  backto: {
-    "merge-pdf": "返回合并PDF",
-  },
+    to: "/sign-pdf",
+    features: [
+      {
+        title: "完全免费且无需注册",
+        description: "PDFEquips 提供免费的在线 PDF 签名服务。无需创建账户，我们从不要求提供您的电子邮件地址或信用卡信息。"
+      },
+      {
+        title: "易于使用的PDF签名工具",
+        description: "PDFEquips 让您可以轻松地在任何 PDF 文件上添加签名，无论是合同、表格还是其他文件，所有格式都兼容。"
+      },
+      {
+        title: "在线安全签署PDF文件",
+        description: "您上传和在我们服务器上创建的所有文件都使用TLS进行加密以确保安全。处理后将立即永久删除。有关更多信息，请参阅我们的隐私政策。"
+      }
+    ],
+    keywords: "签署PDF, 在线签署PDF, 添加签名到PDF, 免费签署PDF, PDF签名工具, 在线PDF签名, 免费PDF签名, 签署PDF文件, 在线添加签名, 安全签署PDF, PDF文件签名, PDF签名工具, 免费在线PDF签名, 签署多个PDF, 添加签名到PDF页面, 无需注册签署PDF, PDF签名工具, 在线PDF签名"
+  }
 };
 
 export const edit_page: _edit_page = {
   edit_page_titles: {
-    merge_pdf: "合并PDF选项",
+    sign_pdf: "签署 PDF 选项",
   },
-  loader_text: "请稍等...",
+  loader_text: "请稍候...",
   add_more_button: "添加更多文件",
   action_buttons: {
-    merge_pdf: "合并PDF",
+    sign_pdf: "签署 PDF",
   },
   pages: "页",
   page: "页",
+};
+
+export const downloadFile: _downloadFile = {
+  titles: {
+    "sign-pdf": ["PDF 文件已签署！", "PDF 文件已签署！"],
+  },
+
+  btnText: {
+    "sign-pdf": ["下载已签署的 PDF 文件", "下载已签署的 PDF 文件"],
+  },
+
+  backto: {
+    "sign-pdf": "返回签署 PDF",
+  },
 };
 
 export const tools: _tools = {

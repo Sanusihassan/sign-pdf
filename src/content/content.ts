@@ -1,25 +1,27 @@
 export const tool = {
-  Merge_PDF: {
-    title: "Merge PDF",
-    description: "Combine multiple PDF files into one document",
-    color: "var(--red)",
+  Sign_PDF: {
+    title: "Sign PDF",
+    seoTitle: "Sign PDFs Online - Free PDF Signature Tool",
+    description: "Add your signature to PDF documents online",
+    color: "#341f97",
     type: ".pdf",
-    to: "/merge-pdf",
-  },
-};
-
-export const edit_page = {
-  edit_page_titles: {
-    merge_pdf: "Merge PDF options",
-  },
-  loader_text: "please wait...",
-  add_more_button: "Add more files",
-  // translate the values of this object to french.
-  action_buttons: {
-    merge_pdf: "Merge PDF",
-  },
-  pages: "pages",
-  page: "page",
+    to: "/sign-pdf",
+    features: [
+      {
+        title: "Completely free and without registration",
+        description: "PDFEquips offers a free online PDF signing service It's not necessary to create an account, and we never ask for your email address or credit card information"
+      },
+      {
+        title: "Easy to use PDF signing tool",
+        description: "PDFEquips makes it simple to add your signature to any PDF document, whether it's a contract, form, or any other document, all formats are compatible"
+      },
+      {
+        title: "Securely sign PDF files online",
+        description: "All files you upload and create on our servers are encrypted for security reasons using TLS They will be immediately and permanently deleted after processing For more information, please refer to our privacy policy"
+      }
+    ],
+    keywords: "sign PDF, sign PDF online, add signature to PDF, free PDF sign, PDF signature tool, online PDF signing, PDF sign free, sign PDF documents, add signature online, secure PDF signing, PDF file signature, PDF sign tool, free online PDF signature, sign multiple PDFs, add signature to PDF pages, no registration PDF sign, PDF signing tool, online PDF signature"
+  }
 };
 
 export const tools = {
@@ -29,17 +31,30 @@ export const tools = {
   drop_files: "Drag files here",
 };
 
+export const edit_page = {
+  edit_page_titles: {
+    sign_pdf: "Sign PDF options",
+  },
+  loader_text: "please wait...",
+  add_more_button: "Add more files",
+  action_buttons: {
+    sign_pdf: "Sign PDF",
+  },
+  pages: "pages",
+  page: "page",
+};
+
 export const downloadFile = {
   titles: {
-    "merge-pdf": ["PDF files have been merged!", "PDF file has been merged!"],
+    "sign-pdf": ["PDF files have been signed!", "PDF file has been signed!"],
   },
 
   btnText: {
-    "merge-pdf": ["Download Merged PDF files", "Download Merged PDF file"],
+    "sign-pdf": ["Download Signed PDF files", "Download Signed PDF file"],
   },
 
   backto: {
-    "merge-pdf": "Back To Merge PDF",
+    "sign-pdf": "Back To Sign PDF",
   },
 };
 

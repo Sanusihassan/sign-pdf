@@ -29,13 +29,16 @@ $color-map: (
   "pdf-to-html": rgb(228, 77, 38),
   "pdf-to-markdown": #000000,
   "translate-pdf": #185abc,
+  "sign-pdf": #341f97
 );
 
 body {
   @include ar-wrapper {
     text-align: right !important;
   }
-  font-family: "Raleway", sans-serif;
+
+  font-family: "Raleway",
+  sans-serif;
 }
 
 .tools-page {
@@ -89,6 +92,7 @@ a.dropdown-item {
 }
 
 .dropdown-item {
+
   &.active,
   &:active {
     background-color: initial !important;
@@ -103,6 +107,7 @@ a.dropdown-item {
 // error element styles
 .error-element {
   .hide-on-rtl {
+
     [dir="rtl"] &,
     [lang="ar"] & {
       display: none;
@@ -110,6 +115,7 @@ a.dropdown-item {
   }
 
   .hide-on-rtl {
+
     [dir="ltr"] &,
     :not([lang="ar"]) & {
       display: none;

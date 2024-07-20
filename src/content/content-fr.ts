@@ -10,14 +10,31 @@ import type {
 } from "../../content";
 
 export const tool: _tool = {
-  Merge_PDF: {
-    title: "Fusionner des PDF",
-    description: "Combinez plusieurs fichiers PDF en un seul document",
-    color: "var(--red)",
+  Sign_PDF: {
+    title: "Signer PDF",
+    seoTitle: "Signer des PDFs en ligne - Outil de signature PDF gratuit",
+    description: "Ajoutez votre signature aux documents PDF en ligne",
+    color: "#341f97",
     type: ".pdf",
-    to: "/merge-pdf",
-  },
+    to: "/sign-pdf",
+    features: [
+      {
+        title: "Entièrement gratuit et sans inscription",
+        description: "PDFEquips offre un service de signature PDF en ligne gratuit. Il n'est pas nécessaire de créer un compte, et nous ne demandons jamais votre adresse e-mail ou vos informations de carte de crédit."
+      },
+      {
+        title: "Outil de signature PDF facile à utiliser",
+        description: "PDFEquips facilite l'ajout de votre signature à tout document PDF, qu'il s'agisse d'un contrat, d'un formulaire ou de tout autre document, tous les formats sont compatibles."
+      },
+      {
+        title: "Signer des fichiers PDF en ligne en toute sécurité",
+        description: "Tous les fichiers que vous téléchargez et créez sur nos serveurs sont cryptés pour des raisons de sécurité en utilisant TLS. Ils seront supprimés immédiatement et définitivement après traitement. Pour plus d'informations, veuillez consulter notre politique de confidentialité."
+      }
+    ],
+    keywords: "signer PDF, signer PDF en ligne, ajouter une signature à PDF, signature PDF gratuite, outil de signature PDF, signature PDF en ligne, signer PDF gratuitement, signer des documents PDF, ajouter une signature en ligne, signature PDF sécurisée, signature de fichiers PDF, outil de signature PDF, signature PDF en ligne gratuite, signer plusieurs PDFs, ajouter une signature aux pages PDF, signer PDF sans inscription, outil de signature PDF, signature PDF en ligne"
+  }
 };
+
 
 export const tools: _tools = {
   select: "Sélectionner",
@@ -26,36 +43,33 @@ export const tools: _tools = {
   drop_files: "Déposez les fichiers ici",
 };
 
-export const downloadFile: _downloadFile = {
-  titles: {
-    "merge-pdf": [
-      "Fusion de fichiers PDF réussie !",
-      "Fusion de fichier PDF réussie !",
-    ],
-  },
-  btnText: {
-    "merge-pdf": [
-      "Télécharger les fichiers PDF fusionnés",
-      "Télécharger le fichier PDF fusionné",
-    ],
-  },
-  backto: {
-    "merge-pdf": "Retour à Fusionner PDF",
-  },
-};
-
 export const edit_page: _edit_page = {
   edit_page_titles: {
-    merge_pdf: "Options de fusion de PDF",
+    sign_pdf: "Options de signature PDF",
   },
-  loader_text: "Veuillez patienter...",
+  loader_text: "veuillez patienter...",
   add_more_button: "Ajouter plus de fichiers",
   action_buttons: {
-    merge_pdf: "Fusionner PDF",
+    sign_pdf: "Signer PDF",
   },
   pages: "pages",
   page: "page",
 };
+
+export const downloadFile: _downloadFile = {
+  titles: {
+    "sign-pdf": ["Les fichiers PDF ont été signés !", "Le fichier PDF a été signé !"],
+  },
+
+  btnText: {
+    "sign-pdf": ["Télécharger les fichiers PDF signés", "Télécharger le fichier PDF signé"],
+  },
+
+  backto: {
+    "sign-pdf": "Retour à Signer PDF",
+  },
+};
+
 
 export const errors: _errors = {
   EMPTY_FILE: {

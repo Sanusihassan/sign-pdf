@@ -81,5 +81,5 @@ export default ({ item, lang }: { item: data_type; lang: string }) => {
 };
 
 export const routes = {
-  "/merge-pdf": { item: tool["Merge_PDF"] },
+  "/sign-pdf": { item: tool["Sign_PDF"] },
 };

@@ -9,72 +9,59 @@ import type {
   landing_page as _landing_page,
 } from "../../content";
 
-export const nav_content = {
-  // इसे अनदेखा करें
-  brand: "Equips",
-  merge_pdf: "पीडीएफ विलय करें",
-  split_pdf: "पीडीएफ विभाजित करें",
-  compress_pdf: "पीडीएफ संपीड़ित करें",
-  convert_pdf: "पीडीएफ परिवर्तित करें",
-  convert_to_pdf: "पीडीएफ में परिवर्तित करें",
-  jpg_to_pdf: "जेपीजी से पीडीएफ",
-  word_to_pdf: "शब्द से पीडीएफ",
-  markdown_to_pdf: "पीडीएफ में मार्कडाउन करें",
-  powerpoint_to_pdf: "पावरपॉइंट से पीडीएफ",
-  excel_to_pdf: "एक्सेल से पीडीएफ",
-  html_to_pdf: "एचटीएमएल से पीडीएफ",
-  web_to_pdf: "वेब से पीडीएफ",
-  convert_from_pdf: "पीडीएफ से परिवर्तित करें",
-  read_edit_pdf: "पीडीएफ पढ़ें और संपादित करें",
-  pdf_to_jpg: "पीडीएफ से जेपीजी",
-  pdf_to_word: "पीडीएफ से शब्द",
-  pdf_to_powerpoint: "पीडीएफ से पावरपॉइंट",
-  pdf_to_excel: "पीडीएफ से एक्सेल",
-  pdf_to_pdf_a: "पीडीएफ से पीडीएफ/ए",
-  pdf_to_text: "पाठ के लिए पीडीएफ",
-  pdf_to_html: "पीडीएफ से एचटीएमएल",
-  pdf_to_markdown: "PDF से मार्कडाउन तक",
-};
 export const tool: _tool = {
-  Merge_PDF: {
-    title: "पीडीएफ विलय",
-    description: "एक दस्तावेज में कई पीडीएफ फ़ाइलों को जोड़ें",
-    color: "var(--red)",
+  Sign_PDF: {
+    title: "PDF साइन करें",
+    seoTitle: "ऑनलाइन PDF साइन करें - मुफ्त PDF सिग्नेचर टूल",
+    description: "ऑनलाइन PDF दस्तावेज़ों पर अपना हस्ताक्षर जोड़ें",
+    color: "#341f97",
     type: ".pdf",
-    to: "/merge-pdf",
-  },
-};
-
-export const downloadFile: _downloadFile = {
-  titles: {
-    "merge-pdf": [
-      "PDF फ़ाइलें मर्ज़ की गई हैं!",
-      "PDF फ़ाइल को मर्ज़ किया गया है!",
+    to: "/sign-pdf",
+    features: [
+      {
+        title: "पूरी तरह से मुफ्त और बिना पंजीकरण",
+        description: "PDFEquips एक मुफ्त ऑनलाइन PDF हस्ताक्षर सेवा प्रदान करता है। खाता बनाने की आवश्यकता नहीं है, और हम कभी भी आपका ईमेल पता या क्रेडिट कार्ड की जानकारी नहीं मांगते हैं।"
+      },
+      {
+        title: "आसानी से उपयोग में आने वाला PDF साइनिंग टूल",
+        description: "PDFEquips किसी भी PDF दस्तावेज़, चाहे वह अनुबंध हो, फॉर्म हो या कोई अन्य दस्तावेज़ हो, सभी प्रारूपों के साथ संगत हस्ताक्षर जोड़ने में आसान बनाता है।"
+      },
+      {
+        title: "PDF फ़ाइलों को ऑनलाइन सुरक्षित रूप से साइन करें",
+        description: "सुरक्षा कारणों से TLS का उपयोग करके हमारे सर्वर पर अपलोड और बनाए गए सभी फ़ाइलें एन्क्रिप्ट की जाती हैं। उन्हें प्रोसेसिंग के बाद तुरंत और स्थायी रूप से हटा दिया जाएगा। अधिक जानकारी के लिए, कृपया हमारी गोपनीयता नीति देखें।"
+      }
     ],
-  },
-  btnText: {
-    "merge-pdf": [
-      "मर्ज़ की गई PDF फ़ाइलें डाउनलोड करें",
-      "मर्ज़ की गई PDF फ़ाइल डाउनलोड करें",
-    ],
-  },
-  backto: {
-    "merge-pdf": "मर्ज़ की गई PDF को वापस जाएं",
-  },
+    keywords: "PDF साइन करें, ऑनलाइन PDF साइन करें, PDF में हस्ताक्षर जोड़ें, मुफ्त PDF साइन करें, PDF सिग्नेचर टूल, ऑनलाइन PDF साइनिंग, मुफ्त PDF साइन करें, PDF दस्तावेज़ों को साइन करें, ऑनलाइन हस्ताक्षर जोड़ें, सुरक्षित PDF साइनिंग, PDF फ़ाइल सिग्नेचर, PDF साइन टूल, मुफ्त ऑनलाइन PDF सिग्नेचर, कई PDFs साइन करें, PDF पेजों में हस्ताक्षर जोड़ें, बिना पंजीकरण PDF साइन करें, PDF साइनिंग टूल, ऑनलाइन PDF सिग्नेचर"
+  }
 };
 
 export const edit_page: _edit_page = {
   edit_page_titles: {
-    merge_pdf: "PDF फ्यूज़न विकल्प",
+    sign_pdf: "PDF साइन विकल्प",
   },
   loader_text: "कृपया प्रतीक्षा करें...",
-  add_more_button: "अधिक फ़ाइलें जोड़ें",
+  add_more_button: "अधिक फाइलें जोड़ें",
   action_buttons: {
-    merge_pdf: "पीडीएफ विलय करें",
+    sign_pdf: "PDF साइन करें",
   },
-  pages: "पृष्ठों",
+  pages: "पृष्ठ",
   page: "पृष्ठ",
 };
+
+export const downloadFile: _downloadFile = {
+  titles: {
+    "sign-pdf": ["PDF फाइलें साइन हो गई हैं!", "PDF फाइल साइन हो गई है!"],
+  },
+
+  btnText: {
+    "sign-pdf": ["साइन की गई PDF फाइलें डाउनलोड करें", "साइन की गई PDF फाइल डाउनलोड करें"],
+  },
+
+  backto: {
+    "sign-pdf": "PDF साइन पर वापस जाएं",
+  },
+};
+
 
 export const tools: _tools = {
   select: "चुनें",
