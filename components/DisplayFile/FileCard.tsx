@@ -1,125 +1,160 @@
-import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
-import { ActionDiv, ActionProps } from "./ActionDiv";
-import { Tooltip } from "react-tooltip";
+import { ActionProps } from "./ActionDiv";
 import type { errors as _ } from "../../content";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createRef } from "react";
 import { Loader } from "./Loader";
-import {
-  getFileDetailsTooltipContent,
-  getFirstPageAsImage,
-  getPlaceHoderImageUrl,
-} from "../../src/utils";
-import { useDispatch } from "react-redux";
-type OmitFileName<T extends ActionProps> = Omit<T, "fileName">;
+import { calculatePages, renderPDFOnCanvas } from "../../src/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { ToolState, setField } from "@/src/store";
+import PageNavigator from "./PageNavigator";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+
+type OmitFileName<T extends ActionProps> = Omit<T, "fileName" | "index">;
 
 type CardProps = OmitFileName<ActionProps> & {
-  index: number;
   file: File;
-  isDraggable: boolean;
-  provided: DraggableProvided;
-  snapshot: DraggableStateSnapshot;
   errors: _;
   loader_text: string;
   fileDetailProps: [string, string, string];
+  index?: number | string;
 };
 
+export type CanvasRefType = {
+  ref: React.RefObject<HTMLCanvasElement>;
+  id: number;
+}[];
+
 const FileCard = ({
-  index,
   file,
-  isDraggable,
-  provided,
-  errors,
   extension,
   loader_text,
-  fileDetailProps,
 }: CardProps) => {
-  const [showLoader, setShowLoader] = useState(true);
-  const [imageUrl, setImageUrl] = useState("");
-  const [tooltipSize, setToolTipSize] = useState("");
+  const [canvasRefs, setCanvasRefs] = useState<CanvasRefType>([]);
+  const pageCount = useSelector(
+    (state: { tool: ToolState }) => state.tool.pageCount
+  );
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   let isSubscribed = true;
-  // if (true) {
-  // } else {
-  //   const sizeInBytes = file.size;
-  //   let size: string = "";
-  //   let isoCode = lang === "fr" ? "fr-FR" : lang == "" ? "en" : lang;
-  //   size = new Intl.NumberFormat(isoCode, {
-  //     notation: "compact",
-  //     style: "unit",
-  //     unit: "byte",
-  //     unitDisplay: "narrow",
-  //   }).format(sizeInBytes);
-  //   let tooltipContent = size;
-  // }
-  // }
+
+  const processFile = async () => {
+    try {
+      if (extension && extension === ".pdf") {
+        if (isSubscribed) {
+          const newCanvasRefs: CanvasRefType = [];
+          for (let i = 1; i <= pageCount; i += 1) {
+            const canvasRef = createRef<HTMLCanvasElement>();
+            newCanvasRefs.push({ ref: canvasRef, id: i });
+          }
+          setCanvasRefs(newCanvasRefs);
+        }
+      } else if (extension && extension !== ".jpg") {
+        if (isSubscribed) {
+          setCanvasRefs(
+            !file.size
+              ? [{ ref: createRef<HTMLCanvasElement>(), id: 1 }]
+              : [{ ref: createRef<HTMLCanvasElement>(), id: 1 }]
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error processing files:", error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
-      let size = await getFileDetailsTooltipContent(
-        file,
-        ...fileDetailProps,
-        dispatch,
-        errors
-      );
-      setToolTipSize(size);
+      let _pageCount = await calculatePages(file);
+      dispatch(setField({ pageCount: _pageCount }));
     })();
-    const processFile = async () => {
-      try {
-        setShowLoader(true);
-        if (extension && extension === ".pdf") {
-          if (isSubscribed) {
-            setImageUrl(await getFirstPageAsImage(file, dispatch, errors));
-          }
-        } else if (extension && extension !== ".jpg") {
-          if (isSubscribed) {
-            setImageUrl(
-              !file.size
-                ? "/images/corrupted.png"
-                : getPlaceHoderImageUrl(extension)
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Error processing files:", error);
-      } finally {
-        setShowLoader(false);
-      }
-    };
     processFile();
     return () => {
       isSubscribed = false;
     };
-  }, [extension, file]);
-  return (
-    <div
-      className="card item"
-      data-tooltip-id={`item-tooltip-${index}`}
-      data-tooltip-html={tooltipSize}
-      data-tooltip-place="top"
-      {...(isDraggable ? provided.dragHandleProps : {})}
-    >
-      {showLoader ? <Loader loader_text={loader_text} /> : null}
-      <bdi>
-        <Tooltip id={`item-tooltip-${index}`} />
-      </bdi>
-      <ActionDiv
-        extension={extension}
-        index={index}
-        errors={errors}
-        fileName={file.name}
-      />
-      <div className="card-body d-flex flex-column">
-        {!showLoader ? (
-          <img
-            className="img-fluid-custom object-fit-contain rounded item-img"
-            src={imageUrl}
-            alt={`Selected file ${index}`}
-            draggable={false}
-          />
-        ) : null}
+  }, [extension, file, pageCount]);
 
-        <p className="text-center">{file.name}</p>
-      </div>
-    </div>
+  useEffect(() => {
+    canvasRefs.forEach(({ ref, id }) => {
+      if (ref.current) {
+        renderPDFOnCanvas(ref.current, id, file);
+      }
+    });
+  }, [canvasRefs]);
+
+  useEffect(() => {
+    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const page = parseInt(entry.target.id.replace('page-', ''), 10);
+          setCurrentPage(page);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5,
+    });
+
+    canvasRefs.forEach(({ ref }) => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      canvasRefs.forEach(({ ref }) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, [canvasRefs]);
+
+  const handleZoomChange = (zoomType: 'fit-width' | 'fit-page' | 'zoom-in' | 'zoom-out') => {
+    // To be implemented based on requirements
+  };
+
+  return (
+    <>
+      {canvasRefs.length === 0 ? (
+        <div className="initial-loader">
+          <Loader loader_text={loader_text} />
+        </div>
+      ) : (
+        <div className="pages">
+          {canvasRefs.map(({ ref, id }) => (
+            <div key={id.toString()} className="page" id={`page-${id}`}>
+              <TransformWrapper
+                initialScale={1}
+                pinch={{ step: 10 }}
+                limitToBounds={true}
+                centerOnInit
+                minScale={1}
+                maxScale={3}
+                doubleClick={{
+                  mode: "toggle",
+                  animationType: "easeInOutQuad",
+                }}
+                wheel={{
+                  disabled: true
+                }}
+              >
+                <TransformComponent>
+                  <canvas ref={ref} className="img-fluid-custom object-fit-contain rounded item-img" />
+                </TransformComponent>
+              </TransformWrapper>
+            </div>
+          ))}
+          <PageNavigator
+            currentPage={currentPage}
+            totalPages={pageCount}
+            onZoomChange={handleZoomChange}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

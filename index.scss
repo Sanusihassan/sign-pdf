@@ -41,6 +41,33 @@ body {
   sans-serif;
 }
 
+// Define primary color
+$primary-color: #341f97;
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 10px; // Width of the scrollbar
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; // Track background color
+  border-radius: 1em; // Rounded corners for the track
+}
+
+::-webkit-scrollbar-thumb {
+  background: $primary-color; // Thumb (handle) color
+  border-radius: 1em; // Rounded corners for the thumb
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: darken($primary-color, 10%); // Darker color when hovering
+}
+
+// Optional: for the vertical scrollbar
+::-webkit-scrollbar-button {
+  display: none; // Hide the up/down buttons on the scrollbar
+}
+
 .tools-page {
   min-height: fit-content;
 }
@@ -151,4 +178,8 @@ footer {
       justify-content: space-between !important;
     }
   }
+}
+
+body {
+  touch-action: none;
 }

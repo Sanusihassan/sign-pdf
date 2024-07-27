@@ -1,17 +1,90 @@
-/// i want to modify this so that one row should have only 4 elements max
-.display-file {
+%grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(27%, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(24%, 1fr));
+
   @media (max-width: 600px) {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   }
-  gap: 10px;
-  justify-content: center;
-  min-height: 300px;
-  padding: 10px;
-  align-items: stretch;
+}
+
+.display-file {
+  .pages {
+    // @extend %grid;
+    max-height: 100vh;
+    overflow: auto;
+    padding: 10px;
+    @include extend("position-relative");
+
+    .page {
+      canvas {
+        border: 1px solid #dee2e6;
+      }
+    }
+  }
+
+  .page-navigator {
+    @include extend("d-flex justify-content-between align-items-center");
+    z-index: 800;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #f8f9fa; // Background color similar to Bootstrap's default
+
+    .nav-button {
+      @include extend("btn btn-secondary");
+
+      // &-prev {
+      //   // Additional styling for the previous button, if needed
+      // }
+
+      // &-next {
+      //   // Additional styling for the next button, if needed
+      // }
+    }
+
+    .page-info {
+      @include extend("d-flex align-items-center");
+
+      .page-number {
+        width: 60px;
+        text-align: center;
+        margin: 0 10px;
+      }
+
+      .separator {
+        margin: 0 10px;
+      }
+
+      .fit-options {
+        @include extend("d-flex");
+
+        .fit-button {
+          @include extend("btn btn-light");
+          margin: 0 5px;
+        }
+      }
+
+      .zoom-controls {
+        @include extend("d-flex");
+
+        .zoom-button {
+          @include extend("btn btn-light");
+          margin: 0 5px;
+        }
+      }
+    }
+  }
+
+  .initial-loader {
+    height: 100vh;
+    width: 100%;
+    @include extend("d-flex justify-content-center align-items-center");
+  }
 
   .drag-element {
+
     .image-tooltip,
     .item-tooltip {
       height: 100%;
@@ -22,9 +95,6 @@
       height: 100%;
     }
 
-    .item-img {
-      cursor: pointer;
-    }
 
     display: flex;
     flex-direction: column;
@@ -77,24 +147,72 @@
     @extend %show-action;
   }
 
-  // .action-div {
-  //     position: absolute;
-  //     top: 0;
-  //     left: 0;
-  //     z-index: 1;
-  //     display: flex;
-  //     flex-direction: column;
-  //     align-items: center;
-  //     justify-content: center;
-  //     height: 100%;
-  //     width: 100%;
-  //     opacity: 0;
-  //     transition: opacity 0.2s ease-in-out;
-  // }
-
   .hero-icon {
     display: inline-block;
     width: 1.3em;
     height: 1.3em;
+  }
+
+  .range-file-card {
+    &:not(.one-item-grid) {
+      display: grid;
+      grid-template-columns: 2fr 0.5fr 2fr;
+    }
+
+    &.one-item-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .only-child {
+        flex: 0 1 78%;
+      }
+    }
+
+    .icon {
+      align-self: center;
+      justify-self: center;
+      fill: map-get($color-map, split-pdf);
+      width: 2em;
+      height: 2em;
+    }
+
+    .only-child {
+      grid-column: 1 / -1;
+      justify-self: center;
+    }
+  }
+
+  .extract-file-card {
+    @include extend("position-absolute w-100 h-100");
+
+    .icon {
+      @include extend("check-icon");
+    }
+  }
+
+  // display layouts:
+  .range-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-flow: dense;
+    gap: 2%;
+
+    .range {
+      border: 2px dashed var(--gray);
+      @include extend("p-2");
+
+      // &:nth-child(odd):not(:first-child) {
+      //   grid-column: 1 / -1;
+      // }
+      &:last-child:not(:nth-of-type(even)) {
+        grid-column: 1 / -1;
+      }
+
+      h6 {
+        @include extend("range-title mb-0");
+        // margin: 0 !important;
+      }
+    }
   }
 }

@@ -295,3 +295,27 @@ export async function calculatePages(file: PDFFile): Promise<number> {
     };
   });
 }
+
+
+export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: number, file: File) => {
+  const fileUrl = URL.createObjectURL(file);
+  const loadingTask = getDocument(fileUrl);
+  const pdf = await loadingTask.promise;
+  const page = await pdf.getPage(pageNumber);
+  const viewport = page.getViewport({ scale: 1.5 });
+  if (canvas) {
+    const context = canvas.getContext("2d");
+    if (!context) {
+      throw new Error("Canvas context not available.");
+    }
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    const renderContext = {
+      canvasContext: context,
+      viewport: viewport,
+    };
+    await page.render(renderContext).promise;
+  }
+
+};

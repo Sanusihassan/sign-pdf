@@ -4,9 +4,11 @@
       background-color: $color;
 
       &:hover {
-        @if $key == "PDF-to-PDF-A" or $key == "pdf-to-markdown" {
+        @if $key =="PDF-to-PDF-A" or $key =="pdf-to-markdown" {
           background-color: lighten($color, 14%);
-        } @else {
+        }
+
+        @else {
           background-color: darken($color, 13%);
         }
       }
@@ -15,7 +17,12 @@
 }
 
 .tools-page {
+
   // overlay
+  *:not(.edit-page) {
+    touch-action: none;
+  }
+
   .overlay {
     position: absolute;
     inset: 0px;
@@ -53,23 +60,29 @@
       cursor: pointer;
     }
   }
+
   .download-page {
     min-height: 50vh;
+
     .back-btn {
       display: flex;
       width: 40px;
       height: 40px;
+
       .icon {
         flex: 1;
       }
     }
   }
 }
+
 .md-2pdf {
   display: flex;
+
   @media (max-width: 600px) {
     flex-wrap: wrap;
   }
+
   height: 100%;
 
   .editor {
@@ -88,6 +101,7 @@
     align-items: center;
     background-color: white;
   }
+
   .react-markdown-container {
     flex: 0 1 50%;
     padding: 15px;
@@ -99,6 +113,7 @@
   font-size: 2em;
   cursor: pointer;
 }
+
 .upload-btn,
 .submit-btn,
 .download-btn,
@@ -109,19 +124,24 @@
 .translate-pdf {
   .translate-file-selector {
     height: 50vh;
+
     %flex-centered {
       @include extend("flex justify-content-center align-items-center");
     }
+
     .dropzone {
       @extend %flex-centered;
     }
+
     .devider {
       width: 2px;
       background-color: #dee2e6;
     }
+
     .file-selector {
       @extend %flex-centered;
     }
+
     .upload-btn {
       input {
         opacity: 0;
@@ -129,6 +149,7 @@
         top: 0;
         left: 0;
         @include extend("w-100 h-100");
+
         &::-webkit-file-upload-button {
           @include extend("w-100 h-100 d-block");
           cursor: pointer;

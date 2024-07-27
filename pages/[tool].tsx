@@ -1,4 +1,3 @@
-import Head from "next/head";
 import NavBar from "pdfequips-navbar/NavBar";
 import Tool from "../components/Tool";
 import {
@@ -10,6 +9,7 @@ import {
 } from "../src/content/content";
 import { useRouter } from "next/router";
 import { OpenGraph } from "pdfequips-open-graph/OpenGraph";
+import Head from "next/head"; // Import next/head
 
 export type data_type = {
   title: string;
@@ -29,6 +29,7 @@ export async function getStaticPaths() {
     fallback: false,
   };
 }
+
 export async function getStaticProps({
   params,
 }: {
@@ -40,7 +41,7 @@ export async function getStaticProps({
   return { props: { item } };
 }
 
-export default ({ item }: { item: data_type }) => {
+export default function ToolPage({ item }: { item: data_type }) {
   const router = useRouter();
   const { asPath } = router;
   const websiteSchema = {
@@ -50,6 +51,7 @@ export default ({ item }: { item: data_type }) => {
     description: item.description,
     url: `https://www.pdfequips.com${asPath}`,
   };
+
   return (
     <>
       <Head>
@@ -72,7 +74,6 @@ export default ({ item }: { item: data_type }) => {
           ogTitle={item.seoTitle}
           ogImage={`https://www.pdfequips.com/images${item.to}.png`}
         />
-        {/* needed for styles */}
       </Head>
       <NavBar path={item.to.replace("/", "")} lang="" />
       <Tool
@@ -87,9 +88,8 @@ export default ({ item }: { item: data_type }) => {
       />
     </>
   );
-};
+}
 
-// export default ToolPage;
 export const routes = {
   "/sign-pdf": { item: tool["Sign_PDF"] },
 };

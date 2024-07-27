@@ -14,6 +14,7 @@ export interface ToolState {
   showDownloadBtn: boolean;
   showOptions: boolean;
   nav_height: number;
+  pageCount: number;
 }
 
 const initialState: ToolState = {
@@ -25,6 +26,7 @@ const initialState: ToolState = {
   showDownloadBtn: false,
   showOptions: false,
   nav_height: 0,
+  pageCount: 0
 };
 
 const toolSlice = createSlice({

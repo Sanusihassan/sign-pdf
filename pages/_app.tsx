@@ -32,6 +32,7 @@ function MyApp({ Component, pageProps, lang }: AppProps & { lang: string }) {
     `,
           }}
         ></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
       <ReduxProvider store={store}>
         <Component {...pageProps} lang={lang} />

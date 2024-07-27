@@ -71,7 +71,7 @@ const EditPage = ({
   const gearRef = useRef(null);
   return (
     <aside
-      className={`edit-page ${showTool || showDownloadBtn ? "d-none" : ""}`}
+      className={`edit-page${showTool || showDownloadBtn ? " d-none" : ""}`}
     >
       <section className="edit-area position-relative">
         <DisplayFile
