@@ -32,6 +32,10 @@ $color-map: (
   "sign-pdf": #341f97
 );
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @include ar-wrapper {
     text-align: right !important;
@@ -180,6 +184,21 @@ footer {
   }
 }
 
-body {
-  touch-action: none;
-}
+// body {
+//   touch-action: none;
+// }
+
+// .file-card-container {
+//   width: 100%;
+//   overflow: hidden;
+// }
+
+// .pages-container {
+//   width: 100%;
+//   overflow-x: auto;
+//   scroll-snap-type: y mandatory;
+// }
+
+// .page {
+//   scroll-snap-align: start;
+// }

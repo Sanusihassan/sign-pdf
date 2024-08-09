@@ -5,7 +5,7 @@ import type { errors as _ } from "../content";
 import { setField } from "./store";
 import { getDocument } from "pdfjs-dist";
 import { PDFDocumentProxy, PageViewport, RenderTask } from "pdfjs-dist";
-const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
+export const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
 import { GlobalWorkerOptions } from "pdfjs-dist";
 GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -280,29 +280,37 @@ interface PDFFile extends Blob {
   name: string;
 }
 
-export async function calculatePages(file: PDFFile): Promise<number> {
+export async function calculatePages(file: PDFFile): Promise<number | undefined> {
   const reader = new FileReader();
-  reader.readAsArrayBuffer(file);
-  return new Promise<number>((resolve, reject) => {
-    reader.onload = async (event) => {
-      try {
-        const typedArray = new Uint8Array(event.target?.result as ArrayBuffer);
-        const pdf = await getDocument(typedArray).promise;
-        resolve(pdf.numPages);
-      } catch (error) {
-        reject(error);
-      }
-    };
-  });
+  if (file) {
+    reader.readAsArrayBuffer(file);
+    return new Promise<number>((resolve, reject) => {
+      reader.onload = async (event) => {
+        try {
+          const typedArray = new Uint8Array(event.target?.result as ArrayBuffer);
+          const pdf = await getDocument(typedArray).promise;
+          resolve(pdf.numPages);
+        } catch (error) {
+          reject(error);
+        }
+      };
+    });
+  }
 }
 
 
+let pdfDocument: PDFDocumentProxy | null = null;
+
 export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: number, file: File) => {
-  const fileUrl = URL.createObjectURL(file);
-  const loadingTask = getDocument(fileUrl);
-  const pdf = await loadingTask.promise;
-  const page = await pdf.getPage(pageNumber);
+  if (!pdfDocument) {
+    const fileUrl = URL.createObjectURL(file);
+    const loadingTask = getDocument(fileUrl);
+    pdfDocument = await loadingTask.promise;
+  }
+
+  const page = await pdfDocument.getPage(pageNumber);
   const viewport = page.getViewport({ scale: 1.5 });
+
   if (canvas) {
     const context = canvas.getContext("2d");
     if (!context) {
@@ -317,5 +325,4 @@ export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: n
     };
     await page.render(renderContext).promise;
   }
-
 };

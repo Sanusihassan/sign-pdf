@@ -1,3 +1,4 @@
+"use client"
 import NavBar from "pdfequips-navbar/NavBar";
 import Tool from "../components/Tool";
 import {
@@ -75,7 +76,7 @@ export default function ToolPage({ item }: { item: data_type }) {
           ogImage={`https://www.pdfequips.com/images${item.to}.png`}
         />
       </Head>
-      <NavBar path={item.to.replace("/", "")} lang="" />
+      <NavBar path={item.to.replace("/", "")} shadow={false} lang="" />
       <Tool
         tools={tools}
         data={item}

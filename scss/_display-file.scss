@@ -22,60 +22,67 @@
     }
   }
 
-  .page-navigator {
-    @include extend("d-flex justify-content-between align-items-center");
-    z-index: 800;
+  .page-navigator-wrapper {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px;
-    background-color: #f8f9fa; // Background color similar to Bootstrap's default
+    width: 69%;
 
-    .nav-button {
-      @include extend("btn btn-secondary");
-
-      // &-prev {
-      //   // Additional styling for the previous button, if needed
-      // }
-
-      // &-next {
-      //   // Additional styling for the next button, if needed
-      // }
+    @include xs {
+      width: 100%;
     }
 
-    .page-info {
-      @include extend("d-flex align-items-center");
+    bottom: 0;
+    left: 0;
+    z-index: 800;
+    @include extend("d-flex justify-content-center");
 
-      .page-number {
-        width: 60px;
-        text-align: center;
-        margin: 0 10px;
+    .page-navigator {
+      @include extend("d-flex justify-content-between align-items-center");
+      flex: 0 1 50%;
+      padding: 10px;
+      background-color: #f8f9fa; // Background color similar to Bootstrap's default
+
+      .nav-button {
+        @include extend("btn btn-secondary");
+        // &-prev {
+        //   // Additional styling for the previous button, if needed
+        // }
+
+        // &-next {
+        //   // Additional styling for the next button, if needed
+        // }
       }
 
-      .separator {
-        margin: 0 10px;
-      }
+      .page-info {
+        @include extend("d-flex align-items-center");
 
-      .fit-options {
-        @include extend("d-flex");
+        .page-number {
+          width: 60px;
+          text-align: center;
+          margin: 0 10px;
+          @include extend("form-control");
+        }
 
-        .fit-button {
-          @include extend("btn btn-light");
-          margin: 0 5px;
+        .separator {
+          margin: 0 10px;
+        }
+
+        .fit-options {
+          @include extend("d-flex");
+
+          .fit-button {
+            @include extend("btn btn-light");
+            margin: 0 5px;
+          }
         }
       }
 
-      .zoom-controls {
-        @include extend("d-flex");
-
-        .zoom-button {
-          @include extend("btn btn-light");
-          margin: 0 5px;
-        }
+      .zoom-button {
+        @include extend("btn btn-light");
+        margin: 0 5px;
       }
     }
   }
+
 
   .initial-loader {
     height: 100vh;
@@ -188,31 +195,6 @@
 
     .icon {
       @include extend("check-icon");
-    }
-  }
-
-  // display layouts:
-  .range-layout {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-flow: dense;
-    gap: 2%;
-
-    .range {
-      border: 2px dashed var(--gray);
-      @include extend("p-2");
-
-      // &:nth-child(odd):not(:first-child) {
-      //   grid-column: 1 / -1;
-      // }
-      &:last-child:not(:nth-of-type(even)) {
-        grid-column: 1 / -1;
-      }
-
-      h6 {
-        @include extend("range-title mb-0");
-        // margin: 0 !important;
-      }
     }
   }
 }

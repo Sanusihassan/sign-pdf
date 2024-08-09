@@ -124,7 +124,7 @@ const FileCard = ({
       ) : (
         <div className="pages">
           {canvasRefs.map(({ ref, id }) => (
-            <div key={id.toString()} className="page" id={`page-${id}`}>
+            <div key={id.toString()} className="page">
               <TransformWrapper
                 initialScale={1}
                 pinch={{ step: 10 }}
@@ -141,17 +141,19 @@ const FileCard = ({
                 }}
               >
                 <TransformComponent>
-                  <canvas ref={ref} className="img-fluid-custom object-fit-contain rounded item-img" />
+                  <canvas ref={ref} className="img-fluid-custom object-fit-contain rounded item-img" id={`page-${id}`} />
                 </TransformComponent>
               </TransformWrapper>
             </div>
           ))}
-          <PageNavigator
-            currentPage={currentPage}
-            totalPages={pageCount}
-            onZoomChange={handleZoomChange}
-            onPageChange={setCurrentPage}
-          />
+          <div className="page-navigator-wrapper">
+            <PageNavigator
+              currentPage={currentPage}
+              totalPages={pageCount}
+              onZoomChange={handleZoomChange}
+              onPageChange={setCurrentPage}
+            />
+          </div>
         </div>
       )}
     </>
