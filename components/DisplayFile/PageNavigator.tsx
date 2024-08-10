@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight, FaSearchPlus, FaSearchMinus, FaArrowsAltH, FaExpand } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip';
 
@@ -13,9 +13,10 @@ const PageNavigator: React.FC<PageNavigatorProps> = ({
   currentPage,
   totalPages,
   onPageChange,
-  onZoomChange,
+  onZoomChange
 }) => {
   const [fitType, setFitType] = useState<'fit-width' | 'fit-page'>('fit-width');
+  const [inputValue, setInputValue] = useState(currentPage.toString());
 
   const handleFitToggle = () => {
     const newFitType = fitType === 'fit-width' ? 'fit-page' : 'fit-width';
@@ -24,12 +25,23 @@ const PageNavigator: React.FC<PageNavigatorProps> = ({
   };
 
   const handlePageChange = (page: number) => {
-    onPageChange(page);
+    if (page >= 1 && page <= totalPages) {
+      onPageChange(page);
+    }
   };
 
-  // useEffect(() => {
-  //   // console.log(currentPage)
-  // }, [currentPage]);
+  useEffect(() => {
+    setInputValue(currentPage.toString());
+  }, [currentPage]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    const page = parseInt(value, 10);
+    if (!isNaN(page) && page >= 1 && page <= totalPages) {
+      handlePageChange(page);
+    }
+  };
 
   return (
     <div className="page-navigator">
@@ -41,7 +53,7 @@ const PageNavigator: React.FC<PageNavigatorProps> = ({
 
       <button
         className="nav-button nav-button-prev"
-        onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+        onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage <= 1}
         data-tooltip-id="prev-tooltip"
         data-tooltip-content="Previous Page"
@@ -52,15 +64,10 @@ const PageNavigator: React.FC<PageNavigatorProps> = ({
       <div className="page-info">
         <input
           type="number"
-          min="1"
+          min={1}
           max={totalPages}
-          value={currentPage}
-          onChange={(e) => {
-            const page = parseInt(e.target.value, 10);
-            if (!isNaN(page) && page >= 1 && page <= totalPages) {
-              handlePageChange(page);
-            }
-          }}
+          value={inputValue}
+          onChange={handleInputChange}
           className="page-number"
         />
         <span className="separator">of {totalPages}</span>
@@ -95,7 +102,7 @@ const PageNavigator: React.FC<PageNavigatorProps> = ({
 
       <button
         className="nav-button nav-button-next"
-        onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+        onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
         data-tooltip-id="next-tooltip"
         data-tooltip-content="Next Page"

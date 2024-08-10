@@ -6,26 +6,22 @@ interface PageCanvasProps {
     id: number;
     canvasRef: React.RefObject<HTMLCanvasElement>;
     setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
-    zoomLevel: number;
 }
 
-const PageCanvas: React.FC<PageCanvasProps> = ({ id, canvasRef, setCurrentPage, zoomLevel }) => {
+const PageCanvas: React.FC<PageCanvasProps> = ({ id, canvasRef, setCurrentPage }) => {
     const { ref, inView } = useInView({
-        threshold: 0.1,
+        threshold: 0.01,
         triggerOnce: false,
     });
 
     useEffect(() => {
-        console.log(inView);
         if (inView) {
             setCurrentPage(id);
         }
     }, [inView, id, setCurrentPage]);
 
     return (
-        <div ref={ref} className="page" style={{
-            transform: `scale(${zoomLevel})`,
-        }}>
+        <div ref={ref} className="page">
             <TransformWrapper
                 initialScale={1}
                 pinch={{ step: 10 }}

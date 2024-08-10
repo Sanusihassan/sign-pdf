@@ -15,6 +15,30 @@
     padding: 10px;
     @include extend("position-relative");
 
+    &.scale-1_0 .page {
+      transform: scale(1.0);
+    }
+
+    &.scale-0_9 .page {
+      transform: scale(0.9);
+    }
+
+    &.scale-0_8 .page {
+      transform: scale(0.8);
+    }
+
+    &.scale-0_7 .page {
+      transform: scale(0.7);
+    }
+
+    &.scale-0_6 .page {
+      transform: scale(0.6);
+    }
+
+    &.scale-0_5 .page {
+      transform: scale(0.5);
+    }
+
     .page {
       transform-origin: center top;
       transition: transform 0.3s ease-in-out;
@@ -33,7 +57,7 @@
       width: 100%;
     }
 
-    bottom: 0;
+    bottom: 1%;
     left: 0;
     z-index: 800;
     @include extend("d-flex justify-content-center");
