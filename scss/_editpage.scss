@@ -105,7 +105,6 @@
 
   .options {
     border-left: 1px solid #dee2e6;
-    pointer-events: none !important;
     flex: 1 0 25%;
     grid-template-rows: 7% 85% 13%;
 
@@ -222,7 +221,7 @@
     }
   }
 
-  @import "./image-options";
+  @import "./sign-pdf-options";
 }
 
 .submit-btn {
