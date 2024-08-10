@@ -1,12 +1,12 @@
+import React, { useEffect, useState, createRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ActionProps } from "./ActionDiv";
 import type { errors as _ } from "../../content";
-import { useEffect, useState, createRef } from "react";
 import { Loader } from "./Loader";
 import { calculatePages, renderPDFOnCanvas } from "../../src/utils";
-import { useDispatch, useSelector } from "react-redux";
 import { ToolState, setField } from "@/src/store";
 import PageNavigator from "./PageNavigator";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import PageCanvas from "./PageCanvas";
 
 type OmitFileName<T extends ActionProps> = Omit<T, "fileName" | "index">;
 
@@ -23,11 +23,11 @@ export type CanvasRefType = {
   id: number;
 }[];
 
-const FileCard = ({
+const FileCard: React.FC<CardProps> = ({
   file,
   extension,
   loader_text,
-}: CardProps) => {
+}) => {
   const [canvasRefs, setCanvasRefs] = useState<CanvasRefType>([]);
   const pageCount = useSelector(
     (state: { tool: ToolState }) => state.tool.pageCount
@@ -35,6 +35,7 @@ const FileCard = ({
   const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useDispatch();
   let isSubscribed = true;
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   const processFile = async () => {
     try {
@@ -80,40 +81,29 @@ const FileCard = ({
     });
   }, [canvasRefs]);
 
-  useEffect(() => {
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const page = parseInt(entry.target.id.replace('page-', ''), 10);
-          setCurrentPage(page);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.5,
-    });
-
-    canvasRefs.forEach(({ ref }) => {
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-    });
-
-    return () => {
-      canvasRefs.forEach(({ ref }) => {
-        if (ref.current) {
-          observer.unobserve(ref.current);
-        }
-      });
-    };
-  }, [canvasRefs]);
-
   const handleZoomChange = (zoomType: 'fit-width' | 'fit-page' | 'zoom-in' | 'zoom-out') => {
-    // To be implemented based on requirements
+    switch (zoomType) {
+      case "zoom-in":
+        setZoomLevel(prevZoom => {
+          let zoomInAmount = Math.min(prevZoom + 0.1, 3);
+          if (zoomInAmount >= 1) {
+            zoomInAmount = 1;
+          }
+          return zoomInAmount;
+        }); // Max zoom of 3x
+        break;
+      case "zoom-out":
+        setZoomLevel(prevZoom => Math.max(prevZoom - 0.1, 0.5)); // Min zoom of 0.5x
+        break;
+      case "fit-width":
+        setZoomLevel(1);
+        break;
+      case "fit-page":
+        setZoomLevel(.75);
+        break;
+    }
   };
+
 
   return (
     <>
@@ -122,30 +112,12 @@ const FileCard = ({
           <Loader loader_text={loader_text} />
         </div>
       ) : (
-        <div className="pages">
-          {canvasRefs.map(({ ref, id }) => (
-            <div key={id.toString()} className="page">
-              <TransformWrapper
-                initialScale={1}
-                pinch={{ step: 10 }}
-                limitToBounds={true}
-                centerOnInit
-                minScale={1}
-                maxScale={3}
-                doubleClick={{
-                  mode: "toggle",
-                  animationType: "easeInOutQuad",
-                }}
-                wheel={{
-                  disabled: true
-                }}
-              >
-                <TransformComponent>
-                  <canvas ref={ref} className="img-fluid-custom object-fit-contain rounded item-img" id={`page-${id}`} />
-                </TransformComponent>
-              </TransformWrapper>
-            </div>
-          ))}
+        <>
+          <div className="pages">
+            {canvasRefs.map(({ ref, id }) => (
+              <PageCanvas key={id} id={id} canvasRef={ref} setCurrentPage={setCurrentPage} zoomLevel={zoomLevel} />
+            ))}
+          </div>
           <div className="page-navigator-wrapper">
             <PageNavigator
               currentPage={currentPage}
@@ -154,7 +126,7 @@ const FileCard = ({
               onPageChange={setCurrentPage}
             />
           </div>
-        </div>
+        </>
       )}
     </>
   );

@@ -16,6 +16,9 @@
     @include extend("position-relative");
 
     .page {
+      transform-origin: center top;
+      transition: transform 0.3s ease-in-out;
+
       canvas {
         border: 1px solid #dee2e6;
       }

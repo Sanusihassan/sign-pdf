@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaChevronLeft, FaChevronRight, FaSearchPlus, FaSearchMinus, FaArrowsAltH, FaExpand } from 'react-icons/fa';
 import { Tooltip } from 'react-tooltip';
 
@@ -27,9 +27,9 @@ const PageNavigator: React.FC<PageNavigatorProps> = ({
     onPageChange(page);
   };
 
-  useEffect(() => {
-    console.log(currentPage)
-  }, [currentPage]);
+  // useEffect(() => {
+  //   // console.log(currentPage)
+  // }, [currentPage]);
 
   return (
     <div className="page-navigator">
