@@ -13,6 +13,8 @@ const store = configureStore({
   },
 });
 
+export type RootState = ReturnType<typeof store.getState>;
+
 function MyApp({ Component, pageProps, lang }: AppProps & { lang: string }) {
   return (
     <>

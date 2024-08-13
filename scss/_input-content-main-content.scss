@@ -1,0 +1,56 @@
+.main {
+    flex: 1;
+    @include extend("mb-2");
+
+    [class*=-canvas] {
+        height: 100%;
+    }
+
+    .upload-canvas {
+        border: 3px dashed map-get($color-map, "sign-pdf");
+        @include extend("flex-centered text-center");
+        flex-flow: wrap;
+
+        .drop-msg {
+            @include extend("lead");
+        }
+
+        .upload-btn {
+            @include extend("btn btn-lg position-relative text-white");
+            background-color: map-get($color-map, "sign-pdf");
+
+            &:hover {
+                background-color: darken(map-get($color-map, "sign-pdf"), 5) !important;
+            }
+
+            input {
+                opacity: 0;
+                @include extend("position-absolute");
+            }
+
+            width: fit-content;
+
+            svg {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .text-input-canvas {
+        .input {
+            @include extend("w-100 h-100 p-3");
+            font-size: 4em;
+
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    .drawing-canvas {
+        .canvas {
+            border: none !important;
+            @include extend("w-100 h-100");
+        }
+    }
+}

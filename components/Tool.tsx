@@ -12,6 +12,7 @@ import { useFileStore } from "../src/file-store";
 import { FileInputForm } from "./Tool/FileInputForm";
 import DownloadFile from "./DownloadFile";
 import { validateFiles } from "@/src/utils";
+import { SettingsModal } from "./SettingsModal";
 
 export type errorType = {
   response: {
@@ -94,6 +95,7 @@ const Tool: React.FC<ToolProps> = ({
     ".html": ".html, .htm",
   };
 
+
   return (
     <>
       <div
@@ -139,6 +141,7 @@ const Tool: React.FC<ToolProps> = ({
         <DownloadFile lang={lang} downloadFile={downloadFile} path={path} />
         {/* )} */}
       </div>
+      <SettingsModal />
     </>
   );
 };

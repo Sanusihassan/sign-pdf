@@ -157,6 +157,7 @@ a.dropdown-item {
 @import "./scss/toolspage";
 @import "./scss/editpage";
 @import "./scss/display-file";
+@import "./scss/settings-modal";
 
 footer {
   .copyright-row {
@@ -181,5 +182,106 @@ footer {
     @include xs {
       justify-content: space-between !important;
     }
+  }
+}
+
+.hide {
+  @include extend("d-none")
+}
+
+
+.overlay {
+  position: absolute;
+  inset: 0px;
+  background-color: rgb(0 0 0 / 80%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 1;
+  color: white;
+  border: 3px dashed;
+  width: 100%;
+  height: 100vh;
+}
+
+
+.cedarville-cursive-regular {
+  font-family: "Cedarville Cursive", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.arizonia-regular {
+  font-family: "Arizonia", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lobster-regular {
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.rouge-script-regular {
+  font-family: "Rouge Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.alex-brush-regular {
+  font-family: "Alex Brush", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.sacramento-regular {
+  font-family: "Sacramento", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.main-btn {
+  @include extend("btn text-white");
+
+  &.lg {
+    @include extend("btn-lg");
+  }
+
+  $main-color: map-get($color-map, "sign-pdf");
+  $main-darken: darken(map-get($color-map, "sign-pdf"), 5);
+
+  &:not(&-outlined):not(:disabled) {
+    background-color: $main-color !important;
+
+    &:hover,
+    &:active {
+      background-color: $main-darken !important;
+    }
+
+    &:active {
+      scale: .99;
+    }
+  }
+
+  &-outlined:not(:disabled) {
+    @include extend("bg-white");
+    border: 1px solid $main-color !important;
+    color: $main-color !important;
+
+    &:hover,
+    &:active {
+      background-color: lighten($main-color, 10) !important;
+      @include extend("text-white");
+    }
+  }
+
+  &:disabled {
+    background-color: #636e72 !important;
+    pointer-events: auto !important;
+    cursor: not-allowed !important;
   }
 }

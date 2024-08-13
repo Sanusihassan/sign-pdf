@@ -3,3 +3,8 @@
   background-color: darken(#f8f9fa, 20%);
   border-color: darken(#f8f9fa, 20%);
 }
+
+
+%flex-centered {
+  @include extend("d-flex justify-content-center align-items-center");
+}

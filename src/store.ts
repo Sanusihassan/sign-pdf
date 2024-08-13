@@ -15,6 +15,9 @@ export interface ToolState {
   showOptions: boolean;
   nav_height: number;
   pageCount: number;
+  signature: string;
+  showSignModal: boolean;
+  signatureSVGString: string;
 }
 
 const initialState: ToolState = {
@@ -26,7 +29,10 @@ const initialState: ToolState = {
   showDownloadBtn: false,
   showOptions: false,
   nav_height: 0,
-  pageCount: 0
+  pageCount: 0,
+  signature: "",
+  showSignModal: false,
+  signatureSVGString: ""
 };
 
 const toolSlice = createSlice({

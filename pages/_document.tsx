@@ -1,3 +1,7 @@
+/**
+ * this is my _document.tsx file 
+ * i have a showSignModal on my redux store depending on that boolean value if it's true then i want to set the css overflow property to body to hidden otherwise initial
+ */
 import Document, {
   Html,
   Head,
@@ -32,10 +36,55 @@ const MyDocument = ({ lang }: { lang: string }) => {
           rel="stylesheet"
         />
         <meta name="google-adsense-account" content="ca-pub-7391414384206267" />
+        {/* Cedarville Cursive */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap" rel="stylesheet" />
+
+        {/* Arizonia */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Arizonia&family=Cedarville+Cursive&display=swap" rel="stylesheet" />
+
+        {/* Lobster */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Arizonia&family=Cedarville+Cursive&family=Lobster&display=swap" rel="stylesheet" />
+
+        {/* Rouge Script */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Arizonia&family=Cedarville+Cursive&family=Lobster&family=Rouge+Script&display=swap" rel="stylesheet" />
+
+
+        {/* Alex Brush */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Arizonia&family=Cedarville+Cursive&family=Lobster&family=Rouge+Script&display=swap" rel="stylesheet" />
+
+        {/* Sacramento */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Arizonia&family=Cedarville+Cursive&family=Lobster&family=Rouge+Script&family=Sacramento&display=swap" rel="stylesheet" />
       </Head>
       <body>
         <Main />
         <NextScript />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              function updateBodyOverflow() {
+                const showSignModal = window.__NEXT_DATA__.props.pageProps.initialReduxState.showSignModal;
+                document.body.style.overflow = showSignModal ? 'hidden' : 'initial';
+              }
+              
+              if (typeof window !== 'undefined') {
+                updateBodyOverflow();
+                window.addEventListener('redux-state-change', updateBodyOverflow);
+              }
+            })();
+          `
+        }} />
       </body>
     </Html>
   );
