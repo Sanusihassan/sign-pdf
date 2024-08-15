@@ -18,6 +18,14 @@
             @include extend("shadow");
         }
 
+        .additional-text-drag-el {
+            @include extend("position-absolute w-100 h-100");
+            top: 0;
+            left: 0;
+            opacity: 0;
+            background-color: white;
+        }
+
         // .icon {
         //     font-size: 1.25rem; // Adjust icon size as needed
         //     color: #555; // Icon color

@@ -43,8 +43,18 @@
       transform-origin: center top;
       transition: transform 0.3s ease-in-out;
 
-      canvas {
+      >canvas {
         border: 1px solid #dee2e6;
+      }
+
+      .canvas-container {
+
+        &,
+        .fabric-canvas {
+          @include extend("position-absolute w-100 h-100");
+          top: 0;
+          left: 0;
+        }
       }
     }
   }

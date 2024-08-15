@@ -6,6 +6,8 @@ import { Provider as ReduxProvider } from "react-redux";
 // @ts-ignore
 import { configureStore } from "@reduxjs/toolkit";
 import toolReducer from "../src/store";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const store = configureStore({
   reducer: {
@@ -37,7 +39,9 @@ function MyApp({ Component, pageProps, lang }: AppProps & { lang: string }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </Head>
       <ReduxProvider store={store}>
-        <Component {...pageProps} lang={lang} />
+        <DndProvider backend={HTML5Backend}>
+          <Component {...pageProps} lang={lang} />
+        </DndProvider>
       </ReduxProvider>
     </>
   );
