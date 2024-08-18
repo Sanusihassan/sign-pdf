@@ -1,7 +1,8 @@
-import { SettingsModal } from "@/components/SettingsModal";
-
+import { Wrapper } from "i-text-input/src/components/Wrapper";
 export default function () {
     return (
-        <SettingsModal />
+        <div className="container">
+
+        </div>
     )
 }

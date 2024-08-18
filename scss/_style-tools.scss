@@ -1,0 +1,218 @@
+.style-tools {
+    @include extend("position-sticky border-bottom bg-white flex-row px-2 py-2 main-space-around cross-center");
+    justify-content: space-around;
+    max-width: 100%;
+    z-index: 1;
+    width: 69%;
+
+    // >* {
+    //     // @include extend("push-left")
+    // }
+
+    %padding {
+        padding-top: 2.9px !important;
+        padding-bottom: 2.9px !important;
+        @include extend("px-2");
+    }
+
+    .fonts-dropdown {
+        @include extend("padding border rounded flex-row main-space-between cross-center transition");
+        user-select: none;
+        flex: 0 0 var(--col-2);
+        cursor: pointer;
+
+        &:hover {
+            background-color: #ecf0f1;
+        }
+
+        svg {
+            font-size: .57rem;
+        }
+    }
+
+    .font-size-tool {
+        @include extend("border rounded flex-row cross-center self-stretch");
+
+        button {
+            @include extend("btn btn-light border border-top-0 border-bottom-0 p-0");
+            @include extend("padding h-100");
+            color: #2f3640;
+
+            svg {
+                margin-top: -2.75px;
+            }
+
+            &:first-of-type {
+                border-left: 0 !important;
+                border-top-right-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+            }
+
+            &:nth-of-type(2) {
+                border-right: 0 !important;
+                border-top-left-radius: 0 !important;
+                border-bottom-left-radius: 0 !important;
+            }
+
+        }
+
+        .font-size {
+            @include extend("available text-center padding px-0 text-muted h-100 flex-row main-center cross-center");
+            cursor: text;
+            font-size: .5em;
+            background-color: #dfe6e9;
+        }
+    }
+
+    .text-color-tool {
+        // font-size: 1.15em;
+        font-weight: 500;
+        @include extend("position-relative btn btn-light border-0 rounded-2 flex-row");
+        padding: 5px 5.75px;
+
+        // * {
+        //     outline: 1px solid red;
+        // }
+
+        svg {
+            font-size: 1.25em;
+            // margin: auto;
+            margin-top: -.5px;
+        }
+
+        &::after {
+            content: "";
+            display: block;
+            @include extend("position-absolute rounded-2 bg-dark");
+            width: var(--col-9);
+            padding: 2.5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right,
+                    #ff0000,
+                    #ff7f00,
+                    #ffff00,
+                    #00ff00,
+                    #0000ff,
+                    #4b0082,
+                    #9400d3);
+            bottom: 0;
+        }
+    }
+
+    .bold-tool,
+    .italic-tool,
+    .list-tool,
+    .alignment-tool,
+    .spacing-tool,
+    .more>.indicator {
+        @include extend("position-relative btn btn-light border-0 padding rounded-2 text-center");
+
+        svg {
+            @include extend("m-0 mb-1");
+        }
+    }
+
+    .more {
+        position: static;
+
+        .rest {
+            @include extend("py-2 px-2 rounded bg-white border position-absolute flex-row");
+
+            width: fit-content;
+            top: 95%;
+            right: 1%;
+
+            button {
+                @include extend("btn btn-light border-0 rounded-2 text-center");
+                background-color: transparent;
+            }
+        }
+    }
+
+    .spacing-tool-wrapper {
+        @include extend("position-relative");
+
+        p {
+            @include extend("lead my-0");
+            text-align: start;
+        }
+
+        .spacing-tool-dropdown {
+            @include extend("position-absolute bg-white p-2 rounded-2 shadow-lg");
+            min-width: 250px;
+            width: fit-content;
+            top: 100%;
+            right: -325%;
+        }
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        user-select: none;
+        -webkit-user-drag: none;
+
+        // .spacing-tool {
+        //     margin-bottom: 10px;
+        // }
+
+        .spacing-tool-dropdown {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .slider-container {
+            width: 100%;
+            @include extend("py-2");
+            // margin: 10px 0;
+            // padding: 0 20px;
+
+            @include extend("flex-row cross-center main-space-between");
+            column-gap: 10px;
+
+            .input {
+                @include extend("col-2 available m-0");
+
+                // now i want to remove the up and down arrows that increase and decrease the input[number] value i don't want those to appear in the design, is this possible in css for example?
+                input {
+                    @include extend("w-100 p-2 rounded text-center");
+                    border: .5px solid #ccc;
+                    outline: none;
+                }
+            }
+        }
+
+        .custom-slider {
+            @include extend("col-8 m-0");
+
+            .rc-slider-track {
+                background-color: #3867d6 !important;
+            }
+
+            .rc-slider-handle {
+                border-color: #3867d6 !important;
+                height: 20px;
+                width: 20px;
+                margin-top: -9px;
+                background-color: #fff;
+                border-radius: 50%;
+            }
+
+            .rc-slider-rail {
+                background-color: #ddd !important;
+            }
+
+            .rc-slider {
+                cursor: pointer;
+            }
+        }
+
+
+        // .rc-slider {
+        //     width: 100%;
+        //     left: 0;
+        // }
+    }
+}

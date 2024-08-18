@@ -13,6 +13,7 @@ import { FileInputForm } from "./Tool/FileInputForm";
 import DownloadFile from "./DownloadFile";
 import { validateFiles } from "@/src/utils";
 import { SettingsModal } from "./SettingsModal";
+import { StyleTools } from "./StyleTools";
 
 export type errorType = {
   response: {
@@ -129,6 +130,7 @@ const Tool: React.FC<ToolProps> = ({
           <ErrorElement />
         </div>
         {/* ) : ( */}
+        <StyleTools />
         <EditPage
           extension={data.type}
           edit_page={edit_page}

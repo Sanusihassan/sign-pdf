@@ -18,6 +18,7 @@ export interface ToolState {
   signature: string;
   showSignModal: boolean;
   signatureSVGString: string;
+  showStyleTools: boolean;
 }
 
 const initialState: ToolState = {
@@ -32,7 +33,8 @@ const initialState: ToolState = {
   pageCount: 0,
   signature: "",
   showSignModal: false,
-  signatureSVGString: ""
+  signatureSVGString: "",
+  showStyleTools: false
 };
 
 const toolSlice = createSlice({
