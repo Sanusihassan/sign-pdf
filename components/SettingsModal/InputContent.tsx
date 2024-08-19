@@ -1,3 +1,4 @@
+// i want to isolate hte select font to it's own component:
 "use client";
 import { CiUndo, CiRedo } from "react-icons/ci";
 
