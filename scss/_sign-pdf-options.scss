@@ -14,11 +14,20 @@
         cursor: pointer;
         transition: box-shadow .1s;
 
+        &.date-row,
+        .initials-row,
+        .checkbox-row {
+            @include extend("position-relative");
+        }
+
         &:hover:not(.dropdown-visible) {
             @include extend("shadow");
         }
 
-        .additional-text-drag-el {
+        .additional-text-drag-el,
+        .date-drag-el,
+        .checkbox-drag-el,
+        .initials-drag-el {
             @include extend("position-absolute w-100 h-100");
             top: 0;
             left: 0;
@@ -74,7 +83,7 @@
             left: 0;
 
             .signature-area {
-                @include extend("d-flex align-items-center");
+                @include extend("d-flex align-items-center w-100");
                 background-color: lighten(map-get($color-map, "sign-pdf"), 50);
 
                 .signature-area-svg {

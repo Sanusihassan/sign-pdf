@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, CSSProperties } from "react";
 import { BsTypeStrikethrough } from "react-icons/bs";
 import { IoIosMore } from "react-icons/io";
 import { RiUnderline } from "react-icons/ri";
@@ -7,6 +7,7 @@ import { VscCaseSensitive } from "react-icons/vsc";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useFileStore } from "@/src/file-store";
+import { applyStyle } from "@/src/utils";
 
 export const MoreTools: React.FC = () => {
     const [hideRest, setHideRest] = useState(true);
@@ -39,7 +40,8 @@ export const MoreTools: React.FC = () => {
     const handleOpacityChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setOpacity(value);
-            applyStyle('opacity', value.toString());
+            // Type '"opacity"' has no properties in common with type 'Properties<string | number, string & {}>'.ts(2559)
+            applyStyle('opacity', value.toString(), currentTextElement);
         }
     };
 
@@ -48,7 +50,7 @@ export const MoreTools: React.FC = () => {
         if (!isNaN(value)) {
             const clampedValue = Math.min(Math.max(value, 0), 1);
             setOpacity(clampedValue);
-            applyStyle('opacity', clampedValue.toString());
+            applyStyle('opacity', clampedValue.toString(), currentTextElement);
         }
     };
 
@@ -56,24 +58,18 @@ export const MoreTools: React.FC = () => {
         if (e.key === "ArrowUp") {
             const newValue = Math.min(opacity + 0.1, 1);
             setOpacity(newValue);
-            applyStyle('opacity', newValue.toString());
+            applyStyle('opacity', newValue.toString(), currentTextElement);
         } else if (e.key === "ArrowDown") {
             const newValue = Math.max(opacity - 0.1, 0);
             setOpacity(newValue);
-            applyStyle('opacity', newValue.toString());
+            applyStyle('opacity', newValue.toString(), currentTextElement);
         }
     };
 
-    const applyStyle = (property: string, value: string) => {
-        if (currentTextElement) {
-            currentTextElement.style[property as any] = value;
-        }
-    };
-
-    const toggleStyle = (stateSetter: React.Dispatch<React.SetStateAction<boolean>>, property: string, value: string, defaultValue: string) => {
+    const toggleStyle = (stateSetter: React.Dispatch<React.SetStateAction<boolean>>, property: keyof CSSProperties, value: string, defaultValue: string) => {
         stateSetter(prev => {
             const newState = !prev;
-            applyStyle(property, newState ? value : defaultValue);
+            applyStyle(property, newState ? value : defaultValue, currentTextElement);
             return newState;
         });
     };

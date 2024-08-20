@@ -1,5 +1,5 @@
 import { NextRouter } from "next/router";
-import { Dispatch, useEffect, useMemo, useState } from "react";
+import { CSSProperties, Dispatch, useEffect, useMemo, useState } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import type { errors as _ } from "../content";
 import { setField } from "./store";
@@ -324,5 +324,11 @@ export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: n
       viewport: viewport,
     };
     await page.render(renderContext).promise;
+  }
+};
+
+export const applyStyle = (property: keyof CSSProperties, value: any, currentTextElement: HTMLElement | null) => {
+  if (currentTextElement) {
+    currentTextElement.style[property as any] = value;
   }
 };

@@ -2,22 +2,27 @@ import React, { useState, useRef, useEffect } from "react";
 import { MdOutlineFormatLineSpacing } from "react-icons/md";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { useFileStore } from "@/src/file-store";
+import { applyStyle } from "@/src/utils";
 
 export const SpacingTool: React.FC = () => {
     const [letterSpacing, setLetterSpacing] = useState<number>(0);
     const [lineSpacing, setLineSpacing] = useState<number>(1);
     const [hideDropdown, setHideDropdown] = useState(true);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const { currentTextElement } = useFileStore();
 
     const handleLetterSpacingChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setLetterSpacing(value);
+            applyStyle("letterSpacing", `${letterSpacing}px`, currentTextElement)
         }
     };
 
     const handleLineSpacingChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setLineSpacing(value);
+            applyStyle("lineHeight", lineSpacing, currentTextElement)
         }
     };
 
@@ -63,6 +68,7 @@ export const SpacingTool: React.FC = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
 
     return (
         <div className="spacing-tool-wrapper" ref={dropdownRef}>

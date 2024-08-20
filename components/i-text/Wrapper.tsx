@@ -147,7 +147,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
     };
 
     const inputRef = useRef<HTMLDivElement>(null)
-
+    const [editable, setEditable] = useState(false);
     return (
         <div className={`wrapper${clearOutline ? "" : " no-outline"}`} ref={wrapperRef} style={{ position: 'absolute' }} onMouseMove={handleMouseMove}>
             <Controls
@@ -168,13 +168,14 @@ export const Wrapper: React.FC<WrapperProps> = ({
             <div
                 className={`input${className ? " " + className : ""}`}
                 ref={inputRef}
-                contentEditable
+                contentEditable={editable}
                 suppressContentEditableWarning
                 onInput={handleContentChange}
                 tabIndex={0}
                 style={style}
                 onFocus={() => {
                     setShowControls(true);
+                    setEditable(true)
                     setShowInitialContent(false);
                     if (onFocus) {
                         onFocus();
@@ -183,6 +184,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
                 }}
                 onBlur={() => {
                     setShowControls(false);
+                    setEditable(false)
                 }}
             />
             {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
