@@ -5,7 +5,7 @@ import { useFileStore } from '@/src/file-store';
 
 interface WrapperProps {
     id: number;
-    initialContent: string;
+    initialContent: string | JSX.Element;
     initialX: number;
     initialY: number;
     initialWidth: number;
@@ -30,7 +30,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
 }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [controlsPosition, setControlsPosition] = useState<'top' | 'bottom'>('top');
-    const [showInitialContent, setShowInitialContent] = useState(true);
+    // const [showInitialContent, setShowInitialContent] = useState(true);
     const { setCurrentTextElement } = useFileStore();
     useEffect(() => {
         const wrapper = wrapperRef.current;
@@ -145,8 +145,15 @@ export const Wrapper: React.FC<WrapperProps> = ({
             setShowControls(true)
         }
     };
-
     const inputRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (inputRef.current) {
+            if (inputRef.current.textContent === "" && typeof initialContent === "string") {
+                inputRef.current.textContent = initialContent;
+            }
+        }
+    }, [inputRef.current]);
+
     const [editable, setEditable] = useState(false);
     return (
         <div className={`wrapper${clearOutline ? "" : " no-outline"}`} ref={wrapperRef} style={{ position: 'absolute' }} onMouseMove={handleMouseMove}>
@@ -164,32 +171,33 @@ export const Wrapper: React.FC<WrapperProps> = ({
             <div className={`resize-handle bottom-center${clearOutline ? "" : " clear"}`}></div>
             <div className={`resize-handle bottom-left${clearOutline ? "" : " clear"}`}></div>
             <div className={`resize-handle left-center${clearOutline ? "" : " clear"}`}></div>
-
-            <div
-                className={`input${className ? " " + className : ""}`}
-                ref={inputRef}
-                contentEditable={editable}
-                suppressContentEditableWarning
-                onInput={handleContentChange}
-                tabIndex={0}
-                style={style}
-                onFocus={() => {
-                    setShowControls(true);
-                    setEditable(true)
-                    setShowInitialContent(false);
-                    if (onFocus) {
-                        onFocus();
-                    }
-                    setCurrentTextElement(inputRef.current)
-                }}
-                onBlur={() => {
-                    setShowControls(false);
-                    setEditable(false)
-                }}
-            />
-            {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
+            {typeof initialContent === "string" ?
+                <div
+                    className={`input${className ? " " + className : ""}`}
+                    ref={inputRef}
+                    contentEditable={editable}
+                    suppressContentEditableWarning
+                    onInput={handleContentChange}
+                    tabIndex={0}
+                    style={style}
+                    onFocus={() => {
+                        setShowControls(true);
+                        setEditable(true)
+                        // setShowInitialContent(false);
+                        if (onFocus) {
+                            onFocus();
+                        }
+                        setCurrentTextElement(inputRef.current)
+                    }}
+                    onBlur={() => {
+                        setShowControls(false);
+                        setEditable(false)
+                    }}
+                /> : initialContent
+            }
+            {/* {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
                 {initialContent}
-            </div> : null}
+            </div> : null} */}
         </div>
     );
 };

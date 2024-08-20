@@ -1,3 +1,4 @@
+// i want to support checkbox as well if the item.type === "checkbox"? then IoIosCheckboxOutline it should also be resizable
 import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import useUndo from 'use-undo';
 
@@ -5,10 +6,13 @@ import { useDrop } from 'react-dnd';
 import { Wrapper } from '../i-text/Wrapper';
 import { RootState } from '@/pages/_app';
 import { useSelector } from 'react-redux';
+import { getLanguage } from '@/src/language';
+import { IoIosCheckboxOutline } from "react-icons/io";
+
 
 interface WrapperData {
     id: number;
-    content: string;
+    content: string | React.JSX.Element;
     x: number;
     y: number;
     width: number;
@@ -92,38 +96,59 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [canUndo, canRedo, undoWrappers, redoWrappers]);
+    type drop_type = "text" | "initials" | "date" | "checkbox";
+    const [, drop] = useDrop(
+        () => ({
+            accept: ['text', "date", "checkbox"],
+            drop: (item: { type: drop_type }, monitor) => {
+                const dropTarget = canvasRef.current;
+                if (!dropTarget) return;
 
-    const [, drop] = useDrop(() => ({
-        accept: 'text',
-        drop: (item, monitor) => {
-            const dropTarget = canvasRef.current;
-            if (!dropTarget) return;
+                const targetRect = dropTarget.getBoundingClientRect();
+                const clientOffset = monitor.getClientOffset();
 
-            const targetRect = dropTarget.getBoundingClientRect();
-            const clientOffset = monitor.getClientOffset();
+                if (clientOffset) {
+                    const canvasX = clientOffset.x - targetRect.left;
+                    const canvasY = clientOffset.y - targetRect.top;
+                    if (wrappers.length) {
+                        setInteractLayerInitialized(true);
+                    } else {
+                        setInteractLayerInitialized(false);
+                    }
+                    const lang = getLanguage() || "";
+                    const locale = lang || 'en-US';
 
-            if (clientOffset) {
-                const canvasX = clientOffset.x - targetRect.left;
-                const canvasY = clientOffset.y - targetRect.top;
-                if (wrappers.length) {
-                    setInteractLayerInitialized(true)
-                } else {
-                    setInteractLayerInitialized(false)
+                    const formattedDate = new Date().toLocaleString(locale, {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                    });
+
+
+                    const newWrapper: WrapperData = {
+                        id: Date.now(),
+                        content:
+                            item.type === 'date'
+                                ? formattedDate
+                                : item.type === 'checkbox'
+                                    ? <IoIosCheckboxOutline className="icon input" />
+                                    : 'New text',
+                        x: canvasX,
+                        y: canvasY,
+                        width: item.type === 'checkbox' ? 30 : 200,
+                        height: item.type === 'checkbox' ? 30 : 100,
+                    };
+
+                    updateWrappers([...wrappers, newWrapper]);
                 }
-
-                const newWrapper: WrapperData = {
-                    id: Date.now(),
-                    content: 'New text',
-                    x: canvasX,
-                    y: canvasY,
-                    width: 200,
-                    height: 100
-                };
-
-                updateWrappers([...wrappers, newWrapper]);
-            }
-        },
-    }), [wrappers, updateWrappers]);
+            },
+        }),
+        [wrappers, updateWrappers]
+    );
 
 
     const showStyleTools = useSelector((state: RootState) => state.tool.showStyleTools);
