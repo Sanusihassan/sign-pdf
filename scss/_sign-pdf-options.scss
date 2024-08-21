@@ -66,6 +66,7 @@
 
         .dropdown-toggler {
             @include extend("btn btn-light");
+            z-index: 1;
         }
 
         .signature-dropdown {

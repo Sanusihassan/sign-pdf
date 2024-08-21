@@ -12,6 +12,23 @@
   .icon {
     @include extend("w-100 h-100")
   }
+
+  .signature-svg {
+
+    &,
+    svg {
+      @include extend("position-absolute w-100 h-100");
+      display: block;
+      top: 0;
+      left: 0;
+    }
+
+    svg {
+      #react-sketch-canvas__canvas-background {
+        fill: transparent !important;
+      }
+    }
+  }
 }
 
 %debug {

@@ -5,8 +5,9 @@ import { useFileStore } from "@/src/file-store";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import { RootState } from "@/pages/_app";
 import { useSelector } from "react-redux";
+import { Signature, TextSignature } from "../DisplayFile/Options";
 export type content_type = {
-    type: "text" | "initials" | "date" | "checkbox" | "signature";
+  type: "text" | "initials" | "date" | "checkbox" | "signature";
 } | string;
 interface WrapperProps {
   id: number;
@@ -241,7 +242,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
         />
       ) : initialContent.type === "checkbox" ? (
         <IoIosCheckboxOutline
-          className="icon"
+          className="icon input"
           tabIndex={0}
           style={style}
           onFocus={() => {
@@ -258,12 +259,11 @@ export const Wrapper: React.FC<WrapperProps> = ({
             setEditable(false);
           }}
         />
-      ) : (initialContent.type === "signature" ? <div
-        className="signature-svg"
-        // position-absolute
-        // "xMidYMid meet"
-        dangerouslySetInnerHTML={{ __html: signatureSVGString }}
-      /> : null)}
+      ) : (initialContent.type === "signature" ? (
+        signatureSVGString ?
+          <Signature /> :
+          <TextSignature />
+      ) : null)}
       {/* {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
                 {initialContent}
             </div> : null} */}

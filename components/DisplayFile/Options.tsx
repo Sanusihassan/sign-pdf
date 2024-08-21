@@ -19,23 +19,21 @@ export interface OptionsProps {
   initials?: string;
 }
 
-const SignatureDropDown = ({ scaledSVG, show, setScaledSVG }: {
-  scaledSVG: string,
+const SignatureDropDown = ({ show }: {
   show: boolean;
-  setScaledSVG: React.Dispatch<React.SetStateAction<string | null>>
 }) => {
   const dispatch = useDispatch();
   return <div className={`signature-dropdown${show ? "" : " hide"}`}>
     <div className="signature-area">
       <div className="signature-area-svg">
-        <Signature scaledSVG={scaledSVG} />
+        <Signature />
       </div>
       <button className="delete-btn" onClick={(e) => {
         e.stopPropagation();
         dispatch(setField({
           signatureSVGString: ""
         }));
-        setScaledSVG(null)
+        setField({ signatureSVGString: "" })
       }}>
         <IoTrashOutline className="icon" />
       </button>
@@ -47,19 +45,9 @@ const SignatureDropDown = ({ scaledSVG, show, setScaledSVG }: {
   </div>
 }
 
-const Signature = ({ scaledSVG }: { scaledSVG: string }) => {
-  return <div
-    className="signature-svg"
-    dangerouslySetInnerHTML={{ __html: scaledSVG }}
-  />
-}
-
-const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
-  const dispatch = useDispatch();
-  const showSignModal = useSelector((state: RootState) => state.tool.showSignModal);
+export const Signature = () => {
   const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
   const [scaledSVG, setScaledSVG] = useState<string | null>(null);
-  const [showSignatureDropdown, setShowSignatureDropdown] = useState(false);
   useEffect(() => {
     if (signatureSVGString) {
       const parser = new DOMParser();
@@ -68,7 +56,7 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
 
       if (svgElement) {
         // Set a fixed viewBox
-        svgElement.setAttribute("viewBox", "0 100 256 256");
+        svgElement.setAttribute("viewBox", "0 0 256 256");
         svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
         // Remove width and height attributes
@@ -89,6 +77,29 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
       }
     }
   }, [signatureSVGString]);
+  return scaledSVG ? <div
+    className="signature-svg input"
+    dangerouslySetInnerHTML={{ __html: scaledSVG }}
+  /> : null
+}
+
+export const TextSignature = () => {
+  const signatures = useSelector((state: RootState) => state.tool.signatures);
+  return (
+    signatures.length ?
+      <div className={`signature-svg input ${signatures[0].font}`} style={{
+        color: signatures[0].color
+      }}>
+        {signatures[0].mark}
+      </div> : null
+  )
+}
+
+const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
+  const dispatch = useDispatch();
+  const showSignModal = useSelector((state: RootState) => state.tool.showSignModal);
+  const [showSignatureDropdown, setShowSignatureDropdown] = useState(false);
+
 
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
@@ -132,6 +143,9 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
     }),
   }));
 
+  const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
+  const signatures = useSelector((state: RootState) => state.tool.signatures);
+
   return (
     <div className="sign-pdf-options">
       <div className={`option-row${showSignatureDropdown ? " dropdown-visible" : ""}`} onClick={() => {
@@ -142,23 +156,27 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
       }}>
         <div className="signature-drag-el" ref={dragSignatureRef} />
         <PiDotsSixVerticalBold className="icon" />
-        {scaledSVG ? (
+        {signatureSVGString ? (
           <>
-            <Signature scaledSVG={scaledSVG} />
+            <Signature />
             <button className="dropdown-toggler" onClick={(e) => {
               e.stopPropagation();
               setShowSignatureDropdown(!showSignatureDropdown)
             }}>
               <FaChevronDown />
             </button>
-            <SignatureDropDown scaledSVG={scaledSVG} show={showSignatureDropdown} setScaledSVG={setScaledSVG} />
+            <SignatureDropDown show={showSignatureDropdown} />
           </>
         ) :
-          <>
-            <PiSignature />
-            <div className="option-label">Your signature</div>
-            <strong className="option-add">Add</strong>
-          </>
+          (signatures.length ?
+            <TextSignature />
+            :
+            <>
+              <PiSignature />
+              <div className="option-label">Your signature</div>
+              <strong className="option-add">Add</strong>
+            </>
+          )
         }
       </div>
       <div className="option-row initials-row">

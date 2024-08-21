@@ -5,6 +5,12 @@ type WritableDraft<T> = {
 
 type k = keyof WritableDraft<ToolState>;
 
+type signature = {
+  mark: string;
+  font: string;
+  color: string;
+}
+
 export interface ToolState {
   showTool: boolean;
   isSubmitted: boolean;
@@ -15,7 +21,7 @@ export interface ToolState {
   showOptions: boolean;
   nav_height: number;
   pageCount: number;
-  signature: string;
+  signatures: signature[];
   showSignModal: boolean;
   signatureSVGString: string;
   showStyleTools: boolean;
@@ -31,7 +37,7 @@ const initialState: ToolState = {
   showOptions: false,
   nav_height: 0,
   pageCount: 0,
-  signature: "",
+  signatures: [],
   showSignModal: false,
   signatureSVGString: "",
   showStyleTools: false
