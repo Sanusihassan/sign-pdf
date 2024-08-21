@@ -1,7 +1,3 @@
-/**
- * please explain the code for me
- */
-
 import React, { useEffect, useState } from "react";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import type { edit_page as _ } from "../../content";
@@ -72,7 +68,7 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
 
       if (svgElement) {
         // Set a fixed viewBox
-        svgElement.setAttribute("viewBox", "0 0 256 256");
+        svgElement.setAttribute("viewBox", "0 100 256 256");
         svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
         // Remove width and height attributes
@@ -127,6 +123,15 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
     }),
   }));
 
+
+  const [{ }, dragSignatureRef] = useDrag(() => ({
+    type: "signature",
+    item: { type: "signature" },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   return (
     <div className="sign-pdf-options">
       <div className={`option-row${showSignatureDropdown ? " dropdown-visible" : ""}`} onClick={() => {
@@ -135,6 +140,7 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
         }));
         console.log(showSignModal)
       }}>
+        <div className="signature-drag-el" ref={dragSignatureRef} />
         <PiDotsSixVerticalBold className="icon" />
         {scaledSVG ? (
           <>

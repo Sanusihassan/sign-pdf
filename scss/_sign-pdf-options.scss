@@ -27,7 +27,8 @@
         .additional-text-drag-el,
         .date-drag-el,
         .checkbox-drag-el,
-        .initials-drag-el {
+        .initials-drag-el,
+        .signature-drag-el {
             @include extend("position-absolute w-100 h-100");
             top: 0;
             left: 0;

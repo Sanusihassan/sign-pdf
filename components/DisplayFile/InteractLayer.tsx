@@ -3,16 +3,15 @@ import React, { CSSProperties, useCallback, useEffect, useRef, useState } from '
 import useUndo from 'use-undo';
 
 import { useDrop } from 'react-dnd';
-import { Wrapper } from '../i-text/Wrapper';
+import { content_type, Wrapper } from '../i-text/Wrapper';
 import { RootState } from '@/pages/_app';
 import { useSelector } from 'react-redux';
 import { getLanguage } from '@/src/language';
-import { IoIosCheckboxOutline } from "react-icons/io";
 
 
 interface WrapperData {
     id: number;
-    content: string | React.JSX.Element;
+    content: content_type;
     x: number;
     y: number;
     width: number;
@@ -96,10 +95,10 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [canUndo, canRedo, undoWrappers, redoWrappers]);
-    type drop_type = "text" | "initials" | "date" | "checkbox";
+    type drop_type = "text" | "initials" | "date" | "checkbox" | "signature";
     const [, drop] = useDrop(
         () => ({
-            accept: ['text', "date", "checkbox"],
+            accept: ["text", "date", "checkbox", "signature"],
             drop: (item: { type: drop_type }, monitor) => {
                 const dropTarget = canvasRef.current;
                 if (!dropTarget) return;
@@ -128,15 +127,28 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
                         second: 'numeric',
                     });
 
+                    let content: content_type;
+                    switch (item.type) {
+                        case "checkbox": 
+                            content = {type: "checkbox"};
+                            break;
+                        case "signature":
+                            content = {type: "signature"};
+                            break;
+                        case "date":
+                            content = formattedDate;
+                            break;
+                        case "initials":
+                            content = {type: "initials"};
+                            break;
+                        case "text":
+                            content = "New text";
+                            break;
+                    }
 
                     const newWrapper: WrapperData = {
                         id: Date.now(),
-                        content:
-                            item.type === 'date'
-                                ? formattedDate
-                                : item.type === 'checkbox'
-                                    ? <IoIosCheckboxOutline className="icon" />
-                                    : 'New text',
+                        content,
                         x: canvasX,
                         y: canvasY,
                         width: item.type === 'checkbox' ? 50 : 200,
