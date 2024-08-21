@@ -193,7 +193,25 @@ export const Wrapper: React.FC<WrapperProps> = ({
                         setShowControls(false);
                         setEditable(false)
                     }}
-                /> : initialContent
+                /> : React.cloneElement(initialContent, {
+                    className: `input${className ? " " + className : ""}`,
+                    ref: inputRef,
+                    style: style,
+                    onFocus: () => {
+                        setShowControls(true);
+                        setEditable(true);
+                        if (onFocus) {
+                            onFocus();
+                        }
+                        setCurrentTextElement(inputRef.current);
+                    },
+                    onBlur: () => {
+                        setShowControls(false);
+                        setEditable(false);
+                    },
+                    onInput: handleContentChange,
+                    tabIndex: 0,
+                })
             }
             {/* {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
                 {initialContent}

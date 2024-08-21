@@ -135,12 +135,12 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
                             item.type === 'date'
                                 ? formattedDate
                                 : item.type === 'checkbox'
-                                    ? <IoIosCheckboxOutline className="icon input" />
+                                    ? <IoIosCheckboxOutline className="icon" />
                                     : 'New text',
                         x: canvasX,
                         y: canvasY,
-                        width: item.type === 'checkbox' ? 30 : 200,
-                        height: item.type === 'checkbox' ? 30 : 100,
+                        width: item.type === 'checkbox' ? 50 : 200,
+                        height: item.type === 'checkbox' ? 50 : 100,
                     };
 
                     updateWrappers([...wrappers, newWrapper]);
