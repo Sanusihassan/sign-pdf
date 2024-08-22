@@ -1,5 +1,4 @@
-// i want to support checkbox as well if the item.type === "checkbox"? then IoIosCheckboxOutline it should also be resizable
-import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useRef } from 'react';
 import useUndo from 'use-undo';
 
 import { useDrop } from 'react-dnd';
@@ -7,6 +6,8 @@ import { content_type, Wrapper } from '../i-text/Wrapper';
 import { RootState } from '@/pages/_app';
 import { useSelector } from 'react-redux';
 import { getLanguage } from '@/src/language';
+import { setField } from '@/src/store';
+import { useDispatch } from 'react-redux';
 
 
 interface WrapperData {
@@ -23,11 +24,9 @@ interface InteractLayerProps {
     height: string | number;
     className?: string;
     style?: CSSProperties;
-    acceptPointerEvents: boolean;
     onFocus?: () => void;
     onBlur?: () => void;
     onInput?: () => void;
-    setAcceptPointerEvents: React.Dispatch<React.SetStateAction<boolean>>,
     setInteractLayerInitialized: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -36,11 +35,9 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
     height,
     className,
     style,
-    acceptPointerEvents,
     onFocus,
     onInput,
     onBlur,
-    setAcceptPointerEvents,
     setInteractLayerInitialized
 }) => {
     const [wrappersState, { set: setWrappers, undo: undoWrappers, redo: redoWrappers, canUndo, canRedo }] = useUndo<WrapperData[]>([]);
@@ -129,17 +126,17 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
 
                     let content: content_type;
                     switch (item.type) {
-                        case "checkbox": 
-                            content = {type: "checkbox"};
+                        case "checkbox":
+                            content = { type: "checkbox" };
                             break;
                         case "signature":
-                            content = {type: "signature"};
+                            content = { type: "signature" };
                             break;
                         case "date":
                             content = formattedDate;
                             break;
                         case "initials":
-                            content = {type: "initials"};
+                            content = { type: "initials" };
                             break;
                         case "text":
                             content = "New text";
@@ -164,6 +161,12 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
 
 
     const showStyleTools = useSelector((state: RootState) => state.tool.showStyleTools);
+    const acceptPointerEvents = useSelector((state: RootState) => state.tool.acceptPointerEvents);
+    const dispatch = useDispatch();
+
+    const disablePointerEvents = () => {
+        dispatch(setField({ acceptPointerEvents: false }));
+    }
     return (
         <div
             ref={drop}
@@ -171,17 +174,18 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
             style={{ width, height, position: 'absolute', top: 0, }}
         >
             <div ref={canvasRef} style={{ width: '100%', height: '100%', pointerEvents: acceptPointerEvents ? "auto" : "none" }} onClick={(e) => {
-                const target = e.target;
-                if (!(target as HTMLElement).classList.contains("input")) {
+                const target = (e.target as HTMLElement);
+                if (!(target.classList.contains("input")) && !(target.classList.contains("wrapper"))) {
                     if (onBlur || !showStyleTools) {
                         if (onBlur) {
                             onBlur();
                         }
-                        setAcceptPointerEvents(false)
+                        disablePointerEvents();
                     }
+                } else {
+                    if (onFocus)
+                        onFocus();
                 }
-            }} onDoubleClick={() => {
-                // setAcceptPointerEvents(false)
             }}>
                 {wrappers.map(wrapper => (
                     <Wrapper

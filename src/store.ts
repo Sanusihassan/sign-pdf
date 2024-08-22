@@ -25,6 +25,7 @@ export interface ToolState {
   showSignModal: boolean;
   signatureSVGString: string;
   showStyleTools: boolean;
+  acceptPointerEvents: boolean;
 }
 
 const initialState: ToolState = {
@@ -40,7 +41,8 @@ const initialState: ToolState = {
   signatures: [],
   showSignModal: false,
   signatureSVGString: "",
-  showStyleTools: false
+  showStyleTools: false,
+  acceptPointerEvents: true
 };
 
 const toolSlice = createSlice({

@@ -2,9 +2,10 @@ import React, { useRef, useEffect, useState } from "react";
 import { renderPDFOnCanvas } from "@/src/utils";
 import { useInView } from "react-intersection-observer";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setField } from "@/src/store";
 import InteractLayer from "./InteractLayer";
+import { RootState } from "@/pages/_app";
 
 interface PageCanvasProps {
     id: number;
@@ -24,8 +25,8 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
     const { ref, inView } = useInView({ threshold: 0.01, triggerOnce: false });
     const dispatch = useDispatch();
     const [interactLayerSize, setInteractLayerSize] = useState({ width: 0, height: 0 });
-    const [acceptPointerEvents, setAcceptPointerEvents] = useState(true);
     const [interactLayerInitialized, setInteractLayerInitialized] = useState(false);
+    const acceptPointerEvents = useSelector((state: RootState) => state.tool.acceptPointerEvents);
     useEffect(() => {
         if (inView) {
             setCurrentPage(id);
@@ -52,15 +53,35 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
 
     const handleFocus = () => {
         dispatch(setField({ showStyleTools: true }));
+        console.log("focus");
     };
 
     const handleBlur = () => {
+        console.log("blur")
         dispatch(setField({ showStyleTools: false }));
     };
 
+    const [target, setTarget] = useState<HTMLElement | null>(null);
     return (
         <div className="page-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <div ref={ref} className="page" style={{ width: '100%', height: '100%' }}>
+            <div ref={ref} className="page" style={{ width: '100%', height: '100%' }}
+                onMouseMove={(e) => {
+                    const _target = e.target as HTMLElement;
+                    setTarget(_target);
+                    if ((target?.classList.contains("pdf-canvas")) || (target?.classList.contains("wrapper"))) {
+                        dispatch(setField({
+                            acceptPointerEvents: true
+                        }));
+                    }
+                }}
+                onClick={() => {
+                    if ((target?.classList.contains("pdf-canvas")) || (target?.classList.contains("wrapper"))) {
+                        dispatch(setField({
+                            acceptPointerEvents: true
+                        }));
+                    }
+                }}
+            >
                 <TransformWrapper
                     initialScale={1}
                     pinch={{ step: 10 }}
@@ -72,17 +93,34 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
                     wheel={{ disabled: false }}
                     panning={{ disabled: false }}
                     onPanningStart={() => {
-                        if (interactLayerInitialized) {
-                            setAcceptPointerEvents(false)
-                        }
+                        // if (interactLayerInitialized) {
+                        //     dispatch(setField({
+                        //         acceptPointerEvents: false
+                        //     }));
+                        // }
                     }}
-                    onPanningStop={() => setAcceptPointerEvents(true)}
+                    onPanningStop={() => {
+                        dispatch(setField({
+                            acceptPointerEvents: false
+                        }))
+                    }}
                     onZoomStart={() => {
                         if (interactLayerInitialized) {
-                            setAcceptPointerEvents(false);
+                            setField({
+                                acceptPointerEvents: false
+                            });
                         }
                     }}
-                    onZoomStop={() => setAcceptPointerEvents(true)}
+                    onZoomStop={() => {
+                        // dispatch(setField({
+                        //     acceptPointerEvents: true
+                        // }));
+                        if ((target?.classList.contains("input")) || (target?.classList.contains("wrapper"))) {
+                            dispatch(setField({
+                                acceptPointerEvents: true
+                            }))
+                        }
+                    }}
                 >
                     <TransformComponent>
                         <div ref={containerRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -100,8 +138,6 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
                     height={interactLayerSize.height}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    acceptPointerEvents={acceptPointerEvents}
-                    setAcceptPointerEvents={setAcceptPointerEvents}
                     setInteractLayerInitialized={setInteractLayerInitialized}
                 />
             </div>

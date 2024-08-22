@@ -1,3 +1,4 @@
+// how to handle ondrag?
 import React, { useEffect, useState } from "react";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import type { edit_page as _ } from "../../content";
@@ -44,8 +45,16 @@ const SignatureDropDown = ({ show }: {
     </button>
   </div>
 }
-
-export const Signature = () => {
+type sharedProps = {
+  sharedProps?: {
+    ref: React.RefObject<HTMLDivElement>;
+    tabIndex: number;
+    style?: React.CSSProperties | undefined;
+    onFocus: () => void;
+    onBlur: () => void;
+  }
+}
+export const Signature = ({ sharedProps }: sharedProps) => {
   const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
   const [scaledSVG, setScaledSVG] = useState<string | null>(null);
   useEffect(() => {
@@ -80,16 +89,19 @@ export const Signature = () => {
   return scaledSVG ? <div
     className="signature-svg input"
     dangerouslySetInnerHTML={{ __html: scaledSVG }}
+    {...sharedProps}
   /> : null
 }
 
-export const TextSignature = () => {
+export const TextSignature = ({ sharedProps }: sharedProps) => {
   const signatures = useSelector((state: RootState) => state.tool.signatures);
   return (
     signatures.length ?
       <div className={`signature-svg input ${signatures[0].font}`} style={{
         color: signatures[0].color
-      }}>
+      }}
+        {...sharedProps}
+      >
         {signatures[0].mark}
       </div> : null
   )
@@ -100,50 +112,71 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
   const showSignModal = useSelector((state: RootState) => state.tool.showSignModal);
   const [showSignatureDropdown, setShowSignatureDropdown] = useState(false);
 
+  const enablePointerEvents = () => {
+    dispatch(setField({ acceptPointerEvents: true }));
+  }
 
+  // const disablePointerEvents = () => {
+  //   dispatch(setField({ acceptPointerEvents: false }));
+  // }
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: "text",
     item: { type: "text" },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    collect: (monitor) => {
+      enablePointerEvents();
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
   }));
 
   const [{ isDragging: isDraggingDate }, dragDateRef] = useDrag(() => ({
     type: "date",
     item: { type: "date", date: new Date() },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    collect: (monitor) => {
+      enablePointerEvents();
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
   }));
 
   const [{ isDragging: isDraggingInitials }, dragInitialsRef] = useDrag(() => ({
     type: "initials",
     item: { type: "initials", initials },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    collect: (monitor) => {
+      enablePointerEvents();
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
   }));
 
   const [{ isDragging: isDraggingCheckbox }, dragCheckboxRef] = useDrag(() => ({
     type: "checkbox",
     item: { type: "checkbox" },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
-
-  const [{ }, dragSignatureRef] = useDrag(() => ({
-    type: "signature",
-    item: { type: "signature" },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    collect: (monitor) => {
+      enablePointerEvents();
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
   }));
 
   const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
+  const [{ }, dragSignatureRef] = useDrag(() => ({
+    type: "signature",
+    item: { type: "signature" },
+    canDrag: !!signatureSVGString, // Disable dragging if signatureSVGString is empty
+    collect: (monitor) => {
+      enablePointerEvents();
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
+  }), [signatureSVGString]);
+
   const signatures = useSelector((state: RootState) => state.tool.signatures);
 
   return (
@@ -152,9 +185,8 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
         dispatch(setField({
           showSignModal: true
         }));
-        console.log(showSignModal)
       }}>
-        <div className="signature-drag-el" ref={dragSignatureRef} />
+        <div className="signature-drag-el" ref={dragSignatureRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />
         {signatureSVGString ? (
           <>
@@ -179,8 +211,12 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
           )
         }
       </div>
-      <div className="option-row initials-row">
-        <div className="initials-drag-el" ref={dragInitialsRef} />
+      <div className="option-row initials-row" onClick={() => {
+        dispatch(setField({
+          showSignModal: true
+        }));
+      }}>
+        <div className="initials-drag-el" ref={dragInitialsRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />
         <div className="initials-icon">
           {initials}
@@ -189,20 +225,20 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
         <strong className="option-add">Add</strong>
       </div>
       <div className="option-row additional-text">
-        <div className="additional-text-drag-el" ref={dragRef} />
+        <div className="additional-text-drag-el" ref={dragRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />
         <LuTextCursorInput />
         <div className="option-label">Additional text</div>
       </div>
       <div className="option-row date-row">
-        <div className="date-drag-el" ref={dragDateRef} />
+        <div className="date-drag-el" ref={dragDateRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />
         <CiCalendarDate className="icon" />
         <div className="option-label">Date</div>
       </div>
 
       <div className="option-row checkbox-row">
-        <div className="checkbox-drag-el" ref={dragCheckboxRef} />
+        <div className="checkbox-drag-el" ref={dragCheckboxRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />
         <IoIosCheckboxOutline className="icon" />
         <div className="option-label">Checkbox</div>

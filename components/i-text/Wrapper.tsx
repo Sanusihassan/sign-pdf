@@ -176,10 +176,30 @@ export const Wrapper: React.FC<WrapperProps> = ({
         inputRef.current.textContent = initialContent;
       }
     }
+    console.log(inputRef.current)
   }, [inputRef.current]);
 
   const [editable, setEditable] = useState(false);
   const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
+  const sharedProps = {
+    tabIndex: 0,
+    ref: inputRef,
+    onFocus: () => {
+      setShowControls(true);
+      setEditable(true);
+      if (onFocus) {
+        onFocus();
+      }
+      setCurrentTextElement(inputRef.current);
+    },
+    onBlur: () => {
+      setShowControls(false);
+      setEditable(false);
+    },
+  };
+
+
+
   return (
     <div
       className={`wrapper${clearOutline ? "" : " no-outline"}`}
@@ -220,49 +240,22 @@ export const Wrapper: React.FC<WrapperProps> = ({
       {typeof initialContent === "string" ? (
         <div
           className={`input${className ? " " + className : ""}`}
-          ref={inputRef}
+          // ref={inputRef}
           contentEditable={editable}
           suppressContentEditableWarning
           onInput={handleContentChange}
-          tabIndex={0}
-          style={style}
-          onFocus={() => {
-            setShowControls(true);
-            setEditable(true);
-            // setShowInitialContent(false);
-            if (onFocus) {
-              onFocus();
-            }
-            setCurrentTextElement(inputRef.current);
-          }}
-          onBlur={() => {
-            setShowControls(false);
-            setEditable(false);
-          }}
+          {...sharedProps}
         />
       ) : initialContent.type === "checkbox" ? (
         <IoIosCheckboxOutline
           className="icon input"
-          tabIndex={0}
           style={style}
-          onFocus={() => {
-            setShowControls(true);
-            setEditable(true);
-            // setShowInitialContent(false);
-            if (onFocus) {
-              onFocus();
-            }
-            setCurrentTextElement(inputRef.current);
-          }}
-          onBlur={() => {
-            setShowControls(false);
-            setEditable(false);
-          }}
+          {...sharedProps}
         />
       ) : (initialContent.type === "signature" ? (
         signatureSVGString ?
-          <Signature /> :
-          <TextSignature />
+          <Signature sharedProps={sharedProps} /> :
+          <TextSignature sharedProps={sharedProps} />
       ) : null)}
       {/* {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
                 {initialContent}
