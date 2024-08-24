@@ -25,6 +25,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
     const [isCanvasEmpty, setIsCanvasEmpty] = useState(true);
 
     const signatures = useSelector((state: RootState) => state.tool.signatures);
+    const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
     const { uploadedImage } = useFileStore();
 
     const dispatch = useDispatch();
@@ -48,13 +49,17 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
     };
 
     const handleCreate = async () => {
-        console.log('Executing handleCreate');
         if (drawingRef.current) {
             const svgString = await drawingRef.current.getImage();
-
-            dispatch(setField({
-                signatureSVGString: svgString
-            }))
+            if (showModalForInitials) {
+                dispatch(setField({
+                    initials: svgString
+                }))
+            } else {
+                dispatch(setField({
+                    signatureSVGString: svgString
+                }))
+            }
 
             // Create a Blob from the SVG string
             // const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
@@ -81,25 +86,6 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
         setSelectedFont(selectedOption);
     };
 
-    const customStyles = {
-        option: (provided: any, state: any) => ({
-            ...provided,
-            className: state.data.className,
-        }),
-        singleValue: (provided: any, state: any) => ({
-            ...provided,
-            fontFamily: state.data.value,
-        }),
-        control: (provided: any) => ({
-            ...provided,
-            fontFamily: selectedFont ? selectedFont.value : 'inherit',
-        }),
-    };
-
-    const formatOptionLabel = ({ label, className }: FontOption) => (
-        <div className={className}>{label}</div>
-    );
-
     const handleCreateClick = async () => {
         if (layout === "draw" && !isCanvasEmpty) {
             await handleCreate();
@@ -111,6 +97,8 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
     };
 
     const [isFontDropdownOpen, setIsFontDropdownOpen] = useState(false);
+
+    const initials = useSelector((state: RootState) => state.tool.initials);
 
     return (
         <div className={`sign-input-content ${layout}`}>
@@ -172,7 +160,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
                 <button
                     className="footer-btn main-btn"
                     onClick={handleCreateClick}
-                    disabled={(layout === "type" && signatures.length == 0) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
+                    disabled={(layout === "type" && (signatures.length == 0 && initials == "")) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
                 >
                     Create
                 </button>

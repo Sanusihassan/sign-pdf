@@ -5,7 +5,7 @@ type WritableDraft<T> = {
 
 type k = keyof WritableDraft<ToolState>;
 
-type signature = {
+export type signature = {
   mark: string;
   font: string;
   color: string;
@@ -27,6 +27,7 @@ export interface ToolState {
   showStyleTools: boolean;
   acceptPointerEvents: boolean;
   initials: string;
+  showModalForInitials: boolean;
 }
 
 const initialState: ToolState = {
@@ -44,6 +45,7 @@ const initialState: ToolState = {
   signatureSVGString: "",
   showStyleTools: false,
   acceptPointerEvents: true,
+  showModalForInitials: false,
   initials: ""
 };
 

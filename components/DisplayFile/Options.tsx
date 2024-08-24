@@ -6,7 +6,7 @@ import { CiCalendarDate } from "react-icons/ci";
 import { LuTextCursorInput } from "react-icons/lu";
 import { PiSignature } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import { setField } from "@/src/store";
+import { setField, signature } from "@/src/store";
 import { RootState } from "@/pages/_app";
 import { FaChevronDown } from "react-icons/fa6";
 import { IoTrashOutline } from "react-icons/io5";
@@ -16,17 +16,17 @@ import { useDrag } from "react-dnd";
 export interface OptionsProps {
   layout?: string;
   edit_page: _;
-  initials?: string;
 }
 
 const SignatureDropDown = ({ show }: {
   show: boolean;
 }) => {
   const dispatch = useDispatch();
+  const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
   return <div className={`signature-dropdown${show ? "" : " hide"}`}>
     <div className="signature-area">
       <div className="signature-area-svg">
-        <Signature />
+        <Signature signatureSVGString={signatureSVGString} />
       </div>
       <button className="delete-btn" onClick={(e) => {
         e.stopPropagation();
@@ -53,8 +53,7 @@ type sharedProps = {
     onBlur: () => void;
   }
 }
-export const Signature = ({ sharedProps }: sharedProps) => {
-  const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
+export const Signature = ({ sharedProps, signatureSVGString }: { signatureSVGString: string } & sharedProps) => {
   const [scaledSVG, setScaledSVG] = useState<string | null>(null);
   useEffect(() => {
     if (signatureSVGString) {
@@ -92,23 +91,23 @@ export const Signature = ({ sharedProps }: sharedProps) => {
   /> : null
 }
 
-export const TextSignature = ({ sharedProps }: sharedProps) => {
-  const signatures = useSelector((state: RootState) => state.tool.signatures);
+export const TextSignature = ({ sharedProps, signatures }: { signatures: string | signature[] } & sharedProps) => {
+
   return (
-    signatures.length ?
+    typeof signatures === "object" && signatures.length ?
       <div className={`signature-svg input ${signatures[0].font}`} style={{
         color: signatures[0].color
       }}
         {...sharedProps}
       >
         {signatures[0].mark}
-      </div> : null
+      </div> : (typeof signatures === "string" ? <div className="signature-svg input">{signatures}</div> : null)
   )
 }
 
-const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
+const Options = ({ layout, edit_page }: OptionsProps) => {
   const dispatch = useDispatch();
-  const showSignModal = useSelector((state: RootState) => state.tool.showSignModal);
+  const initials = useSelector((state: RootState) => state.tool.initials);
   const [showSignatureDropdown, setShowSignatureDropdown] = useState(false);
 
   const enablePointerEvents = () => {
@@ -168,7 +167,7 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
   const [{ }, dragSignatureRef] = useDrag(() => ({
     type: "signature",
     item: { type: "signature" },
-    canDrag: !!(signatureSVGString || signatures.length > 0),
+    canDrag: !(signatureSVGString && signatures.length > 0),
     collect: (monitor) => {
       enablePointerEvents();
       return ({
@@ -187,12 +186,16 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
         dispatch(setField({
           showSignModal: true
         }));
+
+        dispatch(setField({
+          showModalForInitials: false
+        }));
       }}>
         <div className="signature-drag-el" ref={dragSignatureRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />
         {signatureSVGString ? (
           <>
-            <Signature />
+            <Signature signatureSVGString={signatureSVGString} />
             <button className="dropdown-toggler" onClick={(e) => {
               e.stopPropagation();
               setShowSignatureDropdown(!showSignatureDropdown)
@@ -203,7 +206,7 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
           </>
         ) :
           (signatures.length ?
-            <TextSignature />
+            <TextSignature signatures={signatures} />
             :
             <>
               <PiSignature />
@@ -217,12 +220,21 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
         dispatch(setField({
           showSignModal: true
         }));
+
+        dispatch(setField({
+          showModalForInitials: true
+        }));
       }}>
         <div className="initials-drag-el" ref={dragInitialsRef} onClick={enablePointerEvents} />
+        {initials.startsWith("<svg") ?
+          <>
+            <Signature signatureSVGString={initials} />
+          </> : <TextSignature signatures={initials} />
+        }
         <PiDotsSixVerticalBold className="icon" />
-        <div className="initials-icon">
+        {/* <div className="initials-icon">
           {initials}
-        </div>
+        </div> */}
         <div className="option-label">Your initials</div>
         <strong className="option-add">Add</strong>
       </div>

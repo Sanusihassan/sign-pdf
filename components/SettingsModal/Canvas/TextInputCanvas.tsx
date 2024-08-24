@@ -1,6 +1,7 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { FontOption } from "../InputContent"
 import { setField } from "@/src/store"
+import { RootState } from "@/pages/_app";
 
 type Signature = {
     mark: string;
@@ -12,7 +13,8 @@ export const TextInputCanvas = ({ selectedFont, color }: {
     selectedFont: FontOption | null,
     color: string
 }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newSignature: Signature = {
@@ -21,9 +23,15 @@ export const TextInputCanvas = ({ selectedFont, color }: {
             color: color
         }
 
-        dispatch(setField({
-            signatures: [newSignature]
-        }))
+        if (showModalForInitials) {
+            dispatch(setField({
+                initials: e.target.value
+            }));
+        } else {
+            dispatch(setField({
+                signatures: [newSignature]
+            }));
+        }
     }
 
     return (
