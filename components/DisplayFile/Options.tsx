@@ -101,7 +101,7 @@ export const TextSignature = ({ sharedProps, signatures }: { signatures: string 
         {...sharedProps}
       >
         {signatures[0].mark}
-      </div> : (typeof signatures === "string" ? <div className="signature-svg input">{signatures}</div> : null)
+      </div> : (typeof signatures === "string" && signatures ? <div className="signature-svg input">sig {signatures}</div> : null)
   )
 }
 
@@ -216,16 +216,18 @@ const Options = ({ layout, edit_page }: OptionsProps) => {
           )
         }
       </div>
-      <div className="option-row initials-row" onClick={() => {
-        dispatch(setField({
-          showSignModal: true
-        }));
-
-        dispatch(setField({
-          showModalForInitials: true
-        }));
-      }}>
-        <div className="initials-drag-el" ref={dragInitialsRef} onClick={enablePointerEvents} />
+      <div className="option-row initials-row">
+        <div className="initials-drag-el" ref={dragInitialsRef} onClick={e => {
+          e.stopPropagation();
+          dispatch(setField({
+            showSignModal: true
+          }));
+  
+          dispatch(setField({
+            showModalForInitials: true
+          }));
+          enablePointerEvents()
+        }} />
         {initials.startsWith("<svg") ?
           <>
             <Signature signatureSVGString={initials} />
