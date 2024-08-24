@@ -175,6 +175,7 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
         >
             <div ref={canvasRef} style={{ width: '100%', height: '100%', pointerEvents: acceptPointerEvents ? "auto" : "none" }} onClick={(e) => {
                 const target = (e.target as HTMLElement);
+                e.stopPropagation();
                 if (!(target.classList.contains("input")) && !(target.classList.contains("wrapper"))) {
                     if (onBlur || !showStyleTools) {
                         if (onBlur) {

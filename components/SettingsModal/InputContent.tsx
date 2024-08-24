@@ -1,8 +1,7 @@
-// i want to isolate hte select font to it's own component:
 "use client";
 import { CiUndo, CiRedo } from "react-icons/ci";
 
-import Select from 'react-select';
+import { FaChevronDown } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DrawingCanvas, DrawingCanvasRef } from "./Canvas/DrawingCanvas";
@@ -12,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setField } from "@/src/store";
 import { RootState } from "@/pages/_app";
 import { useFileStore } from "@/src/file-store";
+import { FontSelect } from "../StyleTools/FontSelect";
 const MuiColorInput = dynamic(() => import('mui-color-input').then(mod => mod.MuiColorInput), { ssr: false });
 
 export interface FontOption {
@@ -24,7 +24,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
     const [color, setColor] = useState('#341f97');
     const [isCanvasEmpty, setIsCanvasEmpty] = useState(true);
 
-    const signature = useSelector((state: RootState) => state.tool.signature);
+    const signatures = useSelector((state: RootState) => state.tool.signatures);
     const { uploadedImage } = useFileStore();
 
     const dispatch = useDispatch();
@@ -110,11 +110,13 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
         }));
     };
 
+    const [isFontDropdownOpen, setIsFontDropdownOpen] = useState(false);
+
     return (
         <div className={`sign-input-content ${layout}`}>
             <header>
                 <MuiColorInput format="hex" value={color} onChange={handleChange} className={`color-input${layout == "upload" ? " hide" : ""}`} />
-                <Select
+                {/* <Select
                     options={fontOptions}
                     value={selectedFont}
                     onChange={handleFontChange}
@@ -122,7 +124,24 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
                     className={`font-select${layout == "upload" || layout === "draw" ? " hide" : ""}`}
                     styles={customStyles}
                     formatOptionLabel={formatOptionLabel}
-                />
+                /> */}
+                <div className={`style-tools${layout == "upload" || layout === "draw" ? " hide" : ""}`}>
+                    <div className="fonts-dropdown font-select" onClick={() => setIsFontDropdownOpen(!isFontDropdownOpen)}>
+                        <div
+                            className={`selected-font ${selectedFont?.className}`}
+                            style={{ fontFamily: selectedFont ? selectedFont.value : 'inherit' }}
+                        >
+                            {selectedFont ? selectedFont.label : 'Select Font'}
+                        </div>
+                        <FaChevronDown />
+                        <FontSelect
+                            selectedFont={selectedFont}
+                            onFontChange={handleFontChange}
+                            isOpen={isFontDropdownOpen}
+                            setIsOpen={setIsFontDropdownOpen}
+                        />
+                    </div>
+                </div>
 
                 <div className={`history-controls${layout == "upload" ? " hide" : ""}`}>
                     <button className="history-btn" onClick={handleUndo}>
@@ -153,7 +172,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
                 <button
                     className="footer-btn main-btn"
                     onClick={handleCreateClick}
-                    disabled={(layout === "type" && signature == "") || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
+                    disabled={(layout === "type" && signatures.length == 0) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
                 >
                     Create
                 </button>

@@ -29,43 +29,44 @@ const SettingsModal: React.FC = () => {
     }, [showSignModal]);
 
     return (
-        <div className={`settings-modal overlay${showSignModal ? "" : " hide"}`}>
-            <div className="modal-card">
-                <aside className="sidebar">
-                    <ul className="tabs">
-                        <li
-                            className={`item ${selectedItem === 0 ? 'selected' : ''}`}
-                            onClick={() => handleItemClick(0)}
-                        >
-                            <PiSignature className="icon" />
-                            Draw
-                        </li>
-                        <li
-                            className={`item ${selectedItem === 1 ? 'selected' : ''}`}
-                            onClick={() => handleItemClick(1)}
-                        >
-                            <LuTextCursorInput className="icon" />
-                            Type
-                        </li>
-                        <li
-                            className={`item ${selectedItem === 2 ? 'selected' : ''}`}
-                            onClick={() => handleItemClick(2)}
-                        >
-                            <MdOutlineFileUpload />
-                            Upload
-                        </li>
-                    </ul>
-                </aside>
-                <section className="content">
-                    {selectedItem === 0 ?
-                        <DrawInputSign /> :
-                        selectedItem === 1 ?
-                            <TextInputSign /> :
-                            <UploadInputSign />
-                    }
-                </section>
-            </div>
-        </div>
+        showSignModal ?
+            (<div className="settings-modal overlay">
+                <div className="modal-card">
+                    <aside className="sidebar">
+                        <ul className="tabs">
+                            <li
+                                className={`item ${selectedItem === 0 ? 'selected' : ''}`}
+                                onClick={() => handleItemClick(0)}
+                            >
+                                <PiSignature className="icon" />
+                                Draw
+                            </li>
+                            <li
+                                className={`item ${selectedItem === 1 ? 'selected' : ''}`}
+                                onClick={() => handleItemClick(1)}
+                            >
+                                <LuTextCursorInput className="icon" />
+                                Type
+                            </li>
+                            <li
+                                className={`item ${selectedItem === 2 ? 'selected' : ''}`}
+                                onClick={() => handleItemClick(2)}
+                            >
+                                <MdOutlineFileUpload />
+                                Upload
+                            </li>
+                        </ul>
+                    </aside>
+                    <section className="content">
+                        {selectedItem === 0 ?
+                            <DrawInputSign /> :
+                            selectedItem === 1 ?
+                                <TextInputSign /> :
+                                <UploadInputSign />
+                        }
+                    </section>
+                </div>
+            </div>) : null
     );
 };
 

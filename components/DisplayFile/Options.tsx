@@ -1,4 +1,3 @@
-// how to handle ondrag?
 import React, { useEffect, useState } from "react";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import type { edit_page as _ } from "../../content";
@@ -65,7 +64,7 @@ export const Signature = ({ sharedProps }: sharedProps) => {
 
       if (svgElement) {
         // Set a fixed viewBox
-        svgElement.setAttribute("viewBox", "0 0 256 256");
+        svgElement.setAttribute("viewBox", "0 0 400 256");
         svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
         // Remove width and height attributes
@@ -165,10 +164,11 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
   }));
 
   const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
+  const signatures = useSelector((state: RootState) => state.tool.signatures);
   const [{ }, dragSignatureRef] = useDrag(() => ({
     type: "signature",
     item: { type: "signature" },
-    canDrag: !!signatureSVGString, // Disable dragging if signatureSVGString is empty
+    canDrag: !!(signatureSVGString || signatures.length > 0),
     collect: (monitor) => {
       enablePointerEvents();
       return ({
@@ -177,7 +177,9 @@ const Options = ({ layout, edit_page, initials = "AB" }: OptionsProps) => {
     },
   }), [signatureSVGString]);
 
-  const signatures = useSelector((state: RootState) => state.tool.signatures);
+  useEffect(() => {
+    console.log(!!(signatureSVGString || signatures.length > 0))
+  }, []);
 
   return (
     <div className="sign-pdf-options">

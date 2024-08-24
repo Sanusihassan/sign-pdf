@@ -53,11 +53,9 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
 
     const handleFocus = () => {
         dispatch(setField({ showStyleTools: true }));
-        console.log("focus");
     };
 
     const handleBlur = () => {
-        console.log("blur")
         dispatch(setField({ showStyleTools: false }));
     };
 
