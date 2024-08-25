@@ -95,7 +95,7 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
     type drop_type = "text" | "initials" | "date" | "checkbox" | "signature";
     const [, drop] = useDrop(
         () => ({
-            accept: ["text", "date", "checkbox", "signature"],
+            accept: ["text", "date", "checkbox", "signature", "initials"],
             drop: (item: { type: drop_type }, monitor) => {
                 const dropTarget = canvasRef.current;
                 if (!dropTarget) return;

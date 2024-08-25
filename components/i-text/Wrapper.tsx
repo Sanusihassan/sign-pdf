@@ -181,6 +181,8 @@ export const Wrapper: React.FC<WrapperProps> = ({
 
   const [editable, setEditable] = useState(false);
   const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
+  const signatures = useSelector((state: RootState) => state.tool.signatures);
+  const initials = useSelector((state: RootState) => state.tool.initials);
   const sharedProps = {
     tabIndex: 0,
     ref: inputRef,
@@ -254,9 +256,15 @@ export const Wrapper: React.FC<WrapperProps> = ({
         />
       ) : (initialContent.type === "signature" ? (
         signatureSVGString ?
-          <Signature sharedProps={sharedProps} /> :
-          <TextSignature sharedProps={sharedProps} />
-      ) : null)}
+          <Signature sharedProps={sharedProps} signatureSVGString={signatureSVGString} /> :
+          <TextSignature sharedProps={sharedProps} signatures={signatures} />
+      ) : (
+        initialContent.type === "initials" ?
+          initials?.mark.startsWith("<svg") ?
+            <Signature sharedProps={sharedProps} signatureSVGString={initials.mark} /> :
+            <TextSignature sharedProps={sharedProps} signature={initials} />
+          : null
+      ))}
       {/* {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
                 {initialContent}
             </div> : null} */}

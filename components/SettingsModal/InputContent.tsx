@@ -53,7 +53,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
             const svgString = await drawingRef.current.getImage();
             if (showModalForInitials) {
                 dispatch(setField({
-                    initials: svgString
+                    initials: { mark: svgString, font: selectedFont?.className || "", color: color }
                 }))
             } else {
                 dispatch(setField({
@@ -160,7 +160,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
                 <button
                     className="footer-btn main-btn"
                     onClick={handleCreateClick}
-                    disabled={(layout === "type" && (signatures.length == 0 && initials == "")) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
+                    disabled={(layout === "type" && (signatures.length == 0 && initials == null)) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
                 >
                     Create
                 </button>

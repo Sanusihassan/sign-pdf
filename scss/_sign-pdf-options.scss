@@ -15,13 +15,26 @@
         transition: box-shadow .1s;
 
         &.date-row,
-        .initials-row,
-        .checkbox-row {
+        &.initials-row,
+        &.checkbox-row {
             @include extend("position-relative");
         }
 
         &:hover:not(.dropdown-visible) {
             @include extend("shadow");
+        }
+
+        &.initials-row {
+            .initials {
+                @include extend("d-flex justify-content-between");
+                flex: 0 1 70%;
+
+                .delete-btn {
+                    @include extend("btn btn-light btn-lg");
+                    z-index: 1;
+                }
+            }
+
         }
 
         .additional-text-drag-el,

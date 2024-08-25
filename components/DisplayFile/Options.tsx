@@ -1,3 +1,4 @@
+// when setting the initials to null why is'nt it updated in the dom? the value of the initials also is not updated to null when pressing the delete-btn
 import React, { useEffect, useState } from "react";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import type { edit_page as _ } from "../../content";
@@ -91,23 +92,84 @@ export const Signature = ({ sharedProps, signatureSVGString }: { signatureSVGStr
   /> : null
 }
 
-export const TextSignature = ({ sharedProps, signatures }: { signatures: string | signature[] } & sharedProps) => {
-
+export const TextSignature = ({ sharedProps, signatures, signature }: { signatures?: signature[], signature?: signature | null } & sharedProps) => {
   return (
-    typeof signatures === "object" && signatures.length ?
+    signatures && signatures.length > 0 ?
       <div className={`signature-svg input ${signatures[0].font}`} style={{
         color: signatures[0].color
       }}
         {...sharedProps}
       >
         {signatures[0].mark}
-      </div> : (typeof signatures === "string" && signatures ? <div className="signature-svg input">sig {signatures}</div> : null)
+      </div> : signature ? <div className={`signature-svg input ${signature.font}`} style={{
+        color: signature.color
+      }}>{signature.mark}</div> : null
+  )
+}
+
+
+const InitialsRow = () => {
+  const dispatch = useDispatch();
+  const initials = useSelector((state: RootState) => state.tool.initials);
+  const [{ isDragging: isDraggingInitials }, dragInitialsRef] = useDrag(() => ({
+    type: "initials",
+    item: { type: "initials", initials },
+    collect: (monitor) => {
+      dispatch(setField({ acceptPointerEvents: true }));
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
+  }));
+  useEffect(() => {
+    console.log(initials)
+  }, [initials]);
+  return (
+    <div className="option-row initials-row" onClick={() => {
+      dispatch(setField({
+        showSignModal: true
+      }));
+
+      dispatch(setField({
+        showModalForInitials: true
+      }));
+    }}>
+      <div className={`initials-drag-el${initials === null ? " hide" : ""}`} ref={dragInitialsRef} onClick={e => {
+        e.stopPropagation();
+        dispatch(setField({ acceptPointerEvents: true }));
+      }} />
+      <PiDotsSixVerticalBold className="icon" />
+      {initials ?
+        (
+          <div className="initials">
+            {
+              initials?.mark.startsWith("<svg") ?
+                <Signature signatureSVGString={initials.mark} />
+                : <TextSignature signature={initials} />
+            }
+            <button className="delete-btn" onClick={(e) => {
+              e.stopPropagation();
+              setField({
+                initials: null
+              });
+              console.log("clicked", initials)
+            }}>
+              <IoTrashOutline className="icon" />
+            </button>
+          </div>
+        ) :
+        <>
+          <div className="option-label">Your initials</div>
+          <strong className="option-add">Add</strong>
+        </>
+      }
+    </div>
   )
 }
 
 const Options = ({ layout, edit_page }: OptionsProps) => {
   const dispatch = useDispatch();
-  const initials = useSelector((state: RootState) => state.tool.initials);
+  // const initials = useSelector((state: RootState) => state.tool.initials);
   const [showSignatureDropdown, setShowSignatureDropdown] = useState(false);
 
   const enablePointerEvents = () => {
@@ -140,16 +202,7 @@ const Options = ({ layout, edit_page }: OptionsProps) => {
     },
   }));
 
-  const [{ isDragging: isDraggingInitials }, dragInitialsRef] = useDrag(() => ({
-    type: "initials",
-    item: { type: "initials", initials },
-    collect: (monitor) => {
-      enablePointerEvents();
-      return ({
-        isDragging: !!monitor.isDragging(),
-      })
-    },
-  }));
+
 
   const [{ isDragging: isDraggingCheckbox }, dragCheckboxRef] = useDrag(() => ({
     type: "checkbox",
@@ -216,30 +269,7 @@ const Options = ({ layout, edit_page }: OptionsProps) => {
           )
         }
       </div>
-      <div className="option-row initials-row">
-        <div className="initials-drag-el" ref={dragInitialsRef} onClick={e => {
-          e.stopPropagation();
-          dispatch(setField({
-            showSignModal: true
-          }));
-  
-          dispatch(setField({
-            showModalForInitials: true
-          }));
-          enablePointerEvents()
-        }} />
-        {initials.startsWith("<svg") ?
-          <>
-            <Signature signatureSVGString={initials} />
-          </> : <TextSignature signatures={initials} />
-        }
-        <PiDotsSixVerticalBold className="icon" />
-        {/* <div className="initials-icon">
-          {initials}
-        </div> */}
-        <div className="option-label">Your initials</div>
-        <strong className="option-add">Add</strong>
-      </div>
+      <InitialsRow />
       <div className="option-row additional-text">
         <div className="additional-text-drag-el" ref={dragRef} onClick={enablePointerEvents} />
         <PiDotsSixVerticalBold className="icon" />

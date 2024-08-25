@@ -25,7 +25,7 @@ export const TextInputCanvas = ({ selectedFont, color }: {
 
         if (showModalForInitials) {
             dispatch(setField({
-                initials: e.target.value
+                initials: newSignature
             }));
         } else {
             dispatch(setField({
