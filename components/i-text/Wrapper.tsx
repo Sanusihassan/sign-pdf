@@ -1,3 +1,5 @@
+// the problem is that when the selectedSignature changes they all change i.e the rendered signatures are all changed to the current selectedSignature
+// i don't want that to happen i want to render the current selected signature and let the previous rendered ones.
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import interact from "interactjs";
 import { Controls } from "./Controls";
@@ -5,7 +7,9 @@ import { useFileStore } from "@/src/file-store";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import { RootState } from "@/pages/_app";
 import { useSelector } from "react-redux";
-import { Signature, TextSignature } from "../DisplayFile/Options";
+import { Signature } from "../DisplayFile/Options/Signature";
+import { TextSignature } from "../DisplayFile/Options/TextSignature";
+import { signature } from "@/src/store";
 export type content_type = {
   type: "text" | "initials" | "date" | "checkbox" | "signature";
 } | string;
@@ -49,7 +53,6 @@ export const Wrapper: React.FC<WrapperProps> = ({
   const [controlsPosition, setControlsPosition] = useState<"top" | "bottom">(
     "top"
   );
-  // const [showInitialContent, setShowInitialContent] = useState(true);
   const { setCurrentTextElement } = useFileStore();
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -167,6 +170,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
     }
   };
   const inputRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (inputRef.current) {
       if (
@@ -176,13 +180,23 @@ export const Wrapper: React.FC<WrapperProps> = ({
         inputRef.current.textContent = initialContent;
       }
     }
-    console.log(inputRef.current)
   }, [inputRef.current]);
 
+  useEffect(() => {
+    // Set the initial signature when the component mounts
+    if (typeof initialContent !== "string" && initialContent.type === "signature" && signatures.length > 0) {
+      const selectedSignature = signatures.find(sig => sig.id === activeSignatureId);
+      setWrapperSignature(selectedSignature || signatures[0]);
+    } else if (typeof initialContent !== "string" && initialContent.type === "initials") {
+      setWrapperSignature(initials);
+    }
+  }, []);
+
   const [editable, setEditable] = useState(false);
-  const signatureSVGString = useSelector((state: RootState) => state.tool.signatureSVGString);
   const signatures = useSelector((state: RootState) => state.tool.signatures);
   const initials = useSelector((state: RootState) => state.tool.initials);
+  const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
+  const selectedSignature = signatures.filter(sig => sig.id === activeSignatureId)[0];
   const sharedProps = {
     tabIndex: 0,
     ref: inputRef,
@@ -200,7 +214,18 @@ export const Wrapper: React.FC<WrapperProps> = ({
     },
   };
 
+  const SVGSharedProps = {
+    tabIndex: 0,
+    ref: inputRef,
+    onFocus: () => {
+      setShowControls(true);
+    },
+    onBlur: () => {
+      setShowControls(false);
+    },
+  };
 
+  const [wrapperSignature, setWrapperSignature] = useState<signature | null>(null);
 
   return (
     <div
@@ -255,19 +280,16 @@ export const Wrapper: React.FC<WrapperProps> = ({
           {...sharedProps}
         />
       ) : (initialContent.type === "signature" ? (
-        signatureSVGString ?
-          <Signature sharedProps={sharedProps} signatureSVGString={signatureSVGString} /> :
-          <TextSignature sharedProps={sharedProps} signatures={signatures} />
+        wrapperSignature && wrapperSignature.mark.includes("<svg") ?
+          <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
+          <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
       ) : (
         initialContent.type === "initials" ?
           initials?.mark.startsWith("<svg") ?
-            <Signature sharedProps={sharedProps} signatureSVGString={initials.mark} /> :
+            <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
             <TextSignature sharedProps={sharedProps} signature={initials} />
           : null
       ))}
-      {/* {showInitialContent || (!showControls && !initialContent.length) ? <div className="initial-content">
-                {initialContent}
-            </div> : null} */}
     </div>
   );
 };

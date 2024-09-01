@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { MdOutlineFileUpload } from "react-icons/md";
 import { LuTextCursorInput } from "react-icons/lu";
 import { PiSignature } from "react-icons/pi";
@@ -7,6 +7,8 @@ import { UploadInputSign } from './SettingsModal/UploadInputSign';
 import { TextInputSign } from './SettingsModal/TextInputSign';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/pages/_app';
+import { setField } from '@/src/store';
+import { useDispatch } from 'react-redux';
 
 const SettingsModal: React.FC = () => {
     // State to track the currently selected item
@@ -17,21 +19,54 @@ const SettingsModal: React.FC = () => {
         setSelectedItem(index);
     };
 
+    const dispatch = useDispatch();
+
 
     const showSignModal = useSelector((state: RootState) => state.tool.showSignModal);
 
-    useEffect(() => {
-        if (showSignModal) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "visible";
+    const setModalHeight = () => {
+        if (modalRef.current) {
+            modalRef.current.style.height = `${document.documentElement.scrollHeight}px`;
         }
+    };
+
+    const closeModal = useCallback(() => {
+        dispatch(setField({ showSignModal: false }));
+    }, [dispatch]);
+
+    const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    };
+
+    useEffect(() => {
+
+        if (showSignModal) {
+            document.addEventListener('keydown', handleEscape);
+            setModalHeight();
+            window.addEventListener('resize', setModalHeight);
+            window.addEventListener('scroll', setModalHeight);
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+            window.removeEventListener('resize', setModalHeight);
+            window.removeEventListener('scroll', setModalHeight);
+        };
     }, [showSignModal]);
+
+    const modalRef = useRef<HTMLDivElement>(null);
+
 
     return (
         showSignModal ?
-            (<div className="settings-modal overlay">
-                <div className="modal-card">
+            (<div className="settings-modal overlay" ref={modalRef} onClick={() => {
+                closeModal();
+            }}>
+                <div className="modal-card" onClick={(e) => {
+                    e.stopPropagation();
+                }}>
                     <aside className="sidebar">
                         <ul className="tabs">
                             <li

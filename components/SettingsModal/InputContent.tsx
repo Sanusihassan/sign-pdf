@@ -1,6 +1,6 @@
 "use client";
 import { CiUndo, CiRedo } from "react-icons/ci";
-
+import { v4 as uuid } from 'uuid';
 import { FaChevronDown } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -8,7 +8,7 @@ import { DrawingCanvas, DrawingCanvasRef } from "./Canvas/DrawingCanvas";
 import { TextInputCanvas } from "./Canvas/TextInputCanvas";
 import { UploadCanvas } from "./Canvas/UploadCanvas";
 import { useDispatch, useSelector } from "react-redux";
-import { setField } from "@/src/store";
+import { setField, signature } from "@/src/store";
 import { RootState } from "@/pages/_app";
 import { useFileStore } from "@/src/file-store";
 import { FontSelect } from "../StyleTools/FontSelect";
@@ -25,6 +25,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
     const [isCanvasEmpty, setIsCanvasEmpty] = useState(true);
 
     const signatures = useSelector((state: RootState) => state.tool.signatures);
+    const textSignature = useSelector((state: RootState) => state.tool.textSignature);
     const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
     const { uploadedImage } = useFileStore();
 
@@ -53,16 +54,21 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
             const svgString = await drawingRef.current.getImage();
             if (showModalForInitials) {
                 dispatch(setField({
-                    initials: { mark: svgString, font: selectedFont?.className || "", color: color }
-                }))
+                    initials: { mark: svgString, font: selectedFont?.className || "", color: color, id: uuid() }
+                }));
             } else {
-                dispatch(setField({
-                    signatureSVGString: svgString
-                }))
-            }
+                const newSignature: signature = {
+                    mark: svgString,
+                    font: selectedFont?.className || "",
+                    color: color,
+                    id: uuid()
+                };
 
-            // Create a Blob from the SVG string
-            // const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+                dispatch(setField({
+                    signatures: [...signatures, newSignature],
+                    activeSignatureId: newSignature.id
+                }));
+            }
         }
     };
 
@@ -89,8 +95,14 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
     const handleCreateClick = async () => {
         if (layout === "draw" && !isCanvasEmpty) {
             await handleCreate();
+        } else if (layout === "type") {
+            if (textSignature) {
+                dispatch(setField({
+                    signatures: [...signatures, textSignature],
+                    activeSignatureId: textSignature.id
+                }));
+            }
         }
-        // Add logic for other layouts if needed
         dispatch(setField({
             showSignModal: false
         }));
@@ -160,7 +172,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
                 <button
                     className="footer-btn main-btn"
                     onClick={handleCreateClick}
-                    disabled={(layout === "type" && (signatures.length == 0 && initials == null)) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
+                    disabled={(layout === "type" && ((signatures.length || textSignature) == 0 && initials == null)) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
                 >
                     Create
                 </button>

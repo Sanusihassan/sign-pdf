@@ -188,31 +188,35 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
                         onFocus();
                 }
             }}>
-                {wrappers.map(wrapper => (
-                    <Wrapper
-                        key={wrapper.id}
-                        id={wrapper.id}
-                        initialContent={wrapper.content}
-                        initialX={wrapper.x}
-                        initialY={wrapper.y}
-                        initialWidth={wrapper.width}
-                        initialHeight={wrapper.height}
-                        onDuplicate={handleDuplicate}
-                        onDelete={handleDelete}
-                        onMove={handleMove}
-                        onResize={handleResize}
-                        onContentChange={handleContentChange}
-                        onFocus={() => {
-                            if (onFocus) {
-                                onFocus();
-                            }
-                            // setAcceptPointerEvents(true)
-                        }}
-                        onInput={onInput}
-                        className={className}
-                        style={style}
-                    />
-                ))}
+                {wrappers.map(wrapper => {
+                    return (
+                        // render ?
+                        <Wrapper
+                            key={wrapper.id}
+                            id={wrapper.id}
+                            initialContent={wrapper.content}
+                            initialX={wrapper.x}
+                            initialY={wrapper.y}
+                            initialWidth={wrapper.width}
+                            initialHeight={wrapper.height}
+                            onDuplicate={handleDuplicate}
+                            onDelete={handleDelete}
+                            onMove={handleMove}
+                            onResize={handleResize}
+                            onContentChange={handleContentChange}
+                            onFocus={() => {
+                                if (onFocus) {
+                                    onFocus();
+                                }
+                                // setAcceptPointerEvents(true)
+                            }}
+                            onInput={onInput}
+                            className={className}
+                            style={style}
+                        />
+                    )
+                }
+                )}
             </div>
         </div>
     );

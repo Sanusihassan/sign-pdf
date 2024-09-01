@@ -1,4 +1,5 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
+
 type WritableDraft<T> = {
   -readonly [K in keyof T]: Draft<T[K]>;
 };
@@ -9,6 +10,7 @@ export type signature = {
   mark: string;
   font: string;
   color: string;
+  id: string;
 }
 
 export interface ToolState {
@@ -22,12 +24,13 @@ export interface ToolState {
   nav_height: number;
   pageCount: number;
   signatures: signature[];
+  activeSignatureId: string | null;
   showSignModal: boolean;
-  signatureSVGString: string;
   showStyleTools: boolean;
   acceptPointerEvents: boolean;
   initials: signature | null;
   showModalForInitials: boolean;
+  textSignature: signature | null
 }
 
 const initialState: ToolState = {
@@ -41,12 +44,13 @@ const initialState: ToolState = {
   nav_height: 0,
   pageCount: 0,
   signatures: [],
+  activeSignatureId: null,
   showSignModal: false,
-  signatureSVGString: "",
   showStyleTools: false,
   acceptPointerEvents: true,
   showModalForInitials: false,
-  initials: null
+  initials: null,
+  textSignature: null
 };
 
 const toolSlice = createSlice({
@@ -61,7 +65,6 @@ const toolSlice = createSlice({
     },
     setField(state, action: PayloadAction<Partial<ToolState>>) {
       Object.keys(action.payload).forEach((key) => {
-        // Cast the key to keyof ToolState to ensure it's a valid key
         const typedKey = key as k;
         const value = action.payload[typedKey];
         if (value !== undefined) {
@@ -73,9 +76,6 @@ const toolSlice = createSlice({
   },
 });
 
-export const {
-  resetErrorMessage,
-  setField
-} = toolSlice.actions;
+export const { resetErrorMessage, setField } = toolSlice.actions;
 
 export default toolSlice.reducer;

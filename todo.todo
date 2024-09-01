@@ -1,4 +1,5 @@
-initials is only once and signature is multiple.
+[bug] changing the font-family on the dropdown on the settings pop-up 
 
 
-initials add / delete (signature type).
+is also changing it on the additional text particle.
+only additional type + 

@@ -81,26 +81,26 @@ $primary-color: #341f97;
 
 // Scrollbar styles
 ::-webkit-scrollbar {
-  width: 10px; // Width of the scrollbar
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; // Track background color
-  border-radius: 1em; // Rounded corners for the track
+  background: #f1f1f1;
+  border-radius: 1em;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $primary-color; // Thumb (handle) color
-  border-radius: 1em; // Rounded corners for the thumb
+  background: $primary-color;
+  border-radius: 1em;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: darken($primary-color, 10%); // Darker color when hovering
+  background: darken($primary-color, 10%);
 }
 
 // Optional: for the vertical scrollbar
 ::-webkit-scrollbar-button {
-  display: none; // Hide the up/down buttons on the scrollbar
+  display: none;
 }
 
 .tools-page {
