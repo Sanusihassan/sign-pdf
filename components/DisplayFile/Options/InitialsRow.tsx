@@ -7,10 +7,12 @@ import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
+import { useFileStore } from "@/src/file-store";
 
 export const InitialsRow = () => {
     const dispatch = useDispatch();
     const initials = useSelector((state: RootState) => state.tool.initials);
+    const { initialsImage } = useFileStore();
     const [{ isDragging: isDraggingInitials }, dragInitialsRef] = useDrag(() => ({
         type: "initials",
         item: { type: "initials", initials },
@@ -22,7 +24,7 @@ export const InitialsRow = () => {
         },
     }));
     useEffect(() => {
-        console.log(initials)
+
     }, [initials]);
     return (
         <div className="option-row initials-row" onClick={() => {
@@ -61,8 +63,14 @@ export const InitialsRow = () => {
                     </div>
                 ) :
                 <>
-                    <div className="option-label">Your initials</div>
-                    <strong className="option-add">Add</strong>
+                    {initialsImage ?
+                        <img src={URL.createObjectURL(initialsImage)} ref={dragInitialsRef} /> :
+                        <>
+                            <div className="option-label">Your initials</div>
+                            <strong className="option-add">Add</strong>
+                        </>
+
+                    }
                 </>
             }
         </div>

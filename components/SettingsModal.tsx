@@ -9,8 +9,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/pages/_app';
 import { setField } from '@/src/store';
 import { useDispatch } from 'react-redux';
+import { errors } from '@/content';
 
-const SettingsModal: React.FC = () => {
+const SettingsModal = ({ errors }: { errors: errors }) => {
     // State to track the currently selected item
     const [selectedItem, setSelectedItem] = useState<number>(0);
 
@@ -94,10 +95,10 @@ const SettingsModal: React.FC = () => {
                     </aside>
                     <section className="content">
                         {selectedItem === 0 ?
-                            <DrawInputSign /> :
+                            <DrawInputSign errors={errors} /> :
                             selectedItem === 1 ?
-                                <TextInputSign /> :
-                                <UploadInputSign />
+                                <TextInputSign errors={errors} /> :
+                                <UploadInputSign errors={errors} />
                         }
                     </section>
                 </div>

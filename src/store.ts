@@ -30,7 +30,8 @@ export interface ToolState {
   acceptPointerEvents: boolean;
   initials: signature | null;
   showModalForInitials: boolean;
-  textSignature: signature | null
+  textSignature: signature | null,
+  showSignatureDropdown: boolean;
 }
 
 const initialState: ToolState = {
@@ -50,7 +51,8 @@ const initialState: ToolState = {
   acceptPointerEvents: true,
   showModalForInitials: false,
   initials: null,
-  textSignature: null
+  textSignature: null,
+  showSignatureDropdown: false
 };
 
 const toolSlice = createSlice({

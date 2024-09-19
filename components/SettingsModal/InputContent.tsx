@@ -12,6 +12,7 @@ import { setField, signature } from "@/src/store";
 import { RootState } from "@/pages/_app";
 import { useFileStore } from "@/src/file-store";
 import { FontSelect } from "../StyleTools/FontSelect";
+import { errors } from "@/content";
 const MuiColorInput = dynamic(() => import('mui-color-input').then(mod => mod.MuiColorInput), { ssr: false });
 
 export interface FontOption {
@@ -20,14 +21,14 @@ export interface FontOption {
     className: string;
 }
 
-export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }) => {
+export const InputContent = ({ layout, errors }: { layout?: "draw" | "type" | "upload", errors: errors }) => {
     const [color, setColor] = useState('#341f97');
     const [isCanvasEmpty, setIsCanvasEmpty] = useState(true);
 
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const textSignature = useSelector((state: RootState) => state.tool.textSignature);
     const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
-    const { uploadedImage } = useFileStore();
+    const { signatureImages, initialsImage } = useFileStore();
 
     const dispatch = useDispatch();
 
@@ -155,7 +156,7 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
             <div className="main">
                 {
                     layout === "draw" ? <DrawingCanvas color={color} ref={drawingRef} onEmptyStateChange={handleEmptyStateChange} />
-                        : layout === "type" ? <TextInputCanvas selectedFont={selectedFont} color={color} /> : <UploadCanvas />
+                        : layout === "type" ? <TextInputCanvas selectedFont={selectedFont} color={color} /> : <UploadCanvas errors={errors} />
                 }
             </div>
             <div className="footer">
@@ -172,7 +173,9 @@ export const InputContent = ({ layout }: { layout?: "draw" | "type" | "upload" }
                 <button
                     className="footer-btn main-btn"
                     onClick={handleCreateClick}
-                    disabled={(layout === "type" && ((signatures.length || textSignature) == 0 && initials == null)) || (layout === "upload" && uploadedImage == null) || (layout == "draw" && isCanvasEmpty)}
+                    disabled={(layout === "type" &&
+                        ((signatures.length || textSignature) == 0 && initials == null)) ||
+                        (layout === "upload" && (signatureImages == null && initialsImage == null)) || (layout == "draw" && isCanvasEmpty)}
                 >
                     Create
                 </button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 import { RootState } from "@/pages/_app";
@@ -11,11 +11,10 @@ import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
 
 export const SignatureRow: React.FC = () => {
-    const [showSignatureDropdown, setShowSignatureDropdown] = useState(false);
     const dispatch = useDispatch();
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
-
+    const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
     const activeSignature = signatures.find(sig => sig.id === activeSignatureId) || null;
 
     const [{ }, dragSignatureRef] = useDrag(() => ({
@@ -51,21 +50,18 @@ export const SignatureRow: React.FC = () => {
                     </div>
                     <button className="dropdown-toggler" onClick={(e) => {
                         e.stopPropagation();
-                        setShowSignatureDropdown(!showSignatureDropdown)
+                        dispatch(setField({ showSignatureDropdown: !showSignatureDropdown }))
                     }}>
                         <FaChevronDown />
                     </button>
                     <SignatureDropDown show={showSignatureDropdown} />
                 </>
             ) : (
-                // <div onClick={handleAddSignature}>
                 <>
-
                     <PiSignature />
                     <div className="option-label">Your signature</div>
                     <strong className="option-add">Add</strong>
                 </>
-                // </div>
             )}
         </div>
     );

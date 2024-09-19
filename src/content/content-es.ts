@@ -81,61 +81,43 @@ export const errors: _errors = {
     code: "ERR_FILE_SIZE_LIMIT_EXCEEDED",
   },
   NOT_SUPPORTED_TYPE: {
-    message: "El archivo no es un tipo compatible.",
+    message: "El archivo no es de un tipo admitido.",
     types: {
       PDF: "Por favor, elija un archivo PDF válido.",
-      JPG: "Por favor, elija un archivo de imagen JPEG válido.",
-      DOC: "Por favor, elija un archivo de documento de Word válido.",
-      DOCX: "Por favor, elija un archivo de documento de Word válido.",
-      XLS: "Por favor, elija un archivo de hoja de cálculo de Excel válido.",
-      XLSX: "Por favor, elija un archivo de hoja de cálculo de Excel válido.",
-      PPT: "Por favor, elija un archivo de presentación de PowerPoint válido.",
-      PPTX: "Por favor, elija un archivo de presentación de PowerPoint válido.",
+      IMAGE: "Por favor, elija un archivo de imagen válido (JPG, PNG, BMP, TIFF, GIF, SVG, WebP, HEIF).",
     },
     code: "ERR_INVALID_FILE_TYPE",
   },
   FILE_CORRUPT: {
-    message:
-      "El archivo estácorrupto y no se puede procesar. Por favor, elija un archivo válido.",
+    message: "El archivo está dañado y no se puede procesar. Por favor, elija un archivo válido.",
     code: "ERR_FILE_CORRUPT",
   },
   MISSING_FONTS: {
-    message:
-      "El archivo contiene fuentes faltantes. Por favor, asegúrese de que todas las fuentes estén incrustadas en el archivo PDF.",
+    message: "El archivo contiene fuentes faltantes y no se puede procesar. Por favor, asegúrese de que todas las fuentes estén incrustadas en el archivo PDF.",
     code: "ERR_MISSING_FONTS",
   },
   INVALID_IMAGE_DATA: {
-    message:
-      "El archivo contiene datos de imagen no válidos. Por favor, asegúrese de que todas las imágenes estén correctamente formateadas.",
+    message: "El archivo contiene datos de imagen no válidos. Por favor, asegúrese de que todas las imágenes tengan el formato correcto.",
     code: "ERR_INVALID_IMAGE_DATA",
   },
   SECURITY_RISK: {
-    message:
-      "El archivo contiene un riesgo de seguridad y no se puede procesar. Por favor, elija un archivo válido.",
+    message: "El archivo contiene un riesgo de seguridad y no se puede procesar. Por favor, elija un archivo válido.",
     code: "ERR_SECURITY_RISK",
   },
   MAX_FILES_EXCEEDED: {
-    message:
-      "Ha excedido el número máximo de archivos permitidos. Por favor, elimine algunos archivos e intente nuevamente.",
+    message: "Ha excedido el número máximo de archivos permitidos. Por favor, elimine algunos archivos y vuelva a intentarlo.",
     code: "ERR_MAX_FILES_EXCEEDED",
   },
   NO_FILES_SELECTED: {
-    message:
-      "No se han seleccionado archivos. Por favor, seleccione al menos un archivo.",
+    message: "No se han seleccionado archivos. Por favor, seleccione al menos un archivo.",
     code: "ERR_NO_FILES_SELECTED",
   },
   UNKNOWN_ERROR: {
-    message:
-      "Ha ocurrido un error desconocido. Por favor, inténtelo de nuevo más tarde o contacte al soporte.",
+    message: "Ocurrió un error desconocido. Por favor, inténtelo más tarde o contacte con soporte.",
     code: "ERR_UNKNOWN",
   },
   ERR_NETWORK: {
-    message:
-      "Ha ocurrido un error en la red. Por favor, comprueba tu conexión a internet e inténtalo de nuevo.",
+    message: "Ocurrió un error de red. Por favor, verifique su conexión a internet y vuelva a intentarlo.",
     code: "ERR_NETWORK",
-  },
-  ERR_UPLOAD_COUNT: {
-    message: "Por favor, suba al menos dos archivos para fusionar.",
-    code: "ERR_UPLOAD_COUNT",
   },
 };

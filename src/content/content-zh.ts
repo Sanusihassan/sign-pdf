@@ -69,64 +69,56 @@ export const tools: _tools = {
   drop_files: "在此处拖放文件",
 };
 
+
 export const errors: _errors = {
   EMPTY_FILE: {
-    message: "文件为空，请选择一个有效的文件。",
+    message: "文件为空。请选择有效的文件。",
     code: "ERR_EMPTY_FILE",
   },
   FILE_TOO_LARGE: {
     message:
-      "文件太大。请选择一个更小的文件，或使用我们的压缩PDF工具来减小文件大小。",
+      "文件太大。请选择较小的文件，或使用我们的 PDF 压缩工具来减少文件大小。",
     code: "ERR_FILE_SIZE_LIMIT_EXCEEDED",
   },
   NOT_SUPPORTED_TYPE: {
-    message: "文件不是受支持的类型。",
+    message: "文件类型不受支持。",
     types: {
-      PDF: "请选择一个有效的PDF文件。",
-      JPG: "请选择一个有效的JPEG图片文件。",
-      DOC: "请选择一个有效的Word文档文件。",
-      DOCX: "请选择一个有效的Word文档文件。",
-      XLS: "请选择一个有效的Excel电子表格文件。",
-      XLSX: "请选择一个有效的Excel电子表格文件。",
-      PPT: "请选择一个有效的PowerPoint演示文稿文件。",
-      PPTX: "请选择一个有效的PowerPoint演示文稿文件。",
+      PDF: "请选择有效的 PDF 文件。",
+      IMAGE: "请选择有效的图片文件 (JPG, PNG, BMP, TIFF, GIF, SVG, WebP, HEIF)。",
     },
     code: "ERR_INVALID_FILE_TYPE",
   },
   FILE_CORRUPT: {
-    message: "文件已损坏，无法处理。请选择一个有效的文件。",
+    message: "文件已损坏，无法处理。请选择有效的文件。",
     code: "ERR_FILE_CORRUPT",
   },
   MISSING_FONTS: {
-    message: "文件缺少字体。请确保所有字体都嵌入在PDF文件中。",
+    message:
+      "文件中缺少字体，无法处理。请确保所有字体都嵌入到 PDF 文件中。",
     code: "ERR_MISSING_FONTS",
   },
   INVALID_IMAGE_DATA: {
-    message: "文件包含无效的图像数据。请确保所有图像格式正确。",
+    message: "文件包含无效的图片数据。请确保所有图片格式正确。",
     code: "ERR_INVALID_IMAGE_DATA",
   },
   SECURITY_RISK: {
-    message: "文件存在安全风险，无法处理。请选择一个有效的文件。",
+    message: "文件存在安全风险，无法处理。请选择有效的文件。",
     code: "ERR_SECURITY_RISK",
   },
   MAX_FILES_EXCEEDED: {
-    message: "您已超出允许的最大文件数。请删除一些文件并重试。",
+    message: "您已超过允许的最大文件数量。请删除一些文件并重试。",
     code: "ERR_MAX_FILES_EXCEEDED",
   },
   NO_FILES_SELECTED: {
-    message: "未选择任何文件。请选择至少一个文件。",
+    message: "未选择任何文件。请至少选择一个文件。",
     code: "ERR_NO_FILES_SELECTED",
   },
   UNKNOWN_ERROR: {
-    message: "发生未知错误。请稍后重试或联系支持人员。",
+    message: "发生未知错误。请稍后再试或联系支持。",
     code: "ERR_UNKNOWN",
   },
   ERR_NETWORK: {
-    message: "网络错误，请检查您的互联网连接并重试。",
+    message: "发生网络错误。请检查您的互联网连接并重试。",
     code: "ERR_NETWORK",
-  },
-  ERR_UPLOAD_COUNT: {
-    message: "请至少上传两个文件以合并。",
-    code: "ERR_UPLOAD_COUNT",
   },
 };

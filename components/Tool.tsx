@@ -75,7 +75,7 @@ const Tool: React.FC<ToolProps> = ({
   // const [endpoint, setEndpoint] = useState("");
   // drag and drop input handling
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    const isValid = validateFiles(acceptedFiles, data.type, errors, dispatch, { path: data.to });
+    const isValid = validateFiles(acceptedFiles, data.type, errors, dispatch);
     if (isValid) {
       setFiles(acceptedFiles);
       handleHideTool();
@@ -143,7 +143,7 @@ const Tool: React.FC<ToolProps> = ({
         <DownloadFile lang={lang} downloadFile={downloadFile} path={path} />
         {/* )} */}
       </div>
-      <SettingsModal />
+      <SettingsModal errors={errors} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/pages/_app";
 import { setField, type signature } from "@/src/store";
@@ -6,6 +6,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
+import { useFileStore } from "@/src/file-store";
 
 export const SignatureDropDown: React.FC<{
     show: boolean;
@@ -13,6 +14,10 @@ export const SignatureDropDown: React.FC<{
     const dispatch = useDispatch();
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
+    const { signatureImages } = useFileStore();
+    useEffect(() => {
+
+    }, [signatureImages])
 
     const handleSignatureSelect = (signature: signature) => {
         dispatch(setField({ activeSignatureId: signature.id }));
@@ -55,6 +60,12 @@ export const SignatureDropDown: React.FC<{
                     </button>
                 </div>
             ))}
+            {signatureImages ? signatureImages.map((sig, id) => (
+                <div className="signature-svg input">
+                    <img key={id} src={URL.createObjectURL(sig)} alt={`Signature ${id}`} />
+                </div>
+            )) : null}
+
             <button className="add-signature main-btn-outlined" onClick={handleAddSignature}>
                 <IoIosAddCircleOutline className="icon add-icon" />
                 Add Signature

@@ -183,29 +183,20 @@ export const validateFiles = (
   _files: FileList | File[],
   extension: string,
   errors: _,
-  dispatch: Dispatch<AnyAction>,
-  state: {
-    path: string;
-  }
+  dispatch: Dispatch<AnyAction>
 ) => {
   const files = Array.from(_files); // convert FileList to File[] array
-
   let allowedMimeTypes = [
     "application/pdf",
-    "text/html",
     "image/jpeg",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    "application/vnd.ms-powerpoint",
-    "application/vnd.ms-excel",
+    "image/png",
+    "image/bmp",
+    "image/tiff",
+    "image/gif",
+    "image/svg+xml",
+    "image/webp",
+    "image/heif",
   ];
-  // validation for merge-pdf page & empty files
-  if (state.path == "merge-pdf" && files.length <= 1) {
-    dispatch(setField({ errorMessage: errors.ERR_UPLOAD_COUNT.message }));
-    dispatch(setField({ errorCode: "ERR_UPLOAD_COUNT" }));
-    return false;
-  }
   if (files.length == 0) {
     dispatch(setField({ errorMessage: errors.NO_FILES_SELECTED.message }));
     dispatch(setField({ errorCode: "ERR_NO_FILES_SELECTED" }));
@@ -216,18 +207,16 @@ export const validateFiles = (
     const file = files[i] || null;
     extension = extension.replace(".", "").toUpperCase();
     let file_extension = file.name.split(".").pop()?.toUpperCase() || "";
-    // this contains all types and some special types that might potentially be of than one extension
     const types = [
-      "ppt",
-      "pptx",
-      "doc",
-      "docx",
-      "xls",
-      "xlsx",
-      "html",
-      "htm",
-      "jpg",
       "pdf",
+      "jpg",
+      "png",
+      "bmp",
+      "tiff",
+      "gif",
+      "svg",
+      "webp",
+      "heif"
     ];
 
     if (!file || !file.name) {
