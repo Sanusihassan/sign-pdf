@@ -40,12 +40,35 @@ export const edit_page: _edit_page = {
     sign_pdf: "PDF साइन विकल्प",
   },
   loader_text: "कृपया प्रतीक्षा करें...",
-  add_more_button: "अधिक फाइलें जोड़ें",
+  add_more_button: "अधिक फ़ाइलें जोड़ें",
   action_buttons: {
     sign_pdf: "PDF साइन करें",
   },
   pages: "पृष्ठ",
   page: "पृष्ठ",
+  options: {
+    signature_row: {
+      your_signature: "आपका हस्ताक्षर",
+      add: "जोड़ें"
+    },
+    initials: {
+      your_initials: "आपके आद्याक्षर",
+      add: "जोड़ें"
+    },
+    additional_text: "अतिरिक्त पाठ",
+    date: "तारीख",
+    checkbox: "चेकबॉक्स"
+  },
+  settings_modal: {
+    sidebar: {
+      draw: "ड्रॉ",
+      type: "टाइप",
+      upload: "अपलोड",
+    },
+    input_content: {
+      create: "बनाएँ"
+    }
+  }
 };
 
 export const downloadFile: _downloadFile = {

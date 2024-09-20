@@ -54,7 +54,31 @@ export const edit_page: _edit_page = {
   },
   pages: "pages",
   page: "page",
+  options: {
+    signature_row: {
+      your_signature: "Votre signature",
+      add: "Ajouter"
+    },
+    initials: {
+      your_initials: "Vos initiales",
+      add: "Ajouter"
+    },
+    additional_text: "Texte supplémentaire",
+    date: "Date",
+    checkbox: "Case à cocher"
+  },
+  settings_modal: {
+    sidebar: {
+      draw: "Dessiner",
+      type: "Taper",
+      upload: "Télécharger",
+    },
+    input_content: {
+      create: "Créer"
+    }
+  }
 };
+
 
 export const downloadFile: _downloadFile = {
   titles: {

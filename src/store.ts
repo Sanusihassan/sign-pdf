@@ -24,7 +24,7 @@ export interface ToolState {
   nav_height: number;
   pageCount: number;
   signatures: signature[];
-  activeSignatureId: string | null;
+  activeSignatureId: string | null | number;
   showSignModal: boolean;
   showStyleTools: boolean;
   acceptPointerEvents: boolean;

@@ -39,13 +39,36 @@ export const edit_page: _edit_page = {
   edit_page_titles: {
     sign_pdf: "签署 PDF 选项",
   },
-  loader_text: "请稍候...",
+  loader_text: "请稍等...",
   add_more_button: "添加更多文件",
   action_buttons: {
     sign_pdf: "签署 PDF",
   },
   pages: "页",
   page: "页",
+  options: {
+    signature_row: {
+      your_signature: "您的签名",
+      add: "添加"
+    },
+    initials: {
+      your_initials: "您的首字母",
+      add: "添加"
+    },
+    additional_text: "附加文本",
+    date: "日期",
+    checkbox: "复选框"
+  },
+  settings_modal: {
+    sidebar: {
+      draw: "绘制",
+      type: "输入",
+      upload: "上传",
+    },
+    input_content: {
+      create: "创建"
+    }
+  }
 };
 
 export const downloadFile: _downloadFile = {

@@ -12,7 +12,7 @@ import { setField, signature } from "@/src/store";
 import { RootState } from "@/pages/_app";
 import { useFileStore } from "@/src/file-store";
 import { FontSelect } from "../StyleTools/FontSelect";
-import { errors } from "@/content";
+import { edit_page, errors } from "@/content";
 const MuiColorInput = dynamic(() => import('mui-color-input').then(mod => mod.MuiColorInput), { ssr: false });
 
 export interface FontOption {
@@ -21,7 +21,7 @@ export interface FontOption {
     className: string;
 }
 
-export const InputContent = ({ layout, errors }: { layout?: "draw" | "type" | "upload", errors: errors }) => {
+export const InputContent = ({ layout, errors, content }: { layout?: "draw" | "type" | "upload", errors: errors, content: edit_page["settings_modal"]["input_content"] }) => {
     const [color, setColor] = useState('#341f97');
     const [isCanvasEmpty, setIsCanvasEmpty] = useState(true);
 
@@ -177,7 +177,7 @@ export const InputContent = ({ layout, errors }: { layout?: "draw" | "type" | "u
                         ((signatures.length || textSignature) == 0 && initials == null)) ||
                         (layout === "upload" && (signatureImages == null && initialsImage == null)) || (layout == "draw" && isCanvasEmpty)}
                 >
-                    Create
+                    {content.create}
                 </button>
             </div>
         </div>

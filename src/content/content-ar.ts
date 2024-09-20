@@ -53,6 +53,29 @@ export const edit_page: _edit_page = {
   },
   pages: "صفحات",
   page: "صفحة",
+  options: {
+    signature_row: {
+      your_signature: "توقيعك",
+      add: "إضافة"
+    },
+    initials: {
+      your_initials: "أحرفك الأولى",
+      add: "إضافة"
+    },
+    additional_text: "نص إضافي",
+    date: "التاريخ",
+    checkbox: "مربع الاختيار"
+  },
+  settings_modal: {
+    sidebar: {
+      draw: "رسم",
+      type: "كتابة",
+      upload: "تحميل",
+    },
+    input_content: {
+      create: "إنشاء"
+    }
+  }
 };
 
 export const downloadFile: _downloadFile = {

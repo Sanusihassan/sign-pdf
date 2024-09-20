@@ -42,6 +42,7 @@ function validateImages(files: File[]): boolean {
 export const UploadCanvas = ({ errors }: { errors: errors }) => {
     const { setSignatureImages, signatureImages, setInitialsImage } = useFileStore();
     const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
+    const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
     const dispatch = useDispatch();
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,6 +91,7 @@ export const UploadCanvas = ({ errors }: { errors: errors }) => {
                     setSignatureImages([...newFiles]);
                 }
                 dispatch(setField({ showSignatureDropdown: true }));
+                console.log("showSignatureDropdown ================> ", showSignatureDropdown, signatureImages?.length)
             }
         } catch (error) {
             dispatch(setField({ errorMessage: errors.UNKNOWN_ERROR.message }));

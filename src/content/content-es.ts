@@ -44,7 +44,7 @@ export const tools: _tools = {
 
 export const edit_page: _edit_page = {
   edit_page_titles: {
-    sign_pdf: "Opciones de firma de PDF",
+    sign_pdf: "Opciones de Firmar PDF",
   },
   loader_text: "por favor espera...",
   add_more_button: "Agregar más archivos",
@@ -53,6 +53,29 @@ export const edit_page: _edit_page = {
   },
   pages: "páginas",
   page: "página",
+  options: {
+    signature_row: {
+      your_signature: "Tu firma",
+      add: "Agregar"
+    },
+    initials: {
+      your_initials: "Tus iniciales",
+      add: "Agregar"
+    },
+    additional_text: "Texto adicional",
+    date: "Fecha",
+    checkbox: "Casilla de verificación"
+  },
+  settings_modal: {
+    sidebar: {
+      draw: "Dibujar",
+      type: "Escribir",
+      upload: "Subir",
+    },
+    input_content: {
+      create: "Crear"
+    }
+  }
 };
 
 export const downloadFile: _downloadFile = {

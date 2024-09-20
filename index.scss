@@ -108,12 +108,12 @@ $primary-color: #341f97;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $primary-color;
+  background: linear-gradient(transparent, $primary-color);
   border-radius: 1em;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: darken($primary-color, 10%);
+  background: linear-gradient(darken(transparent, 10%), $primary-color);
 }
 
 // Optional: for the vertical scrollbar
@@ -380,6 +380,23 @@ footer {
   bottom: -5px;
   right: -5px;
   cursor: nwse-resize;
+}
+
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.no-drag {
+  -webkit-user-drag: none
+}
+
+.w-100 {
+  @include extend("w-100");
+}
+
+.h-100 {
+  @include extend("h-100");
 }
 
 @import "i-text-input/src/scss/_input.scss";

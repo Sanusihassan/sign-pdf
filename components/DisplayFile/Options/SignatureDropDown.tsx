@@ -8,16 +8,14 @@ import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
 import { useFileStore } from "@/src/file-store";
 
-export const SignatureDropDown: React.FC<{
-    show: boolean;
-}> = ({ show }) => {
+export const SignatureDropDown = () => {
     const dispatch = useDispatch();
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
-    const { signatureImages } = useFileStore();
+    const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
+    const { signatureImages, setSignatureImages } = useFileStore();
     useEffect(() => {
-
-    }, [signatureImages])
+    }, [signatureImages, showSignatureDropdown])
 
     const handleSignatureSelect = (signature: signature) => {
         dispatch(setField({ activeSignatureId: signature.id }));
@@ -37,7 +35,7 @@ export const SignatureDropDown: React.FC<{
     };
 
     return (
-        <div className={`signature-dropdown${show ? "" : " hide"}`} onClick={(e) => e.stopPropagation()}>
+        <div className={`signature-dropdown${showSignatureDropdown ? "" : " hide"}`} onClick={(e) => e.stopPropagation()}>
             {signatures.map((signature) => (
                 <div key={signature.id} className="signature-area">
                     <div
@@ -61,8 +59,25 @@ export const SignatureDropDown: React.FC<{
                 </div>
             ))}
             {signatureImages ? signatureImages.map((sig, id) => (
-                <div className="signature-svg input">
-                    <img key={id} src={URL.createObjectURL(sig)} alt={`Signature ${id}`} />
+                <div className="signature-area">
+                    <div className={`signature-area-svg${String(id) === activeSignatureId ? " active" : ""}`} onClick={() => {
+                        dispatch(setField({ activeSignatureId: id }));
+                    }}>
+                        <div className="signature-svg">
+                            <img key={id} src={URL.createObjectURL(sig)} alt={`Signature ${id}`} className="responsive-image no-drag" />
+                        </div>
+                        <button
+                            className="delete-btn"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                // Update the state to remove the selected signature
+                                const updatedSignatures = signatureImages.filter((_, index) => index !== id);
+                                setSignatureImages(updatedSignatures);
+                            }}
+                        >
+                            <IoTrashOutline className="icon" />
+                        </button>
+                    </div>
                 </div>
             )) : null}
 

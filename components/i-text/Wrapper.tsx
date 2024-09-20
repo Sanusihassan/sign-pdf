@@ -180,6 +180,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
         inputRef.current.textContent = initialContent;
       }
     }
+    console.log(initialContent);
   }, [inputRef.current]);
 
   useEffect(() => {
@@ -196,7 +197,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
   const signatures = useSelector((state: RootState) => state.tool.signatures);
   const initials = useSelector((state: RootState) => state.tool.initials);
   const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
-  const selectedSignature = signatures.filter(sig => sig.id === activeSignatureId)[0];
+  const { signatureImages } = useFileStore();
   const sharedProps = {
     tabIndex: 0,
     ref: inputRef,
@@ -226,6 +227,8 @@ export const Wrapper: React.FC<WrapperProps> = ({
   };
 
   const [wrapperSignature, setWrapperSignature] = useState<signature | null>(null);
+
+  const { initialsImage } = useFileStore();
 
   return (
     <div
@@ -282,13 +285,20 @@ export const Wrapper: React.FC<WrapperProps> = ({
       ) : (initialContent.type === "signature" ? (
         wrapperSignature && wrapperSignature.mark.includes("<svg") ?
           <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
-          <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
+          typeof activeSignatureId === "number" ?
+            signatureImages && signatureImages[activeSignatureId] && (
+              <img
+                src={URL.createObjectURL(signatureImages[activeSignatureId])}
+                alt="Signature"
+                className="w-100 h-100"
+              />) :
+            <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
       ) : (
         initialContent.type === "initials" ?
           initials?.mark.startsWith("<svg") ?
             <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
-            <TextSignature sharedProps={sharedProps} signature={initials} />
-          : null
+            (initialsImage ? <img src={URL.createObjectURL(initialsImage)} className="w-100 h-100" /> : null) :
+          <TextSignature sharedProps={sharedProps} signature={initials} />
       ))}
     </div>
   );

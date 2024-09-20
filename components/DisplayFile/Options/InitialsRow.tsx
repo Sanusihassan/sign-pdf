@@ -8,8 +8,9 @@ import { TextSignature } from "./TextSignature";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
 import { useFileStore } from "@/src/file-store";
+import { edit_page } from "@/content";
 
-export const InitialsRow = () => {
+export const InitialsRow = ({ content }: { content: edit_page["options"]["initials"] }) => {
     const dispatch = useDispatch();
     const initials = useSelector((state: RootState) => state.tool.initials);
     const { initialsImage } = useFileStore();
@@ -56,7 +57,6 @@ export const InitialsRow = () => {
                                     initials: null
                                 })
                             )
-                            console.log("clicked", initials)
                         }}>
                             <IoTrashOutline className="icon" />
                         </button>
@@ -66,10 +66,9 @@ export const InitialsRow = () => {
                     {initialsImage ?
                         <img src={URL.createObjectURL(initialsImage)} ref={dragInitialsRef} /> :
                         <>
-                            <div className="option-label">Your initials</div>
-                            <strong className="option-add">Add</strong>
+                            <div className="option-label">{content.your_initials}</div>
+                            <strong className="option-add">{content.add}</strong>
                         </>
-
                     }
                 </>
             }

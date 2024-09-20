@@ -143,7 +143,7 @@ const Tool: React.FC<ToolProps> = ({
         <DownloadFile lang={lang} downloadFile={downloadFile} path={path} />
         {/* )} */}
       </div>
-      <SettingsModal errors={errors} />
+      <SettingsModal errors={errors} content={edit_page.settings_modal} />
     </>
   );
 };

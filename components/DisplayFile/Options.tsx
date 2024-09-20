@@ -1,11 +1,10 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch } from "react";
 import { IoIosCheckboxOutline } from "react-icons/io";
-import type { edit_page as _ } from "../../content";
+import type { edit_page } from "../../content";
 import { CiCalendarDate } from "react-icons/ci";
 import { LuTextCursorInput } from "react-icons/lu";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setField } from "@/src/store";
-import { RootState } from "@/pages/_app";
 import { useDrag } from "react-dnd";
 import { InitialsRow } from "./Options/InitialsRow";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
@@ -13,17 +12,14 @@ import { Action } from "@reduxjs/toolkit";
 import { SignatureRow } from "./Options/SignatureRow";
 
 export interface OptionsProps {
-  layout?: string;
-  edit_page: _;
+  content: edit_page["options"];
 }
 
 export const enablePointerEvents = (dispatch: Dispatch<Action>) => {
   dispatch(setField({ acceptPointerEvents: true }));
 }
 
-
-
-const Options = ({ layout, edit_page }: OptionsProps) => {
+const Options = ({ content }: OptionsProps) => {
   const dispatch = useDispatch();
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
@@ -61,26 +57,26 @@ const Options = ({ layout, edit_page }: OptionsProps) => {
 
   return (
     <div className="sign-pdf-options">
-      <SignatureRow />
-      <InitialsRow />
+      <SignatureRow content={content.signature_row} />
+      <InitialsRow content={content.initials} />
       <div className="option-row additional-text">
         <div className="additional-text-drag-el" ref={dragRef} onClick={() => enablePointerEvents(dispatch)} />
         <PiDotsSixVerticalBold className="icon" />
         <LuTextCursorInput />
-        <div className="option-label">Additional text</div>
+        <div className="option-label">{content.additional_text}</div>
       </div>
       <div className="option-row date-row">
         <div className="date-drag-el" ref={dragDateRef} onClick={() => enablePointerEvents(dispatch)} />
         <PiDotsSixVerticalBold className="icon" />
         <CiCalendarDate className="icon" />
-        <div className="option-label">Date</div>
+        <div className="option-label">{content.date}</div>
       </div>
 
       <div className="option-row checkbox-row">
         <div className="checkbox-drag-el" ref={dragCheckboxRef} onClick={() => enablePointerEvents(dispatch)} />
         <PiDotsSixVerticalBold className="icon" />
         <IoIosCheckboxOutline className="icon" />
-        <div className="option-label">Checkbox</div>
+        <div className="option-label">{content.checkbox}</div>
       </div>
     </div>
   );

@@ -9,9 +9,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/pages/_app';
 import { setField } from '@/src/store';
 import { useDispatch } from 'react-redux';
-import { errors } from '@/content';
+import { edit_page, errors } from '@/content';
 
-const SettingsModal = ({ errors }: { errors: errors }) => {
+const SettingsModal = ({ errors, content }: { errors: errors, content: edit_page["settings_modal"] }) => {
     // State to track the currently selected item
     const [selectedItem, setSelectedItem] = useState<number>(0);
 
@@ -75,30 +75,30 @@ const SettingsModal = ({ errors }: { errors: errors }) => {
                                 onClick={() => handleItemClick(0)}
                             >
                                 <PiSignature className="icon" />
-                                Draw
+                                {content.sidebar.draw}
                             </li>
                             <li
                                 className={`item ${selectedItem === 1 ? 'selected' : ''}`}
                                 onClick={() => handleItemClick(1)}
                             >
                                 <LuTextCursorInput className="icon" />
-                                Type
+                                {content.sidebar.type}
                             </li>
                             <li
                                 className={`item ${selectedItem === 2 ? 'selected' : ''}`}
                                 onClick={() => handleItemClick(2)}
                             >
                                 <MdOutlineFileUpload />
-                                Upload
+                                {content.sidebar.upload}
                             </li>
                         </ul>
                     </aside>
                     <section className="content">
                         {selectedItem === 0 ?
-                            <DrawInputSign errors={errors} /> :
+                            <DrawInputSign errors={errors} content={content.input_content} /> :
                             selectedItem === 1 ?
-                                <TextInputSign errors={errors} /> :
-                                <UploadInputSign errors={errors} />
+                                <TextInputSign errors={errors} content={content.input_content} /> :
+                                <UploadInputSign errors={errors} content={content.input_content} />
                         }
                     </section>
                 </div>

@@ -135,7 +135,7 @@ const EditPage = ({
             }
           </bdi>
         </h5>
-        <Options edit_page={edit_page} />
+        <Options content={edit_page.options} />
         <div className="hide-onsmall">
           <SubmitBtn k={path} edit_page={edit_page} />
         </div>
