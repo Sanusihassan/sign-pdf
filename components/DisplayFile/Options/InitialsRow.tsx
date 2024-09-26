@@ -64,7 +64,7 @@ export const InitialsRow = ({ content }: { content: edit_page["options"]["initia
                 ) :
                 <>
                     {initialsImage ?
-                        <img src={URL.createObjectURL(initialsImage)} ref={dragInitialsRef} /> :
+                        <img src={URL.createObjectURL(initialsImage)} ref={dragInitialsRef} className="sig-img" /> :
                         <>
                             <div className="option-label">{content.your_initials}</div>
                             <strong className="option-add">{content.add}</strong>

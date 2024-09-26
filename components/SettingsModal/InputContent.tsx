@@ -58,11 +58,12 @@ export const InputContent = ({ layout, errors, content }: { layout?: "draw" | "t
                     initials: { mark: svgString, font: selectedFont?.className || "", color: color, id: uuid() }
                 }));
             } else {
+
                 const newSignature: signature = {
                     mark: svgString,
                     font: selectedFont?.className || "",
                     color: color,
-                    id: uuid()
+                    id: uuid(),
                 };
 
                 dispatch(setField({
@@ -96,7 +97,8 @@ export const InputContent = ({ layout, errors, content }: { layout?: "draw" | "t
     const handleCreateClick = async () => {
         if (layout === "draw" && !isCanvasEmpty) {
             await handleCreate();
-        } else if (layout === "type") {
+        }
+        else if (layout === "type" && !showModalForInitials) {
             if (textSignature) {
                 dispatch(setField({
                     signatures: [...signatures, textSignature],

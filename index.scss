@@ -391,6 +391,12 @@ footer {
   -webkit-user-drag: none
 }
 
+.sig-img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover
+}
+
 .w-100 {
   @include extend("w-100");
 }

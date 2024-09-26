@@ -137,6 +137,7 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     setInteractLayerInitialized={setInteractLayerInitialized}
+                    id={id}
                 />
             </div>
         </div>

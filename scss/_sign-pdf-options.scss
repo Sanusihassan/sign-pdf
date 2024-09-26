@@ -77,6 +77,12 @@
             }
         }
 
+        .signature-area-svg {
+            @include xs {
+                z-index: 3;
+            }
+        }
+
         .dropdown-toggler {
             @include extend("btn btn-light");
             z-index: 1;

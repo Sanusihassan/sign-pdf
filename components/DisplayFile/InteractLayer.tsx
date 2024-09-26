@@ -1,22 +1,27 @@
-import React, { CSSProperties, useCallback, useEffect, useRef } from 'react';
+// the problem is that each time the wrappers is updated i loose the previous state.
+// i don't want this because the wrappers are dropped on a particular page each page should.
+// now when the previous state is cleared i only get somthing like this: [{"id":1727117046233,"content":{"type":"signature"},"x":303,"y":97.54169464111328,"width":200,"height":129.333,"page":2}]
+// even if i added a particle to the previous page i.e page one before adding it to the current page which is page 2
+// please give me the complete code solution, because i'm going to replace the current code with the one you'll give me.
+// each time i scroll to a particular page i get only the wrappers of that page.
+import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
 import useUndo from 'use-undo';
-
 import { useDrop } from 'react-dnd';
-import { content_type, Wrapper } from '../i-text/Wrapper';
+import { content_type } from '../i-text/Wrapper';
 import { RootState } from '@/pages/_app';
 import { useSelector } from 'react-redux';
 import { getLanguage } from '@/src/language';
 import { setField } from '@/src/store';
 import { useDispatch } from 'react-redux';
 
-
-interface WrapperData {
+export interface WrapperData {
     id: number;
     content: content_type;
     x: number;
     y: number;
     width: number;
     height: number;
+    page: number
 }
 
 interface InteractLayerProps {
@@ -24,62 +29,56 @@ interface InteractLayerProps {
     height: string | number;
     className?: string;
     style?: CSSProperties;
+    id: number;
     onFocus?: () => void;
     onBlur?: () => void;
     onInput?: () => void;
     setInteractLayerInitialized: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const InteractLayer: React.FC<InteractLayerProps> = ({
+import WrapperList from './InteractLayer/WrapperList';
+
+interface InteractLayerProps {
+    width: string | number;
+    height: string | number;
+    className?: string;
+    style?: CSSProperties;
+    id: number;
+    onFocus?: () => void;
+    onBlur?: () => void;
+    onInput?: () => void;
+    setInteractLayerInitialized: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export type drop_type = "text" | "initials" | "date" | "checkbox" | "signature";
+
+export const InteractLayer = ({
     width,
     height,
     className,
     style,
+    id,
     onFocus,
     onInput,
     onBlur,
     setInteractLayerInitialized
-}) => {
+}: InteractLayerProps) => {
     const [wrappersState, { set: setWrappers, undo: undoWrappers, redo: redoWrappers, canUndo, canRedo }] = useUndo<WrapperData[]>([]);
-    const { present: wrappers } = wrappersState;
+    const { present } = wrappersState;
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
     const canvasRef = useRef<HTMLDivElement>(null);
 
     const updateWrappers = useCallback((newWrappers: WrapperData[]) => {
         setWrappers(newWrappers);
     }, [setWrappers]);
 
-    const handleDuplicate = (id: number) => {
-        const wrapperToDuplicate = wrappers.find(w => w.id === id);
-        if (wrapperToDuplicate) {
-            const canvasRect = canvasRef.current?.getBoundingClientRect();
-            const newX = Math.min(wrapperToDuplicate.x + 10, (canvasRect?.width || 0) - wrapperToDuplicate.width);
-            const newY = Math.min(wrapperToDuplicate.y + 10, (canvasRect?.height || 0) - wrapperToDuplicate.height);
-            const newWrappers = [...wrappers, { ...wrapperToDuplicate, id: Date.now(), x: newX, y: newY }];
-            updateWrappers(newWrappers);
-        }
-    };
-
-    const handleDelete = (id: number) => {
-        const newWrappers = wrappers.filter(w => w.id !== id);
-        updateWrappers(newWrappers);
-    };
-
-    const handleMove = (id: number, x: number, y: number) => {
-        const newWrappers = wrappers.map(w => w.id === id ? { ...w, x, y } : w);
-        updateWrappers(newWrappers);
-    };
-
-    const handleResize = (id: number, width: number, height: number) => {
-        const newWrappers = wrappers.map(w => w.id === id ? { ...w, width, height } : w);
-        updateWrappers(newWrappers);
-    };
-
-    const handleContentChange = (id: number, content: string) => {
-        const newWrappers = wrappers.map(w => w.id === id ? { ...w, content } : w);
-        updateWrappers(newWrappers);
-    };
-
     useEffect(() => {
+
+        if (!stateWrappers.length) {
+            dispatch(setField({
+                wrappers: present
+            }));
+        }
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === 'z' && canUndo) {
                 e.preventDefault();
@@ -92,7 +91,7 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [canUndo, canRedo, undoWrappers, redoWrappers]);
-    type drop_type = "text" | "initials" | "date" | "checkbox" | "signature";
+
     const [, drop] = useDrop(
         () => ({
             accept: ["text", "date", "checkbox", "signature", "initials"],
@@ -150,8 +149,8 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
                         y: canvasY,
                         width: item.type === 'checkbox' ? 50 : 200,
                         height: item.type === 'checkbox' ? 50 : 100,
+                        page: id
                     };
-
                     updateWrappers([...wrappers, newWrapper]);
                 }
             },
@@ -159,64 +158,48 @@ export const InteractLayer: React.FC<InteractLayerProps> = ({
         [wrappers, updateWrappers]
     );
 
-
     const showStyleTools = useSelector((state: RootState) => state.tool.showStyleTools);
     const acceptPointerEvents = useSelector((state: RootState) => state.tool.acceptPointerEvents);
+    const stateWrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const insertActiveSignatureToCurrentPage = useSelector((state: RootState) => state.tool.insertActiveSignatureToCurrentPage);
     const dispatch = useDispatch();
 
     const disablePointerEvents = () => {
         dispatch(setField({ acceptPointerEvents: false }));
-    }
+    };
+
+
     return (
         <div
             ref={drop}
             className={`canvas`}
-            style={{ width, height, position: 'absolute', top: 0, }}
+            style={{ width, height, position: 'absolute', top: 0 }}
         >
-            <div ref={canvasRef} style={{ width: '100%', height: '100%', pointerEvents: acceptPointerEvents ? "auto" : "none" }} onClick={(e) => {
-                const target = (e.target as HTMLElement);
-                e.stopPropagation();
-                if (!(target.classList.contains("input")) && !(target.classList.contains("wrapper"))) {
-                    if (onBlur || !showStyleTools) {
-                        if (onBlur) {
-                            onBlur();
+            <div
+                ref={canvasRef}
+                style={{ width: '100%', height: '100%', pointerEvents: acceptPointerEvents ? "auto" : "none" }}
+                onClick={(e) => {
+                    const target = e.target as HTMLElement;
+                    e.stopPropagation();
+                    if (!(target.classList.contains("input")) && !(target.classList.contains("wrapper"))) {
+                        if (onBlur || !showStyleTools) {
+                            if (onBlur) onBlur();
+                            disablePointerEvents();
                         }
-                        disablePointerEvents();
+                    } else {
+                        if (onFocus) onFocus();
                     }
-                } else {
-                    if (onFocus)
-                        onFocus();
-                }
-            }}>
-                {wrappers.map(wrapper => {
-                    return (
-                        // render ?
-                        <Wrapper
-                            key={wrapper.id}
-                            id={wrapper.id}
-                            initialContent={wrapper.content}
-                            initialX={wrapper.x}
-                            initialY={wrapper.y}
-                            initialWidth={wrapper.width}
-                            initialHeight={wrapper.height}
-                            onDuplicate={handleDuplicate}
-                            onDelete={handleDelete}
-                            onMove={handleMove}
-                            onResize={handleResize}
-                            onContentChange={handleContentChange}
-                            onFocus={() => {
-                                if (onFocus) {
-                                    onFocus();
-                                }
-                                // setAcceptPointerEvents(true)
-                            }}
-                            onInput={onInput}
-                            className={className}
-                            style={style}
-                        />
-                    )
-                }
-                )}
+                }}
+            >
+                <WrapperList
+                    wrappers={wrappers}
+                    updateWrappers={updateWrappers}
+                    canvasRef={canvasRef}
+                    className={className}
+                    style={style}
+                    onFocus={onFocus}
+                    onInput={onInput}
+                />
             </div>
         </div>
     );

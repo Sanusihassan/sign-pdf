@@ -4,10 +4,18 @@
     flex-flow: column;
     z-index: 801;
 
+    @include xs {
+        justify-content: flex-start;
+    }
 
     .modal-card {
         width: 65%;
         flex: 0 1 45%;
+
+        @include xs {
+            width: 90%;
+        }
+
         @include extend("bg-white");
         column-gap: 5px;
 

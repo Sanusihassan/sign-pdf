@@ -1,5 +1,26 @@
-// the problem is that when the selectedSignature changes they all change i.e the rendered signatures are all changed to the current selectedSignature
-// i don't want that to happen i want to render the current selected signature and let the previous rendered ones.
+/**
+ * i want to send the data like this:
+ * {
+  "annotations": [
+    {
+      "type": "signature",
+      "value": "svg string",
+      "position": { "x": 100, "y": 200, "page": 1 }
+    },
+    {
+      "type": "text",
+      "value": "John Doe",
+      "position": { "x": 150, "y": 250, "page": 1 }
+    },
+    {
+      "type": "date",
+      "value": "2024-09-22",
+      "position": { "x": 300, "y": 350, "page": 2 }
+    }
+  ]
+}
+
+ */
 import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import interact from "interactjs";
 import { Controls } from "./Controls";
@@ -102,6 +123,9 @@ export const Wrapper: React.FC<WrapperProps> = ({
           ],
         });
     }
+    setClearOutline(showControls ||
+      initialContent == "type something..." ||
+      initialContent === "")
   }, [id, initialX, initialY, initialWidth, initialHeight, onMove, onResize]);
 
   const updateControlPosition = () => {
@@ -158,10 +182,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
   };
 
   const [showControls, setShowControls] = useState(true);
-  const clearOutline =
-    showControls ||
-    initialContent == "type something..." ||
-    initialContent === "";
+  const [clearOutline, setClearOutline] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const controlsElement = document.querySelector(".controls");
@@ -180,7 +201,6 @@ export const Wrapper: React.FC<WrapperProps> = ({
         inputRef.current.textContent = initialContent;
       }
     }
-    console.log(initialContent);
   }, [inputRef.current]);
 
   useEffect(() => {
@@ -230,6 +250,52 @@ export const Wrapper: React.FC<WrapperProps> = ({
 
   const { initialsImage } = useFileStore();
 
+  // const renderContent = () => {
+  //   if (typeof initialContent === "string") {
+  //     return (
+  //       <div
+  //         className={`input${className ? " " + className : ""}`}
+  //         contentEditable={editable}
+  //         suppressContentEditableWarning
+  //         onInput={handleContentChange}
+  //         {...sharedProps}
+  //       />
+  //     );
+  //   } else if (initialContent.type === "checkbox") {
+  //     return (
+  //       <IoIosCheckboxOutline
+  //         className="icon input"
+  //         style={style}
+  //         {...sharedProps}
+  //       />
+  //     );
+  //   } else if (initialContent.type === "signature") {
+  //     if (wrapperSignature && wrapperSignature.mark.includes("<svg")) {
+  //       return <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} />;
+  //     } else if (typeof activeSignatureId === "number" && signatureImages && signatureImages[activeSignatureId]) {
+  //       return (
+  //         <img
+  //           src={URL.createObjectURL(signatureImages[activeSignatureId])}
+  //           alt="Signature"
+  //           className="w-100 h-100"
+  //         />
+  //       );
+  //     } else {
+  //       return <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
+  //     }
+  //   } else if (initialContent.type === "initials") {
+  //     if (initials?.mark.startsWith("<svg")) {
+  //       return <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} />
+  //     } else if (initialsImage) {
+  //       return <div {...sharedProps} className="w-100 h-100">
+  //         <img src={URL.createObjectURL(initialsImage)} className="w-100 h-100" alt="Initials" />
+  //       </div>
+  //     } else {
+  //       return <TextSignature sharedProps={sharedProps} signature={initials} />
+  //     }
+  //   }
+  // };
+
   return (
     <div
       className={`wrapper${clearOutline ? "" : " no-outline"}`}
@@ -266,7 +332,9 @@ export const Wrapper: React.FC<WrapperProps> = ({
       ></div>
       <div
         className={`resize-handle left-center${clearOutline ? "" : " clear"}`}
+
       ></div>
+
       {typeof initialContent === "string" ? (
         <div
           className={`input${className ? " " + className : ""}`}
@@ -287,19 +355,26 @@ export const Wrapper: React.FC<WrapperProps> = ({
           <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
           typeof activeSignatureId === "number" ?
             signatureImages && signatureImages[activeSignatureId] && (
-              <img
-                src={URL.createObjectURL(signatureImages[activeSignatureId])}
-                alt="Signature"
-                className="w-100 h-100"
-              />) :
+              <div className="w-100 h-100" {...sharedProps}>
+                <img
+                  src={URL.createObjectURL(signatureImages[activeSignatureId])}
+                  alt="Signature"
+                  className="w-100 h-100"
+                />
+              </div>
+            ) :
             <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
       ) : (
         initialContent.type === "initials" ?
           initials?.mark.startsWith("<svg") ?
             <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
-            (initialsImage ? <img src={URL.createObjectURL(initialsImage)} className="w-100 h-100" /> : null) :
-          <TextSignature sharedProps={sharedProps} signature={initials} />
+            (initialsImage ? <div className="w-100 h-100" {...sharedProps}>
+              <img src={URL.createObjectURL(initialsImage)} className="w-100 h-100" />
+            </div>
+              : <TextSignature sharedProps={sharedProps} signature={initials} />) : null
       ))}
+
+      {/* {renderContent()} */}
     </div>
   );
 };

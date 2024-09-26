@@ -10,7 +10,7 @@ export const TextInputCanvas = ({ selectedFont, color }: {
 }) => {
     const dispatch = useDispatch();
     const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
-    // const signatures = useSelector((state: RootState) => state.tool.signatures);
+    const signatures = useSelector((state: RootState) => state.tool.signatures);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newSignature: signature = {
@@ -19,13 +19,14 @@ export const TextInputCanvas = ({ selectedFont, color }: {
             color: color,
             id: uuid()
         }
-        dispatch(setField({
-            textSignature: newSignature
-        }));
-
         if (showModalForInitials) {
             dispatch(setField({
                 initials: newSignature
+            }));
+        }
+        else {
+            dispatch(setField({
+                textSignature: newSignature
             }));
         }
     }

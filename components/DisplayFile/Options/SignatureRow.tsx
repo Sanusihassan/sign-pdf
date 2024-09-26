@@ -12,6 +12,7 @@ import { TextSignature } from "./TextSignature";
 import { useFileStore } from "@/src/file-store";
 import { edit_page } from "@/content";
 
+
 export const SignatureRow = ({ content }: {
     content: edit_page["options"]["signature_row"]
 }) => {
@@ -19,6 +20,7 @@ export const SignatureRow = ({ content }: {
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
     const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
     const { signatureImages } = useFileStore();
     // if typeof activeSignatureId === "number" then i want to find the activeSignatureId from the signatureImages array and check the item with the index activeSignatureId index.
     // else
@@ -49,15 +51,30 @@ export const SignatureRow = ({ content }: {
 
     return (
         <div className={`option-row${showSignatureDropdown ? " dropdown-visible" : ""}`} onClick={handleAddSignature}>
-            <div className="signature-drag-el" ref={dragSignatureRef} onClick={() => enablePointerEvents(dispatch)} />
+            <div className="signature-drag-el" ref={dragSignatureRef} onClickCapture={(e) => {
+                enablePointerEvents(dispatch);
+            }} />
             <PiDotsSixVerticalBold className="icon" />
             {activeSignature || signatureImages?.length ? (
                 <>
-                    <div className="signature-area-svg">
+                    <div className="signature-area-svg" onClick={e => {
+                        if (signatures.length !== 0) {
+                            e.stopPropagation();
+                            // dispatch(setField({
+                            //     wrappers: [...wrappers, newWrapper]
+                            // }))
+                            // dispatch(setField({
+                            //     insertActiveSignatureToCurrentPage: {
+                            //         insert: true,
+                            //         type: "signature"
+                            //     }
+                            // }));
+                        }
+                    }}>
                         {activeSignature !== null && activeSignature?.mark.startsWith("<svg") ?
                             <Signature signatureSVGString={activeSignature.mark} /> :
                             activeSignature?.mark.startsWith('blob:') ?
-                                <img src={activeSignature.mark} alt={`Signature ${activeSignature}`} className="responsive-image" />
+                                <img src={activeSignature.mark} alt={`Signature ${activeSignature}`} className="sig-img" />
                                 :
                                 <TextSignature signature={activeSignature as signature} />
                         }

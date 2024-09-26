@@ -31,9 +31,6 @@ export const tools = {
   drop_files: "Drag files here",
 };
 
-// please translate this object to arabic, spanish, french, hindi, chinese (zh)
-// only translate the string values i.e don't translate the property names because they should all be of the same type i.e _edit_page i already have the _edit_page interface defined. so you only need to generate edit_page objects for all of these languages.
-// they should be defined like this: export const edit_page: _edit_page = {...}
 export const edit_page = {
   edit_page_titles: {
     sign_pdf: "Sign PDF options",

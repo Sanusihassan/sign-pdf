@@ -1,3 +1,5 @@
+// this is my store:
+import { drop_type, WrapperData } from "@/components/DisplayFile/InteractLayer";
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
 
 type WritableDraft<T> = {
@@ -32,6 +34,14 @@ export interface ToolState {
   showModalForInitials: boolean;
   textSignature: signature | null,
   showSignatureDropdown: boolean;
+  wrappers: WrapperData[];
+  additionalText: string[];
+  datesFields: string[];
+  insertActiveSignatureToCurrentPage: {
+    insert: boolean;
+    type: drop_type | null
+  };
+  checkbox: WrapperData[]
 }
 
 const initialState: ToolState = {
@@ -52,7 +62,15 @@ const initialState: ToolState = {
   showModalForInitials: false,
   initials: null,
   textSignature: null,
-  showSignatureDropdown: false
+  showSignatureDropdown: false,
+  wrappers: [],
+  additionalText: [],
+  datesFields: [],
+  checkbox: [],
+  insertActiveSignatureToCurrentPage: {
+    insert: false,
+    type: null
+  }
 };
 
 const toolSlice = createSlice({
