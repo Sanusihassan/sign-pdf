@@ -7,13 +7,11 @@ import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
 import { IoTrashOutline } from "react-icons/io5";
-import { useFileStore } from "@/src/file-store";
 import { edit_page } from "@/content";
 
 export const InitialsRow = ({ content }: { content: edit_page["options"]["initials"] }) => {
     const dispatch = useDispatch();
     const initials = useSelector((state: RootState) => state.tool.initials);
-    const { initialsImage } = useFileStore();
     const [{ isDragging: isDraggingInitials }, dragInitialsRef] = useDrag(() => ({
         type: "initials",
         item: { type: "initials", initials },
@@ -48,7 +46,10 @@ export const InitialsRow = ({ content }: { content: edit_page["options"]["initia
                         {
                             initials?.mark.startsWith("<svg") ?
                                 <Signature signatureSVGString={initials.mark} />
-                                : <TextSignature signature={initials} />
+                                :
+                                initials?.mark.startsWith("blob:") ?
+                                    <img src={initials.mark} ref={dragInitialsRef} className="sig-img" /> :
+                                    <TextSignature signature={initials} />
                         }
                         <button className="delete-btn" onClick={(e) => {
                             e.stopPropagation();
@@ -63,13 +64,9 @@ export const InitialsRow = ({ content }: { content: edit_page["options"]["initia
                     </div>
                 ) :
                 <>
-                    {initialsImage ?
-                        <img src={URL.createObjectURL(initialsImage)} ref={dragInitialsRef} className="sig-img" /> :
-                        <>
-                            <div className="option-label">{content.your_initials}</div>
-                            <strong className="option-add">{content.add}</strong>
-                        </>
-                    }
+                    <div className="option-label">{content.your_initials}</div>
+                    <strong className="option-add">{content.add}</strong>
+
                 </>
             }
         </div>

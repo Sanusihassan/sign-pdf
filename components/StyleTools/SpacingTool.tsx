@@ -4,25 +4,30 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useFileStore } from "@/src/file-store";
 import { applyStyle } from "@/src/utils";
+import { RootState } from "@/pages/_app";
+import { useSelector, useDispatch } from "react-redux";
 
 export const SpacingTool: React.FC = () => {
     const [letterSpacing, setLetterSpacing] = useState<number>(0);
     const [lineSpacing, setLineSpacing] = useState<number>(1);
     const [hideDropdown, setHideDropdown] = useState(true);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
-    const { currentTextElement } = useFileStore();
+
+    const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const dispatch = useDispatch();
 
     const handleLetterSpacingChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setLetterSpacing(value);
-            applyStyle("letterSpacing", `${letterSpacing}px`, currentTextElement)
+            applyStyle("letterSpacing", `${letterSpacing}px`, activeWrapper, dispatch, wrappers)
         }
     };
 
     const handleLineSpacingChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setLineSpacing(value);
-            applyStyle("lineHeight", lineSpacing, currentTextElement)
+            applyStyle("lineHeight", lineSpacing, activeWrapper, dispatch, wrappers)
         }
     };
 

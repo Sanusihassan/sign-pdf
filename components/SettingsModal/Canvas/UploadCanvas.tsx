@@ -4,6 +4,7 @@ import { useFileStore } from "@/src/file-store";
 import { setField } from "@/src/store";
 import { IoIosImages } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuid } from 'uuid';
 
 const allowedMimeTypes = [
     "image/jpeg",
@@ -40,9 +41,8 @@ function validateImages(files: File[]): boolean {
 }
 
 export const UploadCanvas = ({ errors }: { errors: errors }) => {
-    const { setSignatureImages, signatureImages, setInitialsImage } = useFileStore();
     const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
-    const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
+    const signatures = useSelector((state: RootState) => state.tool.signatures);
     const dispatch = useDispatch();
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,23 +75,42 @@ export const UploadCanvas = ({ errors }: { errors: errors }) => {
 
         // Check maximum number of files (assuming max is 10)
         const maxFiles = 10;
-        if (signatureImages && signatureImages.length + newFiles.length > maxFiles) {
+        if (newFiles.length > maxFiles) {
             dispatch(setField({ errorMessage: errors.MAX_FILES_EXCEEDED.message }));
             return;
         }
 
         try {
+            const file = newFiles[0];
             if (showModalForInitials) {
-                const file = newFiles[0];
-                setInitialsImage(file);
+                dispatch(setField({
+                    initials: {
+                        color: "",
+                        font: "",
+                        id: uuid(),
+                        mark: URL.createObjectURL(file)
+                    }
+                }))
             } else {
-                if (signatureImages) {
-                    setSignatureImages([...signatureImages, ...newFiles]);
-                } else {
-                    setSignatureImages([...newFiles]);
-                }
-                dispatch(setField({ showSignatureDropdown: true }));
-                console.log("showSignatureDropdown ================> ", showSignatureDropdown, signatureImages?.length)
+                newFiles.forEach(file => {
+                    const newSig = {
+                        color: "",
+                        font: "",
+                        id: uuid(),
+                        mark: URL.createObjectURL(file)
+                    };
+                    dispatch(setField({
+                        signatures: [...signatures, newSig]
+                    }));
+                    if (!showModalForInitials) {
+                        dispatch(setField({ showSignatureDropdown: true }));
+                    }
+                })
+                // if (signatureImages) {
+                //     setSignatureImages([...signatureImages, ...newFiles]);
+                // } else {
+                //     setSignatureImages([...newFiles]);
+                // }
             }
         } catch (error) {
             dispatch(setField({ errorMessage: errors.UNKNOWN_ERROR.message }));

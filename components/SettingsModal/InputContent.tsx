@@ -2,7 +2,7 @@
 import { CiUndo, CiRedo } from "react-icons/ci";
 import { v4 as uuid } from 'uuid';
 import { FaChevronDown } from "react-icons/fa6";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DrawingCanvas, DrawingCanvasRef } from "./Canvas/DrawingCanvas";
 import { TextInputCanvas } from "./Canvas/TextInputCanvas";
@@ -28,9 +28,11 @@ export const InputContent = ({ layout, errors, content }: { layout?: "draw" | "t
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const textSignature = useSelector((state: RootState) => state.tool.textSignature);
     const showModalForInitials = useSelector((state: RootState) => state.tool.showModalForInitials);
-    const { signatureImages, initialsImage } = useFileStore();
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+    }, [signatures])
 
     const handleChange = (newValue: string) => {
         setColor(newValue);
@@ -177,7 +179,7 @@ export const InputContent = ({ layout, errors, content }: { layout?: "draw" | "t
                     onClick={handleCreateClick}
                     disabled={(layout === "type" &&
                         ((signatures.length || textSignature) == 0 && initials == null)) ||
-                        (layout === "upload" && (signatureImages == null && initialsImage == null)) || (layout == "draw" && isCanvasEmpty)}
+                        (layout === "upload" && (signatures.length == 0 && initials === null)) || (layout == "draw" && isCanvasEmpty)}
                 >
                     {content.create}
                 </button>

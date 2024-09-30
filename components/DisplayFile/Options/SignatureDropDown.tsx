@@ -6,16 +6,15 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoTrashOutline } from "react-icons/io5";
 import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
-import { useFileStore } from "@/src/file-store";
+// import { useFileStore } from "@/src/file-store";
 
 export const SignatureDropDown = () => {
     const dispatch = useDispatch();
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
     const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
-    const { signatureImages, setSignatureImages } = useFileStore();
     useEffect(() => {
-    }, [signatureImages, showSignatureDropdown])
+    }, [showSignatureDropdown])
 
     const handleSignatureSelect = (signature: signature) => {
         dispatch(setField({ activeSignatureId: signature.id }));
@@ -44,7 +43,11 @@ export const SignatureDropDown = () => {
                     >
                         {signature.mark.startsWith("<svg") ?
                             <Signature signatureSVGString={signature.mark} /> :
-                            <TextSignature signature={signature} />
+                            signature.mark.startsWith("blob:") ?
+                                <div className="signature-svg">
+                                    <img key={signature.id} src={signature.mark} alt={`Signature ${signature.id}`} className="responsive-image no-drag" />
+                                </div> :
+                                <TextSignature signature={signature} />
                         }
                     </div>
                     <button
@@ -58,7 +61,7 @@ export const SignatureDropDown = () => {
                     </button>
                 </div>
             ))}
-            {signatureImages ? signatureImages.map((sig, id) => (
+            {/* {signatureImages ? signatureImages.map((sig, id) => (
                 <div className="signature-area">
                     <div className={`signature-area-svg${String(id) === activeSignatureId ? " active" : ""}`} onClick={() => {
                         dispatch(setField({ activeSignatureId: id }));
@@ -79,7 +82,7 @@ export const SignatureDropDown = () => {
                         </button>
                     </div>
                 </div>
-            )) : null}
+            )) : null} */}
 
             <button className="add-signature main-btn-outlined" onClick={handleAddSignature}>
                 <IoIosAddCircleOutline className="icon add-icon" />

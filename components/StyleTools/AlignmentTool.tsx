@@ -1,6 +1,9 @@
+import { RootState } from '@/pages/_app';
 import { useFileStore } from '@/src/file-store';
+import { applyStyle } from '@/src/utils';
 import React, { useState } from 'react';
 import { FaAlignCenter, FaAlignJustify, FaAlignLeft, FaAlignRight } from 'react-icons/fa6';
+import { useSelector, useDispatch } from 'react-redux';
 
 const icons = [
     FaAlignJustify,
@@ -12,11 +15,11 @@ const icons = [
 export const AlignmentTool = () => {
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
     const { currentTextElement } = useFileStore();
-
+    const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const dispatch = useDispatch();
     const handleClick = () => {
         setCurrentIconIndex((prevIndex) => (prevIndex + 1) % icons.length);
-        console.log(currentIconIndex)
-
         let textAlignValue = "";
         switch (currentIconIndex) {
             case 0:
@@ -34,10 +37,7 @@ export const AlignmentTool = () => {
             default:
                 textAlignValue = "start";
         }
-
-        if (currentTextElement) {
-            currentTextElement.style.textAlign = textAlignValue;
-        }
+        applyStyle("textAlign", textAlignValue, activeWrapper, dispatch, wrappers);
     };
 
     const CurrentIcon = icons[currentIconIndex];

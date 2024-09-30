@@ -5,7 +5,8 @@ import type { errors as _ } from "../../content";
 import { AnyAction } from "@reduxjs/toolkit";
 import {
   resetErrorMessage,
-  setField
+  setField,
+  ToolState
 } from "../store";
 
 export const handleUpload = async (
@@ -15,6 +16,8 @@ export const handleUpload = async (
   state: {
     path: string;
     errorMessage: string;
+    annotations: ToolState["wrappers"],
+    signatures: ToolState["signatures"]
   },
   files: File[],
   errors: _,
@@ -23,7 +26,9 @@ export const handleUpload = async (
 ) => {
   e.preventDefault();
   dispatch(setField({ isSubmitted: true }));
-
+  // console.log(JSON.stringify(state.annotations));
+  // console.log(JSON.stringify(state.signatures));
+  // return;
   if (!files) return;
   // Extract file names from the File[] array
   const fileNames = files.map((file) => file.name);
@@ -43,18 +48,17 @@ export const handleUpload = async (
   for (let i = 0; i < files.length; i++) {
     formData.append("files", files[i]);
   }
+  formData.append("annotations", JSON.stringify(state.annotations));
+  formData.append("signatures", JSON.stringify(state.signatures));
   let url;
-  // @ts-ignore
   if (process.env.NODE_ENV === "development") {
-    url = `http://127.0.0.1:5000/${state.path}`;
-    // url = `https://5000-planetcreat-pdfequipsap-te4zoi6qkr3.ws-eu102.gitpod.io/${state.path}`;
+    url = `https://www.pdfequips.com/api/${state.path}`;
   } else {
     url = `/api/${state.path}`;
   }
   if (state.errorMessage) {
     return;
   }
-  // formData.append("compress_amount", String(state.compressPdf));
   const originalFileName = files[0]?.name?.split(".").slice(0, -1).join(".");
 
   const mimeTypeLookupTable: {
@@ -67,39 +71,7 @@ export const handleUpload = async (
     "application/pdf": {
       outputFileMimeType: "application/pdf",
       outputFileName: `${originalFileName}.pdf`,
-    },
-    "application/msword": {
-      outputFileMimeType: "application/msword",
-      outputFileName: `${originalFileName}.docx`,
-    },
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
-      outputFileMimeType:
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      outputFileName: `${originalFileName}.docx`,
-    },
-    "application/vnd.ms-excel": {
-      outputFileMimeType: "application/vnd.ms-excel",
-      outputFileName: `${originalFileName}.xlsx`,
-    },
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-      outputFileMimeType:
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      outputFileName: `${originalFileName}.xlsx`,
-    },
-    "application/vnd.ms-powerpoint": {
-      outputFileMimeType: "application/vnd.ms-powerpoint",
-      outputFileName: `${originalFileName}.pptx`,
-    },
-    "application/vnd.openxmlformats-officedocument.presentationml.presentation":
-    {
-      outputFileMimeType:
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      outputFileName: `${originalFileName}.pptx`,
-    },
-    "text/plain": {
-      outputFileMimeType: "text/plain",
-      outputFileName: `${originalFileName}.txt`,
-    },
+    }
   };
 
   try {

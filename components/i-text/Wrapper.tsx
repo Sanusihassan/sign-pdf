@@ -30,23 +30,23 @@ import { RootState } from "@/pages/_app";
 import { useSelector } from "react-redux";
 import { Signature } from "../DisplayFile/Options/Signature";
 import { TextSignature } from "../DisplayFile/Options/TextSignature";
-import { signature } from "@/src/store";
+import { setField, signature } from "@/src/store";
+import { WrapperData } from "../DisplayFile/InteractLayer";
+import { useDispatch } from "react-redux";
 export type content_type = {
   type: "text" | "initials" | "date" | "checkbox" | "signature";
+  id?: string;
 } | string;
 interface WrapperProps {
-  id: number;
+  id: string;
   initialContent:
   content_type;
-  initialX: number;
-  initialY: number;
-  initialWidth: number;
-  initialHeight: number;
-  onDuplicate: (id: number) => void;
-  onDelete: (id: number) => void;
-  onMove: (id: number, x: number, y: number) => void;
-  onResize: (id: number, width: number, height: number) => void;
-  onContentChange: (id: number, content: string) => void;
+  wrapper: WrapperData;
+  onDuplicate: (id: string) => void;
+  onDelete: (id: string) => void;
+  onMove: (id: string, x: number, y: number) => void;
+  onResize: (id: string, width: number, height: number) => void;
+  onContentChange: (id: string, content: string) => void;
   onFocus?: () => void;
   onInput?: () => void;
   className?: string;
@@ -56,11 +56,8 @@ interface WrapperProps {
 export const Wrapper: React.FC<WrapperProps> = ({
   id,
   initialContent,
-  initialX,
-  initialY,
-  initialWidth,
-  initialHeight,
   className,
+  wrapper,
   style,
   onDuplicate,
   onDelete,
@@ -75,6 +72,11 @@ export const Wrapper: React.FC<WrapperProps> = ({
     "top"
   );
   const { setCurrentTextElement } = useFileStore();
+  const dispatch = useDispatch();
+  const { x: initialX,
+    y: initialY,
+    width: initialWidth,
+    height: initialHeight, style: textElstyle } = wrapper;
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (wrapper) {
@@ -217,7 +219,6 @@ export const Wrapper: React.FC<WrapperProps> = ({
   const signatures = useSelector((state: RootState) => state.tool.signatures);
   const initials = useSelector((state: RootState) => state.tool.initials);
   const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
-  const { signatureImages } = useFileStore();
   const sharedProps = {
     tabIndex: 0,
     ref: inputRef,
@@ -228,6 +229,9 @@ export const Wrapper: React.FC<WrapperProps> = ({
         onFocus();
       }
       setCurrentTextElement(inputRef.current);
+      dispatch(setField({
+        activeWrapper: wrapper
+      }))
     },
     onBlur: () => {
       setShowControls(false);
@@ -247,8 +251,6 @@ export const Wrapper: React.FC<WrapperProps> = ({
   };
 
   const [wrapperSignature, setWrapperSignature] = useState<signature | null>(null);
-
-  const { initialsImage } = useFileStore();
 
   // const renderContent = () => {
   //   if (typeof initialContent === "string") {
@@ -343,6 +345,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
           suppressContentEditableWarning
           onInput={handleContentChange}
           {...sharedProps}
+          style={textElstyle}
         />
       ) : initialContent.type === "checkbox" ? (
         <IoIosCheckboxOutline
@@ -353,28 +356,25 @@ export const Wrapper: React.FC<WrapperProps> = ({
       ) : (initialContent.type === "signature" ? (
         wrapperSignature && wrapperSignature.mark.includes("<svg") ?
           <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
-          typeof activeSignatureId === "number" ?
-            signatureImages && signatureImages[activeSignatureId] && (
+          wrapperSignature && wrapperSignature.mark.startsWith("blob:") ?
+            (
               <div className="w-100 h-100" {...sharedProps}>
                 <img
-                  src={URL.createObjectURL(signatureImages[activeSignatureId])}
+                  src={wrapperSignature.mark}
                   alt="Signature"
                   className="w-100 h-100"
                 />
               </div>
             ) :
             <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
-      ) : (
-        initialContent.type === "initials" ?
-          initials?.mark.startsWith("<svg") ?
-            <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
-            (initialsImage ? <div className="w-100 h-100" {...sharedProps}>
-              <img src={URL.createObjectURL(initialsImage)} className="w-100 h-100" />
-            </div>
-              : <TextSignature sharedProps={sharedProps} signature={initials} />) : null
-      ))}
 
-      {/* {renderContent()} */}
+      ) :
+        initialContent.type === "initials" ?
+          (initials?.mark.startsWith("<svg") ?
+            <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
+            <TextSignature sharedProps={sharedProps} signature={initials} />
+          ) : null
+      )}
     </div>
   );
 };

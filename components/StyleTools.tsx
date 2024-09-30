@@ -1,5 +1,5 @@
 import { FaChevronDown, FaItalic, FaBold } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AlignmentTool } from "./StyleTools/AlignmentTool";
 import { BiFont } from "react-icons/bi";
 import { MoreTools } from "./MoreTools";
@@ -11,21 +11,23 @@ import { FontOption, FontSelect } from "./StyleTools/FontSelect";
 import { FontSizeTool } from "./StyleTools/FontSizeTool";
 import { SpacingTool } from "./StyleTools/SpacingTool";
 import { useFileStore } from "@/src/file-store";
+import { applyStyle } from "@/src/utils";
 
 export const StyleTools = () => {
     const showStyleTools = useSelector((state: RootState) => state.tool.showStyleTools);
     const [color, setColor] = useState('#0000');
     type Tool = "Bold" | "Color" | "Italic" | "More";
     const [activeTools, setActiveTools] = useState<Tool[]>([]);
+    const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const dispatch = useDispatch();
 
     const handleChange = (newValue: string) => {
         setColor(newValue);
         if (!activeTools.includes("Color")) {
             setActiveTools([...activeTools, "Color"]);
         }
-        if (currentTextElement) {
-            currentTextElement.style.color = color;
-        }
+        applyStyle("color", color, activeWrapper, dispatch, wrappers);
     };
 
     const toggleTool = (tool: Tool) => {
@@ -43,7 +45,7 @@ export const StyleTools = () => {
     };
     const [isFontDropdownOpen, setIsFontDropdownOpen] = useState(false);
 
-    const { currentTextElement } = useFileStore();
+    // const { currentTextElement } = useFileStore();
     return (
         <div className={`style-tools${showStyleTools ? "" : " clear"}`}>
             <div className="fonts-dropdown" onClick={() => setIsFontDropdownOpen(!isFontDropdownOpen)}>
@@ -75,13 +77,11 @@ export const StyleTools = () => {
                 className={`bold-tool${activeTools.includes("Bold") ? " active" : ""}`}
                 onClick={() => {
                     toggleTool("Bold");
-                    if (currentTextElement) {
-                        if (!activeTools.includes("Bold")) {
-                            currentTextElement.style.fontWeight = "bold";
-                        }
-                        else {
-                            currentTextElement.style.fontWeight = "normal";
-                        }
+                    if (!activeTools.includes("Bold")) {
+                        applyStyle("fontWeight", "bold", activeWrapper, dispatch, wrappers);
+                    }
+                    else {
+                        applyStyle("fontWeight", "normal", activeWrapper, dispatch, wrappers);
                     }
                 }}
             >
@@ -91,13 +91,11 @@ export const StyleTools = () => {
                 className={`italic-tool${activeTools.includes("Italic") ? " active" : ""}`}
                 onClick={() => {
                     toggleTool("Italic");
-                    if (currentTextElement) {
-                        if (!activeTools.includes("Italic")) {
-                            currentTextElement.style.fontStyle = "italic"
-                        }
-                        else {
-                            currentTextElement.style.fontStyle = "normal";
-                        }
+                    if (!activeTools.includes("Italic")) {
+                        applyStyle("fontStyle", "italic", activeWrapper, dispatch, wrappers);
+                    }
+                    else {
+                        applyStyle("fontStyle", "normal", activeWrapper, dispatch, wrappers);
                     }
                 }}
             >

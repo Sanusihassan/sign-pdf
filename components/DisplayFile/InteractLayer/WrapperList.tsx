@@ -1,4 +1,5 @@
-import React, { CSSProperties, useRef } from 'react';
+// consider this 
+import React, { CSSProperties } from 'react';
 import { WrapperData } from '../InteractLayer';
 import { Wrapper } from '../../i-text/Wrapper';
 import { handleDuplicate, handleDelete, handleMove, handleResize, handleContentChange } from '../InteractLayer/handleWrappers';
@@ -36,12 +37,9 @@ const WrapperList: React.FC<WrapperListProps> = ({
                     key={wrapper.id}
                     id={wrapper.id}
                     initialContent={wrapper.content}
-                    initialX={wrapper.x}
-                    initialY={wrapper.y}
-                    initialWidth={wrapper.width}
-                    initialHeight={wrapper.height}
+                    wrapper={wrapper}
                     onDuplicate={(id) => handleDuplicate(id, dispatch, updateWrappers, canvasRef, stateWrappers, wrappers)}
-                    onDelete={(id) => handleDelete(wrapper.id, dispatch, updateWrappers, wrappers, stateWrappers)}
+                    onDelete={_ => handleDelete(wrapper.id, dispatch, updateWrappers, wrappers, stateWrappers)}
                     onMove={(id, x, y) => handleMove(id, x, y, dispatch, updateWrappers, wrappers)}
                     onResize={(id, width, height) => handleResize(id, width, height, dispatch, updateWrappers, wrappers)}
                     onContentChange={(id, content) => handleContentChange(id, content, dispatch, updateWrappers, wrappers)}

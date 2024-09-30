@@ -8,15 +8,12 @@ export interface FileStore {
   downloadBtn: React.RefObject<HTMLAnchorElement> | null;
   currentTextElement: HTMLElement | null;
   filesOnSubmit: string[];
-  signatureImages: File[] | null;
-  initialsImage: File | null;
+  // signatureImages: File[] | null;
   imageUrls: {
     file: File;
     imageUrl: string;
   }[];
   setFiles: (files: FileList | File[]) => void;
-  setSignatureImages: (files: File[] | null) => void;
-  setInitialsImage: (file: File | null) => void;
   setFileInput: (refEl: RefObject<HTMLInputElement> | null) => void;
   setSubmitBtn: (refEl: React.RefObject<HTMLButtonElement> | null) => void;
   setDownloadBtn: (refEl: React.RefObject<HTMLAnchorElement> | null) => void;
@@ -39,9 +36,7 @@ export const useFileStore = create<FileStore>((set) => ({
   submitBtn: null,
   imageUrls: [],
   filesOnSubmit: [],
-  signatureImages: null,
   currentTextElement: null,
-  initialsImage: null,
   setFiles: (files: FileList | File[]) => {
     const uniqueFiles = new Set<File>();
 
@@ -71,19 +66,14 @@ export const useFileStore = create<FileStore>((set) => ({
   setFilesOnSubmit(value: string[]) {
     set({ filesOnSubmit: value });
   },
-  setSignatureImages(files) {
-    set({
-      signatureImages: files
-    })
-  },
+  // setSignatureImages(files) {
+  //   set({
+  //     signatureImages: files
+  //   })
+  // },
   setCurrentTextElement(el) {
     set({
       currentTextElement: el
     })
-  },
-  setInitialsImage(file) {
-    set({
-      initialsImage: file
-    })
-  },
+  }
 }));

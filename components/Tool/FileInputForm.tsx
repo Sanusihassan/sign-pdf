@@ -8,7 +8,6 @@ import { handleChange } from "../../src/handlers/handleChange";
 import { useFileStore } from "../../src/file-store";
 // types
 import type { tools } from "../../content";
-import { useRouter } from "next/router";
 import { validateFiles } from "../../src/utils";
 import { RootState } from "@/pages/_app";
 type AcceptedFileTypes = {
@@ -64,57 +63,22 @@ export const FileInputForm: React.FC<FileInputFormProps> = ({
         e.stopPropagation();
       }}
       // {"id":1727092938088,"content":{"type":"signature"},"x":419.33331298828125,"y":70.20832061767578,"width":200,"height":100}
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log(
-          JSON.stringify(wrappers)
+      onSubmit={(e) =>
+        handleUpload(
+          e,
+          downloadBtn,
+          dispatch,
+          {
+            path,
+            errorMessage,
+            annotations: wrappers,
+            signatures
+          },
+          files,
+          errors,
+          filesOnSubmit,
+          setFilesOnSubmit
         )
-        // i have this wrappers state variable which is an array of items like this: {"id":1727092938088,"content":{"type":"signature"},"x":419.33331298828125,"y":70.20832061767578,"width":200,"height":100}
-        /**
-         * and signatures is a list of objects like this:
-         type signature = {
-          mark: string;
-          font: string;
-          color: string;
-          id: string;
-        }
-        initials: signature;
-        additional_text: string[]
-        date: string[]
-        checkbox: wrapper[]
-         */
-        // what i want to send as a payload is 
-        // "annotations": [
-        //   {
-        //     "type": "signature",
-        //     "value": "svg string",
-        //     "position": { "x": 100, "y": 200, "page": 1 }
-        //   },
-        //   {
-        //     "type": "text",
-        //     "value": "John Doe",
-        //     "position": { "x": 150, "y": 250, "page": 1 }
-        //   },
-        //   {
-        //     "type": "date",
-        //     "value": "2024-09-22",
-        //     "position": { "x": 300, "y": 350, "page": 2 }
-        //   }
-        // ]
-        // handleUpload(
-        //   e,
-        //   downloadBtn,
-        //   dispatch,
-        //   {
-        //     path,
-        //     errorMessage,
-        //   },
-        //   files,
-        //   errors,
-        //   filesOnSubmit,
-        //   setFilesOnSubmit
-        // )
-      }
       }
       method="POST"
       encType="multipart/form-data"

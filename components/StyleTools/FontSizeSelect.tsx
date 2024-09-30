@@ -1,5 +1,8 @@
+import { RootState } from "@/pages/_app";
 import { useFileStore } from "@/src/file-store";
+import { applyStyle } from "@/src/utils";
 import { Dispatch, RefObject, SetStateAction, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 interface FontSizeSelectProps {
     isOpen: boolean;
@@ -12,6 +15,9 @@ interface FontSizeSelectProps {
 
 export const FontSizeSelect: React.FC<FontSizeSelectProps> = ({ isOpen, setIsOpen, fontSize, setFontSize, decreaseSizeRef, increaseSize }) => {
     const dropdownRef = useRef<HTMLUListElement>(null);
+    const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const dispatch = useDispatch();
 
     const fontSizes = [
         6, 8, 10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 48, 56, 64, 72, 80, 96, 104, 120, 144
@@ -38,9 +44,7 @@ export const FontSizeSelect: React.FC<FontSizeSelectProps> = ({ isOpen, setIsOpe
 
     const handleFontSizeSelect = (size: number) => {
         setFontSize(size);
-        if (currentTextElement) {
-            currentTextElement.style.fontSize = `${size}pt`;
-        }
+        applyStyle("fontSize", `${size}pt`, activeWrapper, dispatch, wrappers);
         setIsOpen(false);
     };
 

@@ -1,42 +1,23 @@
-// the problem is that each time the wrappers is updated i loose the previous state.
-// i don't want this because the wrappers are dropped on a particular page each page should.
-// now when the previous state is cleared i only get somthing like this: [{"id":1727117046233,"content":{"type":"signature"},"x":303,"y":97.54169464111328,"width":200,"height":129.333,"page":2}]
-// even if i added a particle to the previous page i.e page one before adding it to the current page which is page 2
-// please give me the complete code solution, because i'm going to replace the current code with the one you'll give me.
-// each time i scroll to a particular page i get only the wrappers of that page.
-import React, { CSSProperties, useCallback, useEffect, useRef, useState } from 'react';
-import useUndo from 'use-undo';
+import React, { CSSProperties, useCallback, useRef } from 'react';
 import { useDrop } from 'react-dnd';
 import { content_type } from '../i-text/Wrapper';
 import { RootState } from '@/pages/_app';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getLanguage } from '@/src/language';
 import { setField } from '@/src/store';
-import { useDispatch } from 'react-redux';
+import { v4 as uuid } from 'uuid';
+import WrapperList from './InteractLayer/WrapperList';
 
 export interface WrapperData {
-    id: number;
+    id: string;
     content: content_type;
     x: number;
     y: number;
     width: number;
     height: number;
-    page: number
+    page: number;
+    style?: CSSProperties
 }
-
-interface InteractLayerProps {
-    width: string | number;
-    height: string | number;
-    className?: string;
-    style?: CSSProperties;
-    id: number;
-    onFocus?: () => void;
-    onBlur?: () => void;
-    onInput?: () => void;
-    setInteractLayerInitialized: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-import WrapperList from './InteractLayer/WrapperList';
 
 interface InteractLayerProps {
     width: string | number;
@@ -63,39 +44,21 @@ export const InteractLayer = ({
     onBlur,
     setInteractLayerInitialized
 }: InteractLayerProps) => {
-    const [wrappersState, { set: setWrappers, undo: undoWrappers, redo: redoWrappers, canUndo, canRedo }] = useUndo<WrapperData[]>([]);
-    const { present } = wrappersState;
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const allWrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const pageWrappers = allWrappers.filter(wrapper => wrapper.page === id);
     const canvasRef = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch();
 
-    const updateWrappers = useCallback((newWrappers: WrapperData[]) => {
-        setWrappers(newWrappers);
-    }, [setWrappers]);
-
-    useEffect(() => {
-
-        if (!stateWrappers.length) {
-            dispatch(setField({
-                wrappers: present
-            }));
-        }
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.ctrlKey && e.key === 'z' && canUndo) {
-                e.preventDefault();
-                undoWrappers();
-            } else if (e.ctrlKey && e.key === 'y' && canRedo) {
-                e.preventDefault();
-                redoWrappers();
-            }
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [canUndo, canRedo, undoWrappers, redoWrappers]);
+    const updateWrappers = useCallback((newPageWrappers: WrapperData[]) => {
+        const otherWrappers = allWrappers.filter(wrapper => wrapper.page !== id);
+        const updatedAllWrappers = [...otherWrappers, ...newPageWrappers];
+        dispatch(setField({ wrappers: updatedAllWrappers }));
+    }, [allWrappers, id, dispatch]);
 
     const [, drop] = useDrop(
         () => ({
             accept: ["text", "date", "checkbox", "signature", "initials"],
-            drop: (item: { type: drop_type }, monitor) => {
+            drop: (item: { type: drop_type, id: string }, monitor) => {
                 const dropTarget = canvasRef.current;
                 if (!dropTarget) return;
 
@@ -105,7 +68,7 @@ export const InteractLayer = ({
                 if (clientOffset) {
                     const canvasX = clientOffset.x - targetRect.left;
                     const canvasY = clientOffset.y - targetRect.top;
-                    if (wrappers.length) {
+                    if (pageWrappers.length) {
                         setInteractLayerInitialized(true);
                     } else {
                         setInteractLayerInitialized(false);
@@ -124,12 +87,13 @@ export const InteractLayer = ({
                     });
 
                     let content: content_type;
+                    const { id: item_id } = item;
                     switch (item.type) {
                         case "checkbox":
                             content = { type: "checkbox" };
                             break;
                         case "signature":
-                            content = { type: "signature" };
+                            content = { type: "signature", id: item_id };
                             break;
                         case "date":
                             content = formattedDate;
@@ -143,7 +107,7 @@ export const InteractLayer = ({
                     }
 
                     const newWrapper: WrapperData = {
-                        id: Date.now(),
+                        id: uuid(),
                         content,
                         x: canvasX,
                         y: canvasY,
@@ -151,23 +115,19 @@ export const InteractLayer = ({
                         height: item.type === 'checkbox' ? 50 : 100,
                         page: id
                     };
-                    updateWrappers([...wrappers, newWrapper]);
+                    updateWrappers([...pageWrappers, newWrapper]);
                 }
             },
         }),
-        [wrappers, updateWrappers]
+        [pageWrappers, updateWrappers]
     );
 
     const showStyleTools = useSelector((state: RootState) => state.tool.showStyleTools);
     const acceptPointerEvents = useSelector((state: RootState) => state.tool.acceptPointerEvents);
-    const stateWrappers = useSelector((state: RootState) => state.tool.wrappers);
-    const insertActiveSignatureToCurrentPage = useSelector((state: RootState) => state.tool.insertActiveSignatureToCurrentPage);
-    const dispatch = useDispatch();
 
     const disablePointerEvents = () => {
         dispatch(setField({ acceptPointerEvents: false }));
     };
-
 
     return (
         <div
@@ -192,7 +152,7 @@ export const InteractLayer = ({
                 }}
             >
                 <WrapperList
-                    wrappers={wrappers}
+                    wrappers={pageWrappers}
                     updateWrappers={updateWrappers}
                     canvasRef={canvasRef}
                     className={className}

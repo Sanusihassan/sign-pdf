@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 import { RootState } from "@/pages/_app";
@@ -9,7 +9,6 @@ import { PiDotsSixVerticalBold, PiSignature } from "react-icons/pi";
 import { FaChevronDown } from "react-icons/fa6";
 import { Signature } from "./Signature";
 import { TextSignature } from "./TextSignature";
-import { useFileStore } from "@/src/file-store";
 import { edit_page } from "@/content";
 
 
@@ -20,19 +19,13 @@ export const SignatureRow = ({ content }: {
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
     const showSignatureDropdown = useSelector((state: RootState) => state.tool.showSignatureDropdown);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
-    const { signatureImages } = useFileStore();
-    // if typeof activeSignatureId === "number" then i want to find the activeSignatureId from the signatureImages array and check the item with the index activeSignatureId index.
-    // else
-    // const activeSignature = signatures.find(sig => sig.id === activeSignatureId) || null;
-    const activeSignature = typeof activeSignatureId === "number"
-        ? (signatureImages?.[activeSignatureId] ? { mark: URL.createObjectURL(signatureImages[activeSignatureId]), id: activeSignatureId } : null)
-        : signatures.find(sig => sig.id === activeSignatureId) || null;
-
-
+    // const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    useEffect(() => {
+    }, []);
+    const activeSignature = signatures.find(sig => sig.id === activeSignatureId) || signatures[0];
     const [{ }, dragSignatureRef] = useDrag(() => ({
         type: "signature",
-        item: { type: "signature" },
+        item: { type: "signature", id: activeSignature?.id },
         canDrag: !!activeSignature,
         collect: (monitor) => {
             enablePointerEvents(dispatch);
@@ -55,7 +48,7 @@ export const SignatureRow = ({ content }: {
                 enablePointerEvents(dispatch);
             }} />
             <PiDotsSixVerticalBold className="icon" />
-            {activeSignature || signatureImages?.length ? (
+            {activeSignature ? (
                 <>
                     <div className="signature-area-svg" onClick={e => {
                         if (signatures.length !== 0) {

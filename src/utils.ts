@@ -1,12 +1,13 @@
 import { NextRouter } from "next/router";
 import { CSSProperties, Dispatch, useEffect, useMemo, useState } from "react";
-import { AnyAction } from "@reduxjs/toolkit";
+import { Action, AnyAction } from "@reduxjs/toolkit";
 import type { errors as _ } from "../content";
 import { setField } from "./store";
 import { getDocument } from "pdfjs-dist";
 import { PDFDocumentProxy, PageViewport, RenderTask } from "pdfjs-dist";
 export const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
 import { GlobalWorkerOptions } from "pdfjs-dist";
+import { WrapperData } from "@/components/DisplayFile/InteractLayer";
 GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export function useLoadedImage(src: string): HTMLImageElement | null {
@@ -316,8 +317,28 @@ export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: n
   }
 };
 
-export const applyStyle = (property: keyof CSSProperties, value: any, currentTextElement: HTMLElement | null) => {
-  if (currentTextElement) {
-    currentTextElement.style[property as any] = value;
+export const applyStyle = (
+  property: keyof CSSProperties,
+  value: any,
+  activeWrapper: WrapperData | null,
+  dispatch: Dispatch<Action>,
+  wrappers: WrapperData[] = [] // Provide a default empty array
+) => {
+  if (!activeWrapper) return; // Exit early if activeWrapper is null
+
+  const styles: CSSProperties = activeWrapper.style
+    ? { ...activeWrapper.style, [property]: value }
+    : { [property]: value };
+
+  const updatedWrapper: WrapperData = {
+    ...activeWrapper,
+    style: styles,
+  };
+  if (dispatch) {
+    dispatch(setField({
+      wrappers: wrappers.map(wrapper =>
+        wrapper.id === activeWrapper.id ? updatedWrapper : wrapper
+      ),
+    }));
   }
 };

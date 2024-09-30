@@ -8,6 +8,9 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useFileStore } from "@/src/file-store";
 import { applyStyle } from "@/src/utils";
+import { RootState } from "@/pages/_app";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export const MoreTools: React.FC = () => {
     const [hideRest, setHideRest] = useState(true);
@@ -15,12 +18,12 @@ export const MoreTools: React.FC = () => {
     const [opacity, setOpacity] = useState<number>(1);
     const moreRef = useRef<HTMLDivElement | null>(null);
     const opacityDropdownRef = useRef<HTMLDivElement | null>(null);
-
-    const { currentTextElement } = useFileStore();
     const [underline, setUnderline] = useState(false);
     const [strikethrough, setStrikethrough] = useState(false);
     const [uppercase, setUppercase] = useState(false);
-
+    const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const dispatch = useDispatch();
     const handleClickOutside = (event: MouseEvent) => {
         if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
             setHideRest(true);
@@ -41,7 +44,7 @@ export const MoreTools: React.FC = () => {
         if (typeof value === "number") {
             setOpacity(value);
             // Type '"opacity"' has no properties in common with type 'Properties<string | number, string & {}>'.ts(2559)
-            applyStyle('opacity', value.toString(), currentTextElement);
+            applyStyle('opacity', value.toString(), activeWrapper, dispatch, wrappers);
         }
     };
 
@@ -50,7 +53,7 @@ export const MoreTools: React.FC = () => {
         if (!isNaN(value)) {
             const clampedValue = Math.min(Math.max(value, 0), 1);
             setOpacity(clampedValue);
-            applyStyle('opacity', clampedValue.toString(), currentTextElement);
+            applyStyle('opacity', clampedValue.toString(), activeWrapper, dispatch, wrappers);
         }
     };
 
@@ -58,18 +61,18 @@ export const MoreTools: React.FC = () => {
         if (e.key === "ArrowUp") {
             const newValue = Math.min(opacity + 0.1, 1);
             setOpacity(newValue);
-            applyStyle('opacity', newValue.toString(), currentTextElement);
+            applyStyle('opacity', newValue.toString(), activeWrapper, dispatch, wrappers);
         } else if (e.key === "ArrowDown") {
             const newValue = Math.max(opacity - 0.1, 0);
             setOpacity(newValue);
-            applyStyle('opacity', newValue.toString(), currentTextElement);
+            applyStyle('opacity', newValue.toString(), activeWrapper, dispatch, wrappers);
         }
     };
 
     const toggleStyle = (stateSetter: React.Dispatch<React.SetStateAction<boolean>>, property: keyof CSSProperties, value: string, defaultValue: string) => {
         stateSetter(prev => {
             const newState = !prev;
-            applyStyle(property, newState ? value : defaultValue, currentTextElement);
+            applyStyle(property, newState ? value : defaultValue, activeWrapper, dispatch, wrappers);
             return newState;
         });
     };
