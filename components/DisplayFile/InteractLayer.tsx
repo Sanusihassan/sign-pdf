@@ -31,7 +31,7 @@ interface InteractLayerProps {
     setInteractLayerInitialized: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export type drop_type = "text" | "initials" | "date" | "checkbox" | "signature";
+export type drop_type = "text" | "initials" | "date" | "checkbox" | "signature" | "whiteout";
 
 export const InteractLayer = ({
     width,
@@ -57,7 +57,7 @@ export const InteractLayer = ({
 
     const [, drop] = useDrop(
         () => ({
-            accept: ["text", "date", "checkbox", "signature", "initials"],
+            accept: ["text", "date", "checkbox", "signature", "initials", "whiteout"],
             drop: (item: { type: drop_type, id: string }, monitor) => {
                 const dropTarget = canvasRef.current;
                 if (!dropTarget) return;
@@ -104,8 +104,10 @@ export const InteractLayer = ({
                         case "text":
                             content = "New text";
                             break;
+                        case "whiteout":
+                            content = { type: "whiteout" };
+                            break;
                     }
-
                     const newWrapper: WrapperData = {
                         id: uuid(),
                         content,

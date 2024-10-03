@@ -10,6 +10,8 @@ import { InitialsRow } from "./Options/InitialsRow";
 import { PiDotsSixVerticalBold } from "react-icons/pi";
 import { Action } from "@reduxjs/toolkit";
 import { SignatureRow } from "./Options/SignatureRow";
+import { CiEraser } from "react-icons/ci";
+
 
 export interface OptionsProps {
   content: edit_page["options"];
@@ -55,6 +57,17 @@ const Options = ({ content }: OptionsProps) => {
     },
   }));
 
+  const [{ isDragging: isDraggingWhiteOut }, dragWhiteOutRef] = useDrag(() => ({
+    type: "whiteout",
+    item: { type: "whiteout" },
+    collect: (monitor) => {
+      enablePointerEvents(dispatch);
+      return ({
+        isDragging: !!monitor.isDragging(),
+      })
+    },
+  }));
+
   return (
     <div className="sign-pdf-options">
       <SignatureRow content={content.signature_row} />
@@ -78,6 +91,14 @@ const Options = ({ content }: OptionsProps) => {
         <IoIosCheckboxOutline className="icon" />
         <div className="option-label">{content.checkbox}</div>
       </div>
+
+      <div className="option-row whiteout">
+        <div className="checkbox-drag-el" ref={dragWhiteOutRef} onClick={() => enablePointerEvents(dispatch)} />
+        <PiDotsSixVerticalBold className="icon" />
+        <CiEraser className="icon" />
+        <div className="option-label">{content.whiteout}</div>
+      </div>
+      {/* add two new rows for white-out and black-out: */}
     </div>
   );
 };

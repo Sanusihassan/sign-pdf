@@ -31,10 +31,10 @@ import { useSelector } from "react-redux";
 import { Signature } from "../DisplayFile/Options/Signature";
 import { TextSignature } from "../DisplayFile/Options/TextSignature";
 import { setField, signature } from "@/src/store";
-import { WrapperData } from "../DisplayFile/InteractLayer";
+import { drop_type, WrapperData } from "../DisplayFile/InteractLayer";
 import { useDispatch } from "react-redux";
 export type content_type = {
-  type: "text" | "initials" | "date" | "checkbox" | "signature";
+  type: drop_type;
   id?: string;
 } | string;
 interface WrapperProps {
@@ -353,28 +353,32 @@ export const Wrapper: React.FC<WrapperProps> = ({
           style={style}
           {...sharedProps}
         />
-      ) : (initialContent.type === "signature" ? (
-        wrapperSignature && wrapperSignature.mark.includes("<svg") ?
-          <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
-          wrapperSignature && wrapperSignature.mark.startsWith("blob:") ?
-            (
-              <div className="w-100 h-100" {...sharedProps}>
-                <img
-                  src={wrapperSignature.mark}
-                  alt="Signature"
-                  className="w-100 h-100"
-                />
-              </div>
-            ) :
-            <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
+      )
+        : initialContent.type === "whiteout" ? (
+          <div className="whiteout input" {...sharedProps} style={style}></div>
+        )
+          : (initialContent.type === "signature" ? (
+            wrapperSignature && wrapperSignature.mark.includes("<svg") ?
+              <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
+              wrapperSignature && wrapperSignature.mark.startsWith("blob:") ?
+                (
+                  <div className="w-100 h-100" {...sharedProps}>
+                    <img
+                      src={wrapperSignature.mark}
+                      alt="Signature"
+                      className="w-100 h-100"
+                    />
+                  </div>
+                ) :
+                <TextSignature sharedProps={sharedProps} signature={wrapperSignature} />
 
-      ) :
-        initialContent.type === "initials" ?
-          (initials?.mark.startsWith("<svg") ?
-            <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
-            <TextSignature sharedProps={sharedProps} signature={initials} />
-          ) : null
-      )}
+          ) :
+            initialContent.type === "initials" ?
+              (initials?.mark.startsWith("<svg") ?
+                <Signature sharedProps={SVGSharedProps} signatureSVGString={initials.mark} /> :
+                <TextSignature sharedProps={sharedProps} signature={initials} />
+              ) : null
+          )}
     </div>
   );
 };

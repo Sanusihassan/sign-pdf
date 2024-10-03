@@ -19,6 +19,7 @@ export const StyleTools = () => {
     type Tool = "Bold" | "Color" | "Italic" | "More";
     const [activeTools, setActiveTools] = useState<Tool[]>([]);
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const showDownloadBtn = useSelector((state: RootState) => state.tool.showDownloadBtn);
     const wrappers = useSelector((state: RootState) => state.tool.wrappers);
     const dispatch = useDispatch();
 
@@ -47,7 +48,7 @@ export const StyleTools = () => {
 
     // const { currentTextElement } = useFileStore();
     return (
-        <div className={`style-tools${showStyleTools ? "" : " clear"}`}>
+        <div className={`style-tools${showStyleTools && !showDownloadBtn ? "" : " clear"}`}>
             <div className="fonts-dropdown" onClick={() => setIsFontDropdownOpen(!isFontDropdownOpen)}>
                 <div
                     className={`selected-font ${selectedFont?.className}`}

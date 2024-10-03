@@ -29,7 +29,7 @@ export function SubmitBtn({
           submitBtn?.current?.click();
         }
       }}
-      disabled={errorMessage.length > 0}
+    // disabled={errorMessage.length > 0}
     >
       <bdi>
         {

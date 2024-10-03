@@ -64,7 +64,8 @@ export const edit_page: _edit_page = {
     },
     additional_text: "Texto adicional",
     date: "Fecha",
-    checkbox: "Casilla de verificación"
+    checkbox: "Casilla de verificación",
+    whiteout: "corrección"
   },
   settings_modal: {
     sidebar: {

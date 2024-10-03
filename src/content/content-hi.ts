@@ -57,7 +57,8 @@ export const edit_page: _edit_page = {
     },
     additional_text: "अतिरिक्त पाठ",
     date: "तारीख",
-    checkbox: "चेकबॉक्स"
+    checkbox: "चेकबॉक्स",
+    whiteout: "सफेद पेंट"
   },
   settings_modal: {
     sidebar: {

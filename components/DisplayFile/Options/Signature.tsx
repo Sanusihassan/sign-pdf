@@ -28,11 +28,12 @@ export const Signature = ({ sharedProps, signatureSVGString }: { signatureSVGStr
 
                 // Add a unique class to this SVG
                 svgElement.setAttribute("class", "signature-svg-content");
+                svgElement.setAttribute("style", "");
 
                 // Add responsive scaling only for this SVG
-                const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
-                style.textContent = ".signature-svg-content { width: 100%; height: 100%; }";
-                svgElement.insertBefore(style, svgElement.firstChild);
+                // const style = document.createElementNS("http://www.w3.org/2000/svg", "style");
+                // style.textContent = ".signature-svg-content { width: 100%; height: 100%; }";
+                // svgElement.insertBefore(style, svgElement.firstChild);
 
                 const serializer = new XMLSerializer();
                 const scaledSVGString = serializer.serializeToString(svgElement);

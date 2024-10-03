@@ -405,4 +405,12 @@ footer {
   @include extend("h-100");
 }
 
+.whiteout {
+  background-color: white;
+  @include extend("position-absolute w-100 h-100");
+  z-index: 1;
+  left: 0;
+  top: 0;
+}
+
 @import "i-text-input/src/scss/_input.scss";

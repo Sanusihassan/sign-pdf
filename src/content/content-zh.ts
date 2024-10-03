@@ -57,7 +57,8 @@ export const edit_page: _edit_page = {
     },
     additional_text: "附加文本",
     date: "日期",
-    checkbox: "复选框"
+    checkbox: "复选框",
+    whiteout: "涂改液"
   },
   settings_modal: {
     sidebar: {

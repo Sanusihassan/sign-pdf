@@ -64,7 +64,8 @@ export const edit_page: _edit_page = {
     },
     additional_text: "نص إضافي",
     date: "التاريخ",
-    checkbox: "مربع الاختيار"
+    checkbox: "مربع الاختيار",
+    whiteout: "تعتيم"
   },
   settings_modal: {
     sidebar: {

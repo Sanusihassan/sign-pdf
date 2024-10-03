@@ -17,7 +17,8 @@ export const handleUpload = async (
     path: string;
     errorMessage: string;
     annotations: ToolState["wrappers"],
-    signatures: ToolState["signatures"]
+    signatures: ToolState["signatures"],
+    initials: ToolState["initials"]
   },
   files: File[],
   errors: _,
@@ -38,11 +39,11 @@ export const handleUpload = async (
     filesOnSubmit.includes(fileName)
   );
 
-  if (allFilesPresent && files.length === filesOnSubmit.length) {
-    dispatch(setField({ showDownloadBtn: true }));
-    dispatch(resetErrorMessage());
-    return;
-  }
+  // if (allFilesPresent && files.length === filesOnSubmit.length) {
+  //   dispatch(setField({ showDownloadBtn: true }));
+  //   dispatch(resetErrorMessage());
+  //   return;
+  // }
 
   const formData = new FormData();
   for (let i = 0; i < files.length; i++) {
@@ -50,15 +51,16 @@ export const handleUpload = async (
   }
   formData.append("annotations", JSON.stringify(state.annotations));
   formData.append("signatures", JSON.stringify(state.signatures));
+  formData.append("initials", JSON.stringify(state.initials));
   let url;
   if (process.env.NODE_ENV === "development") {
-    url = `https://www.pdfequips.com/api/${state.path}`;
+    url = `https://bookish-barnacle-xpg46v5vpvx39jx-4002.app.github.dev/api/${state.path}`;
   } else {
     url = `/api/${state.path}`;
   }
-  if (state.errorMessage) {
-    return;
-  }
+  // if (state.errorMessage) {
+  //   return;
+  // }
   const originalFileName = files[0]?.name?.split(".").slice(0, -1).join(".");
 
   const mimeTypeLookupTable: {

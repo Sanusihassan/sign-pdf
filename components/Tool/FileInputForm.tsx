@@ -36,6 +36,7 @@ export const FileInputForm: React.FC<FileInputFormProps> = ({
   );
   const wrappers = useSelector((state: RootState) => state.tool.wrappers);
   const signatures = useSelector((state: RootState) => state.tool.signatures);
+  const initials = useSelector((state: RootState) => state.tool.initials);
   const dispatch = useDispatch();
   // file store
   const {
@@ -72,7 +73,8 @@ export const FileInputForm: React.FC<FileInputFormProps> = ({
             path,
             errorMessage,
             annotations: wrappers,
-            signatures
+            signatures,
+            initials
           },
           files,
           errors,

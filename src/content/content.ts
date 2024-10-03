@@ -53,7 +53,8 @@ export const edit_page = {
     },
     additional_text: "Additional text",
     date: "Date",
-    checkbox: "Checkbox"
+    checkbox: "Checkbox",
+    whiteout: "whiteout",
   },
   settings_modal: {
     sidebar: {
