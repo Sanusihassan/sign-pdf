@@ -66,7 +66,7 @@ export const SignatureRow = ({ content }: {
                     }}>
                         {activeSignature !== null && activeSignature?.mark.startsWith("<svg") ?
                             <Signature signatureSVGString={activeSignature.mark} /> :
-                            activeSignature?.mark.startsWith('blob:') ?
+                            activeSignature?.mark.startsWith('data:image/') ?
                                 <img src={activeSignature.mark} alt={`Signature ${activeSignature}`} className="sig-img" />
                                 :
                                 <TextSignature signature={activeSignature as signature} />

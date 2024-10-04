@@ -1,6 +1,5 @@
 import { errors } from "@/content";
 import { RootState } from "@/pages/_app";
-import { useFileStore } from "@/src/file-store";
 import { setField } from "@/src/store";
 import { IoIosImages } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +44,7 @@ export const UploadCanvas = ({ errors }: { errors: errors }) => {
     const signatures = useSelector((state: RootState) => state.tool.signatures);
     const dispatch = useDispatch();
 
-    const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const _files = e.target.files;
         if (!_files || _files.length === 0) {
             dispatch(setField({ errorMessage: errors.NO_FILES_SELECTED.message }));
@@ -81,36 +80,47 @@ export const UploadCanvas = ({ errors }: { errors: errors }) => {
         }
 
         try {
-            const file = newFiles[0];
+            const processFile = async (file: File): Promise<string> => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        if (event.target && typeof event.target.result === 'string') {
+                            resolve(event.target.result);
+                        } else {
+                            reject(new Error('Failed to read file'));
+                        }
+                    };
+                    reader.onerror = (error) => reject(error);
+                    reader.readAsDataURL(file);
+                });
+            };
+
             if (showModalForInitials) {
+                const base64Data = await processFile(newFiles[0]);
                 dispatch(setField({
                     initials: {
                         color: "",
                         font: "",
                         id: uuid(),
-                        mark: URL.createObjectURL(file)
+                        mark: base64Data
                     }
-                }))
+                }));
             } else {
-                newFiles.forEach(file => {
-                    const newSig = {
-                        color: "",
-                        font: "",
-                        id: uuid(),
-                        mark: URL.createObjectURL(file)
-                    };
-                    dispatch(setField({
-                        signatures: [...signatures, newSig]
-                    }));
-                    if (!showModalForInitials) {
-                        dispatch(setField({ showSignatureDropdown: true }));
-                    }
-                })
-                // if (signatureImages) {
-                //     setSignatureImages([...signatureImages, ...newFiles]);
-                // } else {
-                //     setSignatureImages([...newFiles]);
-                // }
+                const processedFiles = await Promise.all(newFiles.map(processFile));
+                const newSignatures = processedFiles.map(base64Data => ({
+                    color: "",
+                    font: "",
+                    id: uuid(),
+                    mark: base64Data
+                }));
+
+                dispatch(setField({
+                    signatures: [...signatures, ...newSignatures]
+                }));
+
+                if (!showModalForInitials) {
+                    dispatch(setField({ showSignatureDropdown: true }));
+                }
             }
         } catch (error) {
             dispatch(setField({ errorMessage: errors.UNKNOWN_ERROR.message }));

@@ -360,7 +360,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
           : (initialContent.type === "signature" ? (
             wrapperSignature && wrapperSignature.mark.includes("<svg") ?
               <Signature sharedProps={SVGSharedProps} signatureSVGString={wrapperSignature.mark} /> :
-              wrapperSignature && wrapperSignature.mark.startsWith("blob:") ?
+              wrapperSignature && wrapperSignature.mark.startsWith("data:image/") ?
                 (
                   <div className="w-100 h-100" {...sharedProps}>
                     <img

@@ -43,7 +43,7 @@ export const SignatureDropDown = () => {
                     >
                         {signature.mark.startsWith("<svg") ?
                             <Signature signatureSVGString={signature.mark} /> :
-                            signature.mark.startsWith("blob:") ?
+                            signature.mark.startsWith("data:image/") ?
                                 <div className="signature-svg">
                                     <img key={signature.id} src={signature.mark} alt={`Signature ${signature.id}`} className="responsive-image no-drag" />
                                 </div> :

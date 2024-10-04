@@ -47,7 +47,7 @@ export const InitialsRow = ({ content }: { content: edit_page["options"]["initia
                             initials?.mark.startsWith("<svg") ?
                                 <Signature signatureSVGString={initials.mark} />
                                 :
-                                initials?.mark.startsWith("blob:") ?
+                                initials?.mark.startsWith("data:image/") ?
                                     <img src={initials.mark} ref={dragInitialsRef} className="sig-img" /> :
                                     <TextSignature signature={initials} />
                         }
