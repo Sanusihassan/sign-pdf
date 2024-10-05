@@ -12,26 +12,26 @@ import type {
 export const tool: _tool = {
   Sign_PDF: {
     title: "Firmar PDF",
-    seoTitle: "Firmar PDFs en línea - Herramienta de firma PDF gratuita",
-    description: "Añade tu firma a documentos PDF en línea",
+    seoTitle: "Firmar y Editar PDFs - Editor de PDF Gratuito en Línea",
+    description: "Añade firmas, edita texto y modifica documentos PDF en línea",
     color: "#341f97",
     type: ".pdf",
     to: "/sign-pdf",
     features: [
       {
         title: "Completamente gratis y sin registro",
-        description: "PDFEquips ofrece un servicio de firma de PDF en línea gratuito. No es necesario crear una cuenta, y nunca pedimos tu dirección de correo electrónico ni información de tu tarjeta de crédito."
+        description: "PDFEquips ofrece un servicio gratuito de firma y edición de PDF en línea. No se requiere crear una cuenta ni proporcionar correo electrónico."
       },
       {
-        title: "Herramienta de firma de PDF fácil de usar",
-        description: "PDFEquips facilita añadir tu firma a cualquier documento PDF, ya sea un contrato, formulario u otro documento, todos los formatos son compatibles."
+        title: "Herramienta fácil de usar para firmar y editar PDF",
+        description: "Añade fácilmente firmas, campos de texto, casillas de verificación y edita el contenido existente en cualquier documento PDF."
       },
       {
-        title: "Firma archivos PDF en línea de manera segura",
-        description: "Todos los archivos que cargas y creas en nuestros servidores están encriptados por razones de seguridad usando TLS. Serán eliminados de inmediato y de manera permanente después de su procesamiento. Para más información, consulta nuestra política de privacidad."
+        title: "Características completas de edición de PDF",
+        description: "Añade firmas, campos de texto y casillas de verificación. Blanquea áreas no deseadas, cambia fuentes, colores y estilos de texto."
       }
     ],
-    keywords: "firmar PDF, firmar PDF en línea, añadir firma a PDF, firmar PDF gratis, herramienta de firma PDF, firma PDF en línea, firmar PDF gratis, firmar documentos PDF, añadir firma en línea, firma PDF segura, firma de archivos PDF, herramienta de firma PDF, firma PDF en línea gratuita, firmar múltiples PDFs, añadir firma a páginas PDF, firmar PDF sin registro, herramienta de firma PDF, firma PDF en línea"
+    keywords: "firmar PDF, editar PDF, firma electrónica PDF, firmar PDF en línea, añadir firma a PDF, firma PDF gratis, herramienta de firma PDF, firma de PDF en línea, firma PDF gratuita, firmar documentos PDF, añadir firma en línea, firma segura de PDF, firma de archivo PDF, herramienta de firma PDF, firma PDF gratuita en línea, firmar múltiples PDFs, añadir firma a páginas PDF, firma PDF sin registro, herramienta de firma PDF, firma PDF en línea, editar PDF en línea, añadir texto a PDF, blanquear PDF, cambiar fuente PDF, editor de texto PDF"
   }
 };
 
@@ -93,6 +93,12 @@ export const downloadFile: _downloadFile = {
   },
 };
 
+export const footer: _footer = {
+  brand: "PDFEquips",
+  terms: "términos",
+  conditions: "condiciones",
+  privacy_policy: "política de privacidad",
+};
 
 export const errors: _errors = {
   EMPTY_FILE: {

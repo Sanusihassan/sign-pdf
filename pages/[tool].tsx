@@ -7,19 +7,16 @@ import {
   tool,
   tools,
   downloadFile,
+  footer,
 } from "../src/content/content";
 import { useRouter } from "next/router";
 import { OpenGraph } from "pdfequips-open-graph/OpenGraph";
 import Head from "next/head"; // Import next/head
-
-export type data_type = {
-  title: string;
-  description: string;
-  color: string;
-  type: string;
-  to: string;
-  seoTitle: string;
-};
+import { Features } from "@/components/Features";
+import { Footer } from "@/components/Footer";
+import HowTo from "@/components/HowTo";
+import { howToType, SignPDFHowToSchema } from "@/src/how-to/how-to-en";
+import type { tool as _tool } from "@/content";
 
 export async function getStaticPaths() {
   const paths = Object.keys(routes).map((key) => ({
@@ -42,7 +39,7 @@ export async function getStaticProps({
   return { props: { item } };
 }
 
-export default function ToolPage({ item }: { item: data_type }) {
+export default function ToolPage({ item }: { item: _tool["Sign_PDF"] }) {
   const router = useRouter();
   const { asPath } = router;
   const websiteSchema = {
@@ -64,6 +61,7 @@ export default function ToolPage({ item }: { item: data_type }) {
           }}
         />
         <meta name="description" content={item.description} />
+        <meta name="keywords" content={item.keywords} />
         <link rel="icon" type="image/svg+xml" href="/images/icons/logo.svg" />
         <OpenGraph
           ogUrl={`https://www.pdfequips.com${item.to}`}
@@ -87,6 +85,13 @@ export default function ToolPage({ item }: { item: data_type }) {
         page={edit_page.page}
         downloadFile={downloadFile}
       />
+      <div className="container">
+        <Features features={item.features} />
+      </div>
+      <div className="container">
+        <HowTo howTo={SignPDFHowToSchema as howToType} alt={item.seoTitle} imgSrc={item.to.replace("/", "")} />
+      </div>
+      <Footer footer={footer} title={item.seoTitle.split("-")[1]} />
     </>
   );
 }

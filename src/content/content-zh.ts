@@ -12,26 +12,26 @@ import type {
 export const tool: _tool = {
   Sign_PDF: {
     title: "签署PDF",
-    seoTitle: "在线签署PDF - 免费PDF签名工具",
-    description: "在线为PDF文件添加签名",
+    seoTitle: "签署和编辑PDF - 免费在线PDF编辑器",
+    description: "在线添加签名、编辑文本和修改PDF文档",
     color: "#341f97",
     type: ".pdf",
     to: "/sign-pdf",
     features: [
       {
         title: "完全免费且无需注册",
-        description: "PDFEquips 提供免费的在线 PDF 签名服务。无需创建账户，我们从不要求提供您的电子邮件地址或信用卡信息。"
+        description: "PDFEquips提供免费的在线PDF签名和编辑服务。无需创建账户或提供电子邮件。"
       },
       {
-        title: "易于使用的PDF签名工具",
-        description: "PDFEquips 让您可以轻松地在任何 PDF 文件上添加签名，无论是合同、表格还是其他文件，所有格式都兼容。"
+        title: "易于使用的PDF签名和编辑工具",
+        description: "轻松为任何PDF文档添加签名、文本字段、复选框，并编辑现有内容。"
       },
       {
-        title: "在线安全签署PDF文件",
-        description: "您上传和在我们服务器上创建的所有文件都使用TLS进行加密以确保安全。处理后将立即永久删除。有关更多信息，请参阅我们的隐私政策。"
+        title: "全面的PDF编辑功能",
+        description: "添加签名、文本字段和复选框。涂白不需要的区域，更改字体、颜色和文本样式。"
       }
     ],
-    keywords: "签署PDF, 在线签署PDF, 添加签名到PDF, 免费签署PDF, PDF签名工具, 在线PDF签名, 免费PDF签名, 签署PDF文件, 在线添加签名, 安全签署PDF, PDF文件签名, PDF签名工具, 免费在线PDF签名, 签署多个PDF, 添加签名到PDF页面, 无需注册签署PDF, PDF签名工具, 在线PDF签名"
+    keywords: "签署PDF, 编辑PDF, PDF电子签名, 在线签署PDF, 为PDF添加签名, 免费PDF签名, PDF签名工具, 在线PDF签名, 免费PDF签名, 签署PDF文档, 在线添加签名, 安全PDF签名, PDF文件签名, PDF签名工具, 免费在线PDF签名, 签署多个PDF, 为PDF页面添加签名, 无需注册PDF签名, PDF签名工具, 在线PDF签名, 在线编辑PDF, 向PDF添加文本, 涂白PDF, 更改PDF字体, PDF文本编辑器"
   }
 };
 
@@ -93,6 +93,12 @@ export const tools: _tools = {
   drop_files: "在此处拖放文件",
 };
 
+export const footer: _footer = {
+  brand: "PDFEquips",
+  terms: "条款",
+  conditions: "条件",
+  privacy_policy: "隐私政策",
+};
 
 export const errors: _errors = {
   EMPTY_FILE: {

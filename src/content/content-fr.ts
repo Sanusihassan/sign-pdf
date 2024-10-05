@@ -9,29 +9,30 @@ import type {
   landing_page as _landing_page,
 } from "../../content";
 
+
 export const tool: _tool = {
   Sign_PDF: {
     title: "Signer PDF",
-    seoTitle: "Signer des PDFs en ligne - Outil de signature PDF gratuit",
-    description: "Ajoutez votre signature aux documents PDF en ligne",
+    seoTitle: "Signer et Éditer des PDF - Éditeur PDF Gratuit en Ligne",
+    description: "Ajoutez des signatures, éditez du texte et modifiez des documents PDF en ligne",
     color: "#341f97",
     type: ".pdf",
     to: "/sign-pdf",
     features: [
       {
-        title: "Entièrement gratuit et sans inscription",
-        description: "PDFEquips offre un service de signature PDF en ligne gratuit. Il n'est pas nécessaire de créer un compte, et nous ne demandons jamais votre adresse e-mail ou vos informations de carte de crédit."
+        title: "Totalement gratuit et sans inscription",
+        description: "PDFEquips propose un service gratuit de signature et d'édition de PDF en ligne. Aucune création de compte ni adresse e-mail requise."
       },
       {
-        title: "Outil de signature PDF facile à utiliser",
-        description: "PDFEquips facilite l'ajout de votre signature à tout document PDF, qu'il s'agisse d'un contrat, d'un formulaire ou de tout autre document, tous les formats sont compatibles."
+        title: "Outil facile à utiliser pour signer et éditer des PDF",
+        description: "Ajoutez facilement des signatures, des champs de texte, des cases à cocher et modifiez le contenu existant dans n'importe quel document PDF."
       },
       {
-        title: "Signer des fichiers PDF en ligne en toute sécurité",
-        description: "Tous les fichiers que vous téléchargez et créez sur nos serveurs sont cryptés pour des raisons de sécurité en utilisant TLS. Ils seront supprimés immédiatement et définitivement après traitement. Pour plus d'informations, veuillez consulter notre politique de confidentialité."
+        title: "Fonctionnalités complètes d'édition de PDF",
+        description: "Ajoutez des signatures, des champs de texte et des cases à cocher. Blanchissez les zones indésirables, changez les polices, les couleurs et les styles de texte."
       }
     ],
-    keywords: "signer PDF, signer PDF en ligne, ajouter une signature à PDF, signature PDF gratuite, outil de signature PDF, signature PDF en ligne, signer PDF gratuitement, signer des documents PDF, ajouter une signature en ligne, signature PDF sécurisée, signature de fichiers PDF, outil de signature PDF, signature PDF en ligne gratuite, signer plusieurs PDFs, ajouter une signature aux pages PDF, signer PDF sans inscription, outil de signature PDF, signature PDF en ligne"
+    keywords: "signer PDF, éditer PDF, signature électronique PDF, signer PDF en ligne, ajouter signature à PDF, signature PDF gratuite, outil de signature PDF, signature PDF en ligne, signer PDF gratuitement, signer documents PDF, ajouter signature en ligne, signature PDF sécurisée, signature fichier PDF, outil signature PDF, signature PDF gratuite en ligne, signer plusieurs PDF, ajouter signature aux pages PDF, signer PDF sans inscription, outil de signature PDF, signature PDF en ligne, éditer PDF en ligne, ajouter texte à PDF, blanchir PDF, changer police PDF, éditeur de texte PDF"
   }
 };
 
@@ -95,7 +96,12 @@ export const downloadFile: _downloadFile = {
   },
 };
 
-
+export const footer: _footer = {
+  brand: "PDFEquips",
+  terms: "conditions",
+  conditions: "conditions d'utilisation",
+  privacy_policy: "politique de confidentialité",
+};
 
 
 export const errors: _errors = {

@@ -1,26 +1,26 @@
 export const tool = {
   Sign_PDF: {
     title: "Sign PDF",
-    seoTitle: "Sign PDFs Online - Free PDF Signature Tool",
-    description: "Add your signature to PDF documents online",
+    seoTitle: "Sign & Edit PDFs - Free Online PDF Editor",
+    description: "Add signatures, edit text, and modify PDF documents online",
     color: "#341f97",
     type: ".pdf",
     to: "/sign-pdf",
     features: [
       {
         title: "Completely free and without registration",
-        description: "PDFEquips offers a free online PDF signing service It's not necessary to create an account, and we never ask for your email address or credit card information"
+        description: "PDFEquips offers a free online PDF signing and editing service. No account creation or email required."
       },
       {
-        title: "Easy to use PDF signing tool",
-        description: "PDFEquips makes it simple to add your signature to any PDF document, whether it's a contract, form, or any other document, all formats are compatible"
+        title: "Easy to use PDF signing and editing tool",
+        description: "Easily add signatures, text fields, checkboxes, and edit existing content in any PDF document."
       },
       {
-        title: "Securely sign PDF files online",
-        description: "All files you upload and create on our servers are encrypted for security reasons using TLS They will be immediately and permanently deleted after processing For more information, please refer to our privacy policy"
+        title: "Comprehensive PDF editing features",
+        description: "Add signatures, text fields, and checkboxes. Whiteout unwanted areas, change fonts, colors, and text styles."
       }
     ],
-    keywords: "sign PDF, sign PDF online, add signature to PDF, free PDF sign, PDF signature tool, online PDF signing, PDF sign free, sign PDF documents, add signature online, secure PDF signing, PDF file signature, PDF sign tool, free online PDF signature, sign multiple PDFs, add signature to PDF pages, no registration PDF sign, PDF signing tool, online PDF signature"
+    keywords: "sign PDF, edit PDF, eSign PDF, sign PDF online, add signature to PDF, free PDF sign, PDF signature tool, online PDF signing, PDF sign free, sign PDF documents, add signature online, secure PDF signing, PDF file signature, PDF sign tool, free online PDF signature, sign multiple PDFs, add signature to PDF pages, no registration PDF sign, PDF signing tool, online PDF signature, edit PDF online, add text to PDF, whiteout PDF, change PDF font, PDF text editor"
   }
 };
 
@@ -80,6 +80,13 @@ export const downloadFile = {
   backto: {
     "sign-pdf": "Back To Sign PDF",
   },
+};
+
+export const footer = {
+  brand: "PDFEquips",
+  terms: "terms",
+  conditions: "conditions",
+  privacy_policy: "privacy policy",
 };
 
 export const errors = {
