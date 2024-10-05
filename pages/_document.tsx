@@ -36,6 +36,11 @@ const MyDocument = ({ lang }: { lang: string }) => {
           rel="stylesheet"
         />
         <meta name="google-adsense-account" content="ca-pub-7391414384206267" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7391414384206267"
+          cross-origin="anonymous"></script>
+
         {/* Cedarville Cursive */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
