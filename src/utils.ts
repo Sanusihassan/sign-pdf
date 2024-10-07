@@ -317,6 +317,35 @@ export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: n
   }
 };
 
+// // the problem with this function is that it deletes the previous styles of the selected element that i want
+// export const applyStyle = (
+//   property: keyof CSSProperties,
+//   value: any,
+//   activeWrapper: WrapperData | null,
+//   dispatch: Dispatch<Action>,
+//   wrappers: WrapperData[] = [] // Provide a default empty array
+// ) => {
+//   if (!activeWrapper) return; // Exit early if activeWrapper is null
+
+//   const styles: CSSProperties = activeWrapper.style
+//     ? { ...activeWrapper.style, [property]: value }
+//     : { [property]: value };
+
+//   const updatedWrapper: WrapperData = {
+//     ...activeWrapper,
+//     style: styles,
+//   };
+//   if (dispatch) {
+//     dispatch(setField({
+//       wrappers: wrappers.map(wrapper =>
+//         wrapper.id === activeWrapper.id ? updatedWrapper : wrapper
+//       ),
+//     }));
+//   }
+// };
+
+
+
 export const applyStyle = (
   property: keyof CSSProperties,
   value: any,
@@ -326,18 +355,17 @@ export const applyStyle = (
 ) => {
   if (!activeWrapper) return; // Exit early if activeWrapper is null
 
-  const styles: CSSProperties = activeWrapper.style
-    ? { ...activeWrapper.style, [property]: value }
-    : { [property]: value };
-
-  const updatedWrapper: WrapperData = {
-    ...activeWrapper,
-    style: styles,
+  const updatedStyle: CSSProperties = {
+    ...activeWrapper.style, // Spread existing styles
+    [property]: value, // Add or update the new style property
   };
+
   if (dispatch) {
     dispatch(setField({
       wrappers: wrappers.map(wrapper =>
-        wrapper.id === activeWrapper.id ? updatedWrapper : wrapper
+        wrapper.id === activeWrapper.id
+          ? { ...wrapper, style: updatedStyle }
+          : wrapper
       ),
     }));
   }

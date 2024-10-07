@@ -54,7 +54,7 @@ export const InputContent = ({ layout, errors, content }: { layout?: "draw" | "t
 
     const handleCreate = async () => {
         if (drawingRef.current) {
-            const svgString = (await drawingRef.current.getImage()).replace(`style="width: 100%; height: 100%;"`, "");
+            const svgString = (await drawingRef.current.getImage()).replace(`style="width: 100%; height: 100%;"`, `viewBox="0 0 400 256"`);
             if (showModalForInitials) {
                 dispatch(setField({
                     initials: { mark: svgString, font: selectedFont?.className || "", color: color, id: uuid() }

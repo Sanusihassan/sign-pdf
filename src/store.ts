@@ -1,5 +1,6 @@
 import { drop_type, WrapperData } from "@/components/DisplayFile/InteractLayer";
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
+import { CSSProperties } from "react";
 
 type WritableDraft<T> = {
   -readonly [K in keyof T]: Draft<T[K]>;
@@ -41,7 +42,8 @@ export interface ToolState {
     type: drop_type | null
   };
   checkboxes: WrapperData[];
-  activeWrapper: WrapperData | null
+  activeWrapper: WrapperData | null,
+  styles: CSSProperties[]
 }
 
 const initialState: ToolState = {
@@ -71,7 +73,8 @@ const initialState: ToolState = {
     insert: false,
     type: null
   },
-  activeWrapper: null
+  activeWrapper: null,
+  styles: []
 };
 
 const toolSlice = createSlice({

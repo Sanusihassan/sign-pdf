@@ -27,7 +27,7 @@ export const handleUpload = async (
 ) => {
   e.preventDefault();
   dispatch(setField({ isSubmitted: true }));
-  // console.log(JSON.stringify(state.annotations));
+  console.log(JSON.stringify(state.annotations));
   // console.log(JSON.stringify(state.signatures));
   // return;
   if (!files) return;
@@ -54,7 +54,7 @@ export const handleUpload = async (
   formData.append("initials", JSON.stringify(state.initials));
   let url;
   if (process.env.NODE_ENV === "development") {
-    url = `https://bookish-barnacle-xpg46v5vpvx39jx-4002.app.github.dev/api/${state.path}`;
+    url = `https://studious-carnival-w45wppxwvrh5647-4001.app.github.dev/api/${state.path}`;
   } else {
     url = `/api/${state.path}`;
   }
