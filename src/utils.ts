@@ -2,7 +2,7 @@ import { NextRouter } from "next/router";
 import { CSSProperties, Dispatch, useEffect, useMemo, useState } from "react";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import type { errors as _ } from "../content";
-import { setField } from "./store";
+import { setField, StylesType } from "./store";
 import { getDocument } from "pdfjs-dist";
 import { PDFDocumentProxy, PageViewport, RenderTask } from "pdfjs-dist";
 export const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
@@ -317,56 +317,26 @@ export const renderPDFOnCanvas = async (canvas: HTMLCanvasElement, pageNumber: n
   }
 };
 
-// // the problem with this function is that it deletes the previous styles of the selected element that i want
-// export const applyStyle = (
-//   property: keyof CSSProperties,
-//   value: any,
-//   activeWrapper: WrapperData | null,
-//   dispatch: Dispatch<Action>,
-//   wrappers: WrapperData[] = [] // Provide a default empty array
-// ) => {
-//   if (!activeWrapper) return; // Exit early if activeWrapper is null
-
-//   const styles: CSSProperties = activeWrapper.style
-//     ? { ...activeWrapper.style, [property]: value }
-//     : { [property]: value };
-
-//   const updatedWrapper: WrapperData = {
-//     ...activeWrapper,
-//     style: styles,
-//   };
-//   if (dispatch) {
-//     dispatch(setField({
-//       wrappers: wrappers.map(wrapper =>
-//         wrapper.id === activeWrapper.id ? updatedWrapper : wrapper
-//       ),
-//     }));
-//   }
-// };
-
-
 
 export const applyStyle = (
   property: keyof CSSProperties,
   value: any,
   activeWrapper: WrapperData | null,
   dispatch: Dispatch<Action>,
-  wrappers: WrapperData[] = [] // Provide a default empty array
+  styles: StylesType[]
 ) => {
-  if (!activeWrapper) return; // Exit early if activeWrapper is null
-
-  const updatedStyle: CSSProperties = {
-    ...activeWrapper.style, // Spread existing styles
-    [property]: value, // Add or update the new style property
-  };
+  if (!activeWrapper) return;
 
   if (dispatch) {
+    const updatedStyles = styles.filter(style => style.id !== activeWrapper.id);
+    const existingStyle = styles.find(style => style.id === activeWrapper.id);
+
+    const newStyle = existingStyle
+      ? { ...existingStyle, [property]: value }
+      : { [property]: value, id: activeWrapper.id };
+
     dispatch(setField({
-      wrappers: wrappers.map(wrapper =>
-        wrapper.id === activeWrapper.id
-          ? { ...wrapper, style: updatedStyle }
-          : wrapper
-      ),
+      styles: [...updatedStyles, newStyle]
     }));
   }
 };

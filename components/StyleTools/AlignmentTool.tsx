@@ -14,9 +14,8 @@ const icons = [
 
 export const AlignmentTool = () => {
     const [currentIconIndex, setCurrentIconIndex] = useState(0);
-    const { currentTextElement } = useFileStore();
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const styles = useSelector((state: RootState) => state.tool.styles);
     const dispatch = useDispatch();
     const handleClick = () => {
         setCurrentIconIndex((prevIndex) => (prevIndex + 1) % icons.length);
@@ -37,7 +36,7 @@ export const AlignmentTool = () => {
             default:
                 textAlignValue = "start";
         }
-        applyStyle("textAlign", textAlignValue, activeWrapper, dispatch, wrappers);
+        applyStyle("textAlign", textAlignValue, activeWrapper, dispatch, styles);
     };
 
     const CurrentIcon = icons[currentIconIndex];

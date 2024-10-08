@@ -12,7 +12,7 @@ export const FontSizeTool = () => {
     const increaseSize = useRef<HTMLButtonElement>(null);
     // const { currentTextElement } = useFileStore();
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const styles = useSelector((state: RootState) => state.tool.styles);
     const dispatch = useDispatch();
 
     const updateFontSize = (newSize: number) => {
@@ -20,21 +20,21 @@ export const FontSizeTool = () => {
         setFontSize(clampedSize);
 
         if (activeWrapper) {
-            const currentFontSize = activeWrapper.style?.fontSize
+            const currentFontSize = styles.find(s => s.id === activeWrapper.id)?.fontSize;
 
             if (currentFontSize) {
                 // Check if the current font size is set in pt
                 const match = (currentFontSize as string).match(/^(\d+(?:\.\d+)?)(pt)$/);
                 if (match) {
                     // If it's in pt, maintain the pt unit
-                    applyStyle("fontSize", `${clampedSize}pt`, activeWrapper, dispatch, wrappers);
+                    applyStyle("fontSize", `${clampedSize}pt`, activeWrapper, dispatch, styles);
                 } else {
                     // If it's not in pt, or the format is unexpected, use px
-                    applyStyle("fontSize", `${clampedSize}px`, activeWrapper, dispatch, wrappers);
+                    applyStyle("fontSize", `${clampedSize}px`, activeWrapper, dispatch, styles);
                 }
             } else {
                 // If fontSize is not set, default to px
-                applyStyle("fontSize", `${clampedSize}px`, activeWrapper, dispatch, wrappers);
+                applyStyle("fontSize", `${clampedSize}px`, activeWrapper, dispatch, styles);
             }
         }
     };

@@ -20,7 +20,7 @@ export const StyleTools = () => {
     const [activeTools, setActiveTools] = useState<Tool[]>([]);
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
     const showDownloadBtn = useSelector((state: RootState) => state.tool.showDownloadBtn);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const styles = useSelector((state: RootState) => state.tool.styles);
     const dispatch = useDispatch();
 
     const handleChange = (newValue: string) => {
@@ -28,7 +28,7 @@ export const StyleTools = () => {
         if (!activeTools.includes("Color")) {
             setActiveTools([...activeTools, "Color"]);
         }
-        applyStyle("color", color, activeWrapper, dispatch, wrappers);
+        applyStyle("color", color, activeWrapper, dispatch, styles);
     };
 
     const toggleTool = (tool: Tool) => {
@@ -79,10 +79,10 @@ export const StyleTools = () => {
                 onClick={() => {
                     toggleTool("Bold");
                     if (!activeTools.includes("Bold")) {
-                        applyStyle("fontWeight", "bold", activeWrapper, dispatch, wrappers);
+                        applyStyle("fontWeight", "bold", activeWrapper, dispatch, styles);
                     }
                     else {
-                        applyStyle("fontWeight", "normal", activeWrapper, dispatch, wrappers);
+                        applyStyle("fontWeight", "normal", activeWrapper, dispatch, styles);
                     }
                 }}
             >
@@ -93,10 +93,10 @@ export const StyleTools = () => {
                 onClick={() => {
                     toggleTool("Italic");
                     if (!activeTools.includes("Italic")) {
-                        applyStyle("fontStyle", "italic", activeWrapper, dispatch, wrappers);
+                        applyStyle("fontStyle", "italic", activeWrapper, dispatch, styles);
                     }
                     else {
-                        applyStyle("fontStyle", "normal", activeWrapper, dispatch, wrappers);
+                        applyStyle("fontStyle", "normal", activeWrapper, dispatch, styles);
                     }
                 }}
             >

@@ -1,5 +1,7 @@
-import { useFileStore } from '@/src/file-store';
-import React, { useRef, useEffect, Dispatch, SetStateAction } from 'react';
+import { RootState } from '@/pages/_app';
+import { applyStyle } from '@/src/utils';
+import React, { useRef, Dispatch, SetStateAction } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export interface FontOption {
     value: string;
@@ -16,6 +18,8 @@ interface FontSelectProps {
 
 export const FontSelect: React.FC<FontSelectProps> = ({ selectedFont, onFontChange, isOpen, setIsOpen }) => {
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+    const styles = useSelector((state: RootState) => state.tool.styles);
 
     const fontOptions: FontOption[] = [
         { value: 'Cedarville Cursive', label: 'Cedarville Cursive', className: 'cedarville-cursive-regular' },
@@ -39,13 +43,12 @@ export const FontSelect: React.FC<FontSelectProps> = ({ selectedFont, onFontChan
     //     };
     // }, [setIsOpen]);
 
-    const { currentTextElement } = useFileStore();
+    // const { currentTextElement } = useFileStore();
+    const dispatch = useDispatch();
 
     const handleFontSelect = (font: FontOption) => {
         onFontChange(font);
-        if (currentTextElement) {
-            currentTextElement.classList.add(font.className)
-        }
+        applyStyle("fontFamily", font.value, activeWrapper, dispatch, styles);
         setIsOpen(false);
     };
 

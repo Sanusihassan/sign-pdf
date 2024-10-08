@@ -16,7 +16,7 @@ export interface WrapperData {
     width: number;
     height: number;
     page: number;
-    style?: CSSProperties
+    font?: string;
 }
 
 interface InteractLayerProps {

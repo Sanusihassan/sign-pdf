@@ -6,7 +6,6 @@ export interface FileStore {
   fileInput: RefObject<HTMLInputElement> | null;
   submitBtn: React.RefObject<HTMLButtonElement> | null;
   downloadBtn: React.RefObject<HTMLAnchorElement> | null;
-  currentTextElement: HTMLElement | null;
   filesOnSubmit: string[];
   // signatureImages: File[] | null;
   imageUrls: {
@@ -25,8 +24,7 @@ export interface FileStore {
       }[]
     >
   >;
-  setFilesOnSubmit(value: string[]): void;
-  setCurrentTextElement(el: HTMLElement | null): void;
+  setFilesOnSubmit(value: string[]): void
 }
 
 export const useFileStore = create<FileStore>((set) => ({
@@ -36,7 +34,6 @@ export const useFileStore = create<FileStore>((set) => ({
   submitBtn: null,
   imageUrls: [],
   filesOnSubmit: [],
-  currentTextElement: null,
   setFiles: (files: FileList | File[]) => {
     const uniqueFiles = new Set<File>();
 
@@ -66,14 +63,4 @@ export const useFileStore = create<FileStore>((set) => ({
   setFilesOnSubmit(value: string[]) {
     set({ filesOnSubmit: value });
   },
-  // setSignatureImages(files) {
-  //   set({
-  //     signatureImages: files
-  //   })
-  // },
-  setCurrentTextElement(el) {
-    set({
-      currentTextElement: el
-    })
-  }
 }));

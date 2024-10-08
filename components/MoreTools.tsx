@@ -22,7 +22,7 @@ export const MoreTools: React.FC = () => {
     const [strikethrough, setStrikethrough] = useState(false);
     const [uppercase, setUppercase] = useState(false);
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const styles = useSelector((state: RootState) => state.tool.styles);
     const dispatch = useDispatch();
     const handleClickOutside = (event: MouseEvent) => {
         if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
@@ -44,7 +44,7 @@ export const MoreTools: React.FC = () => {
         if (typeof value === "number") {
             setOpacity(value);
             // Type '"opacity"' has no properties in common with type 'Properties<string | number, string & {}>'.ts(2559)
-            applyStyle('opacity', value.toString(), activeWrapper, dispatch, wrappers);
+            applyStyle('opacity', value.toString(), activeWrapper, dispatch, styles);
         }
     };
 
@@ -53,7 +53,7 @@ export const MoreTools: React.FC = () => {
         if (!isNaN(value)) {
             const clampedValue = Math.min(Math.max(value, 0), 1);
             setOpacity(clampedValue);
-            applyStyle('opacity', clampedValue.toString(), activeWrapper, dispatch, wrappers);
+            applyStyle('opacity', clampedValue.toString(), activeWrapper, dispatch, styles);
         }
     };
 
@@ -61,18 +61,18 @@ export const MoreTools: React.FC = () => {
         if (e.key === "ArrowUp") {
             const newValue = Math.min(opacity + 0.1, 1);
             setOpacity(newValue);
-            applyStyle('opacity', newValue.toString(), activeWrapper, dispatch, wrappers);
+            applyStyle('opacity', newValue.toString(), activeWrapper, dispatch, styles);
         } else if (e.key === "ArrowDown") {
             const newValue = Math.max(opacity - 0.1, 0);
             setOpacity(newValue);
-            applyStyle('opacity', newValue.toString(), activeWrapper, dispatch, wrappers);
+            applyStyle('opacity', newValue.toString(), activeWrapper, dispatch, styles);
         }
     };
 
     const toggleStyle = (stateSetter: React.Dispatch<React.SetStateAction<boolean>>, property: keyof CSSProperties, value: string, defaultValue: string) => {
         stateSetter(prev => {
             const newState = !prev;
-            applyStyle(property, newState ? value : defaultValue, activeWrapper, dispatch, wrappers);
+            applyStyle(property, newState ? value : defaultValue, activeWrapper, dispatch, styles);
             return newState;
         });
     };

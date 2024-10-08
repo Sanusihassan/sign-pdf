@@ -16,7 +16,7 @@ interface FontSizeSelectProps {
 export const FontSizeSelect: React.FC<FontSizeSelectProps> = ({ isOpen, setIsOpen, fontSize, setFontSize, decreaseSizeRef, increaseSize }) => {
     const dropdownRef = useRef<HTMLUListElement>(null);
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const styles = useSelector((state: RootState) => state.tool.styles);
     const dispatch = useDispatch();
 
     const fontSizes = [
@@ -44,11 +44,9 @@ export const FontSizeSelect: React.FC<FontSizeSelectProps> = ({ isOpen, setIsOpe
 
     const handleFontSizeSelect = (size: number) => {
         setFontSize(size);
-        applyStyle("fontSize", `${size}pt`, activeWrapper, dispatch, wrappers);
+        applyStyle("fontSize", `${size}pt`, activeWrapper, dispatch, styles);
         setIsOpen(false);
     };
-
-    const { currentTextElement } = useFileStore();
 
     return (
         <ul className={`font-size-options options${isOpen ? "" : " hide"}`} ref={dropdownRef} onClick={e => e.stopPropagation()}>

@@ -71,12 +71,12 @@ export const Wrapper: React.FC<WrapperProps> = ({
   const [controlsPosition, setControlsPosition] = useState<"top" | "bottom">(
     "top"
   );
-  const { setCurrentTextElement } = useFileStore();
   const dispatch = useDispatch();
   const { x: initialX,
     y: initialY,
     width: initialWidth,
-    height: initialHeight, style: textElstyle } = wrapper;
+    height: initialHeight } = wrapper;
+
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (wrapper) {
@@ -217,6 +217,9 @@ export const Wrapper: React.FC<WrapperProps> = ({
 
   const [editable, setEditable] = useState(false);
   const signatures = useSelector((state: RootState) => state.tool.signatures);
+  const styles = useSelector((state: RootState) => state.tool.styles);
+  const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
+  const textElstyle = styles.find(style => style.id === activeWrapper?.id);
   const initials = useSelector((state: RootState) => state.tool.initials);
   const activeSignatureId = useSelector((state: RootState) => state.tool.activeSignatureId);
   const sharedProps = {
@@ -228,7 +231,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
       if (onFocus) {
         onFocus();
       }
-      setCurrentTextElement(inputRef.current);
+      // setCurrentTextElement(inputRef.current);
       dispatch(setField({
         activeWrapper: wrapper
       }))
@@ -355,7 +358,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
         />
       )
         : initialContent.type === "whiteout" ? (
-          <div className="whiteout input" {...sharedProps} style={style}></div>
+          <div className="whiteout"></div>
         )
           : (initialContent.type === "signature" ? (
             wrapperSignature && wrapperSignature.mark.includes("<svg") ?

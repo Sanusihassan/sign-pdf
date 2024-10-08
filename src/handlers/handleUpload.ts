@@ -18,7 +18,8 @@ export const handleUpload = async (
     errorMessage: string;
     annotations: ToolState["wrappers"],
     signatures: ToolState["signatures"],
-    initials: ToolState["initials"]
+    initials: ToolState["initials"],
+    styles: ToolState["styles"],
   },
   files: File[],
   errors: _,
@@ -27,7 +28,7 @@ export const handleUpload = async (
 ) => {
   e.preventDefault();
   dispatch(setField({ isSubmitted: true }));
-  console.log(JSON.stringify(state.annotations));
+  console.log(JSON.stringify(state));
   // console.log(JSON.stringify(state.signatures));
   // return;
   if (!files) return;
@@ -52,6 +53,7 @@ export const handleUpload = async (
   formData.append("annotations", JSON.stringify(state.annotations));
   formData.append("signatures", JSON.stringify(state.signatures));
   formData.append("initials", JSON.stringify(state.initials));
+  formData.append("styles", JSON.stringify(state.styles));
   let url;
   if (process.env.NODE_ENV === "development") {
     url = `https://studious-carnival-w45wppxwvrh5647-4001.app.github.dev/api/${state.path}`;

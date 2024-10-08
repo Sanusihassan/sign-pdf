@@ -14,20 +14,20 @@ export const SpacingTool: React.FC = () => {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     const activeWrapper = useSelector((state: RootState) => state.tool.activeWrapper);
-    const wrappers = useSelector((state: RootState) => state.tool.wrappers);
+    const styles = useSelector((state: RootState) => state.tool.styles);
     const dispatch = useDispatch();
 
     const handleLetterSpacingChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setLetterSpacing(value);
-            applyStyle("letterSpacing", `${letterSpacing}px`, activeWrapper, dispatch, wrappers)
+            applyStyle("letterSpacing", `${letterSpacing}px`, activeWrapper, dispatch, styles)
         }
     };
 
     const handleLineSpacingChange = (value: number | number[]) => {
         if (typeof value === "number") {
             setLineSpacing(value);
-            applyStyle("lineHeight", lineSpacing, activeWrapper, dispatch, wrappers)
+            applyStyle("lineHeight", lineSpacing, activeWrapper, dispatch, styles)
         }
     };
 

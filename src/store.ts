@@ -8,6 +8,12 @@ type WritableDraft<T> = {
 
 type k = keyof WritableDraft<ToolState>;
 
+export interface StylesType extends CSSProperties {
+  id: string;
+}
+
+
+
 export type signature = {
   mark: string;
   font: string;
@@ -43,7 +49,8 @@ export interface ToolState {
   };
   checkboxes: WrapperData[];
   activeWrapper: WrapperData | null,
-  styles: CSSProperties[]
+  // fix the syntax error;
+  styles: StylesType[]
 }
 
 const initialState: ToolState = {
