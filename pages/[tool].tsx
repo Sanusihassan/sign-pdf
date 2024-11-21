@@ -13,7 +13,9 @@ import { useRouter } from "next/router";
 import { OpenGraph } from "pdfequips-open-graph/OpenGraph";
 import Head from "next/head"; // Import next/head
 import { Features } from "@/components/Features";
-import { Footer } from "@/components/Footer";
+import { Footer } from "pdfequips-footer/components/Footer";
+import { fetchSubscriptionStatus } from "fetch-subscription-status";
+import { useState, useCallback, useEffect } from "react";
 import HowTo from "@/components/HowTo";
 import { howToType, SignPDFHowToSchema } from "@/src/how-to/how-to-en";
 import type { tool as _tool } from "@/content";
@@ -39,7 +41,7 @@ export async function getStaticProps({
   return { props: { item } };
 }
 
-export default function ToolPage({ item }: { item: _tool["Sign_PDF"] }) {
+export default function ToolPage({ item, initialPremiumStatus }: { item: _tool["Sign_PDF"]; initialPremiumStatus: boolean }) {
   const router = useRouter();
   const { asPath } = router;
   const websiteSchema = {
@@ -49,6 +51,24 @@ export default function ToolPage({ item }: { item: _tool["Sign_PDF"] }) {
     description: item.description,
     url: `https://www.pdfequips.com${asPath}`,
   };
+  const [isPremium, setIsPremium] = useState(initialPremiumStatus);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const checkStatus = useCallback(async () => {
+    try {
+      const status = await fetchSubscriptionStatus(); // Function to fetch subscription status
+      setIsPremium(status);
+      setIsLoaded(true);
+    } catch (err) {
+      console.error("Error checking subscription status:", err);
+      setIsLoaded(true);
+
+    }
+  }, []);
+
+  useEffect(() => {
+    checkStatus();
+  }, []);
+
 
   return (
     <>
@@ -63,6 +83,13 @@ export default function ToolPage({ item }: { item: _tool["Sign_PDF"] }) {
         <meta name="description" content={item.description} />
         <meta name="keywords" content={item.keywords} />
         <link rel="icon" type="image/svg+xml" href="/images/icons/logo.svg" />
+        {isLoaded && !isPremium ?
+          <>
+            <meta name="google-adsense-account" content="ca-pub-7391414384206267" />
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7391414384206267"
+              cross-origin="anonymous"></script>
+          </>
+          : null}
         <OpenGraph
           ogUrl={`https://www.pdfequips.com${item.to}`}
           ogDescription={item.description}
@@ -91,7 +118,7 @@ export default function ToolPage({ item }: { item: _tool["Sign_PDF"] }) {
       <div className="container">
         <HowTo howTo={SignPDFHowToSchema as howToType} alt={item.seoTitle} imgSrc={item.to.replace("/", "")} />
       </div>
-      <Footer footer={footer} title={item.seoTitle.split("-")[1]} />
+      <Footer lang="" title={item.seoTitle.split("-")[1]} />
     </>
   );
 }
