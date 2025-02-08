@@ -2,6 +2,8 @@
  * this is my _document.tsx file 
  * i have a showSignModal on my redux store depending on that boolean value if it's true then i want to set the css overflow property to body to hidden otherwise initial
  */
+// @ts-ignore
+import { Partytown } from '@builder.io/partytown/react';
 import Document, {
   Html,
   Head,
@@ -34,6 +36,14 @@ const MyDocument = ({ lang }: { lang: string }) => {
         <link
           href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
           rel="stylesheet"
+        />
+        <Partytown
+          debug={process.env.NODE_ENV === 'development'}
+          forward={['dataLayer.push']}
+        />
+        <script
+          type="text/partytown"
+          src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"
         />
 
 
