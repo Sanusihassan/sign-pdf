@@ -6,7 +6,7 @@ import { setField, StylesType } from "./store";
 import { getDocument } from "pdfjs-dist";
 import { PDFDocumentProxy, PageViewport, RenderTask } from "pdfjs-dist";
 export const pdfjsWorker = await import("pdfjs-dist/build/pdf.worker.entry");
-import { GlobalWorkerOptions } from "pdfjs-dist";
+import { GlobalWorkerOptions, version } from "pdfjs-dist";
 import { WrapperData } from "@/components/DisplayFile/InteractLayer";
 GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
