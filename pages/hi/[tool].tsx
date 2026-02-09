@@ -6,7 +6,6 @@ import {
   tool,
   tools,
   downloadFile,
-  footer,
 } from "../../src/content/content-hi";
 import { errors } from "../../src/content/content-hi";
 import { useRouter } from "next/router";
@@ -14,7 +13,6 @@ import type { tool as _tool } from "@/content";
 import { OpenGraph } from "pdfequips-open-graph/OpenGraph";
 import { SignPDFHowToSchemaHI } from "@/src/how-to/how-to-hi";
 import { Features } from "@/components/Features";
-import { Footer } from "pdfequips-footer/components/Footer";
 import { fetchSubscriptionStatus } from "fetch-subscription-status";
 import { useState, useCallback, useEffect } from "react";
 import HowTo from "@/components/HowTo";
@@ -38,7 +36,15 @@ export async function getStaticProps({
   return { props: { item } };
 }
 
-export default ({ item, lang, initialPremiumStatus }: { item: _tool["Sign_PDF"]; lang: string; initialPremiumStatus: boolean }) => {
+export default ({
+  item,
+  lang,
+  initialPremiumStatus,
+}: {
+  item: _tool["Sign_PDF"];
+  lang: string;
+  initialPremiumStatus: boolean;
+}) => {
   const router = useRouter();
   const { asPath } = router;
   const websiteSchema = {
@@ -58,7 +64,6 @@ export default ({ item, lang, initialPremiumStatus }: { item: _tool["Sign_PDF"];
     } catch (err) {
       console.error("Error checking subscription status:", err);
       setIsLoaded(true);
-
     }
   }, []);
 
@@ -79,13 +84,19 @@ export default ({ item, lang, initialPremiumStatus }: { item: _tool["Sign_PDF"];
         <meta name="description" content={item.description} />
         <meta name="keywords" content={item.keywords} />
         <link rel="icon" type="image/svg+xml" href="/images/icons/logo.svg" />
-        {isLoaded && !isPremium ?
+        {isLoaded && !isPremium ? (
           <>
-            <meta name="google-adsense-account" content="ca-pub-7801483217621867" />
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7801483217621867"
-              cross-origin="anonymous"></script>
+            <meta
+              name="google-adsense-account"
+              content="ca-pub-7801483217621867"
+            />
+            <script
+              async
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7801483217621867"
+              cross-origin="anonymous"
+            ></script>
           </>
-          : null}
+        ) : null}
         <OpenGraph
           ogUrl={`https://www.pdfequips.com/hi${item.to}`}
           ogDescription={item.description}
@@ -111,9 +122,12 @@ export default ({ item, lang, initialPremiumStatus }: { item: _tool["Sign_PDF"];
         <Features features={item.features} />
       </div>
       <div className="container">
-        <HowTo howTo={SignPDFHowToSchemaHI} alt={item.seoTitle} imgSrc={item.to.replace("/", "")} />
+        <HowTo
+          howTo={SignPDFHowToSchemaHI}
+          alt={item.seoTitle}
+          imgSrc={item.to.replace("/", "")}
+        />
       </div>
-      <Footer lang={lang} title={item.seoTitle.split("-")[1]} />
     </>
   );
 };
